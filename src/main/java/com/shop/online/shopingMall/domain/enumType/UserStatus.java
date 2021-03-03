@@ -1,6 +1,7 @@
 package com.shop.online.shopingMall.domain.enumType;
 
+import org.hibernate.annotations.ColumnDefault;
 
 public enum UserStatus {
-    register, sign
+    DELETE, SIGN
 }

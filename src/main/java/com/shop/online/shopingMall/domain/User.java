@@ -34,9 +34,20 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private List<BillingInfo> billingInfoList;
+    @OneToMany(mappedBy = "user")
+    private List<BillingInfo> billingInfoList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Order> orderList = new ArrayList<>();
 
     @Embedded
     private Address address;
+
+    public User changeEncodingPassword(String encodingPassword) {
+        return User.builder().password(encodingPassword)
+                .id(this.id).email(this.email)
+                .phone(this.phone).address(this.address)
+                .name(this.name).userRole(this.userRole).userStatus(this.userStatus).build();
+
+    }
 }

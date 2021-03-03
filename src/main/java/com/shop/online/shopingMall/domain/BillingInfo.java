@@ -4,6 +4,7 @@ import com.shop.online.shopingMall.domain.base.BaseEntity;
 import com.shop.online.shopingMall.domain.enumType.BillingInfoStatus;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,12 +17,15 @@ public class BillingInfo extends BaseEntity {
     private String name;
 
     private String cardNum;
+
     private String bid;
+
     private BillingInfoStatus billingInfoStatus;
 
-    @OneToMany(mappedBy = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private List<Order> orderList;
+    @OneToMany(mappedBy = "billingInfo")
+    private List<Order> orderList = new ArrayList<>();
 }

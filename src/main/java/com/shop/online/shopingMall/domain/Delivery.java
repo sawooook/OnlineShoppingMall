@@ -2,11 +2,13 @@ package com.shop.online.shopingMall.domain;
 
 import com.shop.online.shopingMall.domain.base.BaseEntity;
 import com.shop.online.shopingMall.domain.enumType.DeliveryStatus;
+import lombok.Getter;
 import org.apache.tomcat.jni.Address;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 public class Delivery extends BaseEntity {
 
     @Id
@@ -19,4 +21,7 @@ public class Delivery extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private DeliveryStatus deliveryStatus;
+
+    @OneToOne(mappedBy = "delivery")
+    private Order order;
 }

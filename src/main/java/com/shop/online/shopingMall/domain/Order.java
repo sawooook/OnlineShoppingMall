@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.util.Base64;
 
 @Entity
+@Table(name = "orders")
 public class Order extends BaseEntity {
 
     @Id @GeneratedValue
@@ -16,10 +17,15 @@ public class Order extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    @OneToMany(mappedBy = "billingInfo_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "billingInfo_id")
     private BillingInfo billingInfo;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
+    @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }
