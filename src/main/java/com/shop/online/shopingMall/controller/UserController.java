@@ -1,16 +1,23 @@
 package com.shop.online.shopingMall.controller;
 
 import com.shop.online.shopingMall.domain.User;
+import com.shop.online.shopingMall.dto.ResponseMessage;
+import com.shop.online.shopingMall.dto.ResponseStatus;
 import com.shop.online.shopingMall.dto.UserDto;
 import com.shop.online.shopingMall.service.UserService;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.bridge.Message;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.charset.Charset;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +34,10 @@ public class UserController {
     public ResponseEntity signUp(@RequestBody @NonNull UserDto userDto) {
         User user = userDto.toEntity();
         userService.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        ResponseMessage message = ResponseMessage.builder().message("SUCCESS").responseStatus(ResponseStatus.OK).data(user).build();
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 
 //    @GetMapping("/user/check")
@@ -36,5 +46,11 @@ public class UserController {
     @GetMapping("/test")
     public ResponseEntity Test() {
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/check/{email}")
+    public ResponseEntity checkEmail(@PathVariable @NonNull String email) {
+        System.out.println(email);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
