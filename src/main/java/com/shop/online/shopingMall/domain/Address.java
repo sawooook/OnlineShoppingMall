@@ -1,13 +1,14 @@
 package com.shop.online.shopingMall.domain;
 
-import lombok.Builder;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 
 @Embeddable
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Address {
 
     private String addressCode;

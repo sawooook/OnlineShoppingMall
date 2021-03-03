@@ -4,8 +4,7 @@ import com.shop.online.shopingMall.domain.Address;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.domain.enumType.UserRole;
 import com.shop.online.shopingMall.domain.enumType.UserStatus;
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
@@ -15,13 +14,11 @@ import java.time.LocalDateTime;
 *
 * */
 
-
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDto {
-
-    @NonNull
-    private String id;
-
     @NonNull
     private String passWord;
 
@@ -36,13 +33,6 @@ public class UserDto {
     // 생성날짜
 
     @NonNull
-    private LocalDateTime createdAt;
-    // 마지막 업데이트 날짜
-
-    @NonNull
-    private LocalDateTime updatedAt;
-
-    @NonNull
     private String addressCode;
 
     @NonNull
@@ -55,13 +45,15 @@ public class UserDto {
     @ColumnDefault(value = "SIGN")
     private UserStatus userStatus;
 
+
+
     public User toEntity() {
-        Address adrress = Address.builder().addressCode(getAddressCode())
+        Address address = Address.builder().addressCode(getAddressCode())
                 .addressDetail(getAddressDetail()).build();
 
         return User.builder().password(this.passWord)
                 .email(this.email)
-                .phone(this.phone).address(adrress)
+                .phone(this.phone).address(address)
                 .name(this.name).userRole(this.userRole).userStatus(this.userStatus).build();
     }
 }
