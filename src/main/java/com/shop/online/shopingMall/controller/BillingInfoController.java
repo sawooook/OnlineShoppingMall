@@ -6,10 +6,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/billingInfo")
@@ -22,9 +19,11 @@ public class BillingInfoController {
         billingInfoService.kakaoPayReady(id);
     }
 
-    @GetMapping("/kakao/approve")
-    public void kakaoPayApprove() throws ChangeSetPersister.NotFoundException {
-        billingInfoService.kakaoPayAprove(1L);
+    @RequestMapping("/kakao/approve")
+    public void kakaoPayApprove(@RequestParam("pg_token") String pgToken) throws ChangeSetPersister.NotFoundException {
+        System.out.println("===============");
+        System.out.println(pgToken);
+        billingInfoService.kakaoPayAprove(1L, pgToken);
 
     }
 

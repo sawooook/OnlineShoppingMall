@@ -40,19 +40,27 @@ public class BillingInfoService {
         billingInfoRepository.save(makeKakaoBillingInfo);
     }
 
-    public void kakaoPayAprove(Long id) throws ChangeSetPersister.NotFoundException {
+    public void kakaoPayAprove(Long id, String pgToken) throws ChangeSetPersister.NotFoundException {
 
         User user = userRepository.findById(id)
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
 
-        KakaoPayApproveResponseDto responseKakaoApprove = KakakoPayUtil.approveToKakaoPay(user);
+        int billingInfoSize = user.getBillingInfoList().size();
 
-        Payment paymentBuild = Payment.builder().aid(responseKakaoApprove.getAid()).amount(responseKakaoApprove.getAmount())
-                .approveAt(responseKakaoApprove.getApproveAt()).createdAt(responseKakaoApprove.getCreatedAt())
-                .cardInfo(responseKakaoApprove.getCardInfo()).quantity(responseKakaoApprove.getQuantity())
-                .cid(responseKakaoApprove.getCid()).itemName(responseKakaoApprove.getItemName()).tid(responseKakaoApprove.getTid()).build();
+        BillingInfo billingInfo = user.getBillingInfoList().get(billingInfoSize - 1);
+
+        KakaoPayApproveResponseDto responseKakaoApprove = KakakoPayUtil.approveToKakaoPay(user, pgToken);
+
+        Payment paymentBuild = Payment.builder().aid(responseKakaoApprove.getAid())
+                .approvedAt(responseKakaoApprove.getApproveAt()).createdAt(responseKakaoApprove.getCreatedAt())
+                .quantity(responseKakaoApprove.getQuantity())
+                .cid(responseKakaoApprove.getCid()).itemName(responseKakaoApprove.getItemName()).tid(responseKakaoApprove.getTid())
+                .billingInfo(billingInfo).build();
 
         paymentRepository.save(paymentBuild);
 
+        billingInfo.updatePaymentKey(responseKakaoApprove.getSid());
+
+        billingInfoRepository.save(billingInfo);
     }
 }

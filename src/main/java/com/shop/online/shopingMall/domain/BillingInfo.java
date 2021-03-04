@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.List;
 
 @Entity @Builder @Getter
 @NoArgsConstructor @AllArgsConstructor
+@DynamicUpdate
 public class BillingInfo extends BaseEntity {
 
     @Id @GeneratedValue
@@ -27,6 +30,8 @@ public class BillingInfo extends BaseEntity {
 
     private String uniqueNumber;
 
+    @Enumerated(EnumType.STRING)
+    @ColumnDefault("'ACTIVE'")
     private BillingInfoStatus billingInfoStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,4 +43,8 @@ public class BillingInfo extends BaseEntity {
 
     @OneToMany(mappedBy = "billingInfo")
     private List<Payment> payments = new ArrayList<>();
+
+    public void updatePaymentKey(String paymentKey) {
+        this.paymentKey = paymentKey;
+    }
 }

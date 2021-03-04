@@ -1,23 +1,21 @@
 package com.shop.online.shopingMall.dto;
 
+import com.shop.online.shopingMall.domain.enumType.CardName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
 
 @Data @Builder
 @NoArgsConstructor @AllArgsConstructor
-public class KakaoPayApproveResponseDto {
-    private String aid;
-    private String tid;
-    private String cid;
-    private String sid;
-//    private String amount;
-//    private String cardInfo;
+public class KakaoPayApproveAmountResponseDto {
     private String itemName;
     private String quantity;
-    private LocalDateTime approveAt;
-    private LocalDateTime createdAt;
+    private LocalDateTime approvedAt;
+    @Enumerated(EnumType.STRING)
+    private CardName cardName;
 }

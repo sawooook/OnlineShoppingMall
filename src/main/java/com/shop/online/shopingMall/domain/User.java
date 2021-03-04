@@ -4,14 +4,14 @@ import com.shop.online.shopingMall.domain.base.BaseEntity;
 import com.shop.online.shopingMall.domain.enumType.UserRole;
 import com.shop.online.shopingMall.domain.enumType.UserStatus;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Getter
-@Builder
+
+@Entity @Getter @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
@@ -33,6 +33,7 @@ public class User extends BaseEntity {
     private UserRole userRole;
 
     @Enumerated(EnumType.STRING)
+    @ColumnDefault("'SIGN'")
     private UserStatus userStatus;
 
     @OneToMany(mappedBy = "user")

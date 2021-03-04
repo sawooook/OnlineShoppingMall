@@ -3,6 +3,9 @@ package util;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.dto.KakaoPayApproveResponseDto;
 import com.shop.online.shopingMall.dto.KakaoPayReadyResponseDto;
+import org.apache.tomcat.util.json.JSONParser;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.boot.json.JsonParser;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -35,21 +38,22 @@ public class KakakoPayUtil {
         ResponseEntity<KakaoPayReadyResponseDto> responseKakaoPay =
                 restTemplate.exchange(kakaoUrl.toUriString(), HttpMethod.POST, httpEntity, KakaoPayReadyResponseDto.class);
 
+        System.out.println(responseKakaoPay.getBody().getNext_redirect_app_url());
+
         return responseKakaoPay;
     }
 
-    public static KakaoPayApproveResponseDto approveToKakaoPay(User user) {
+    public static KakaoPayApproveResponseDto approveToKakaoPay(User user, String pgToken) {
         RestTemplate restTemplate = new RestTemplate();
 
         int billingInfoSize = user.getBillingInfoList().size();
-        String randomPgToken = String.valueOf(Math.random());
 
         UriComponentsBuilder kakaoUrl = UriComponentsBuilder.fromHttpUrl(KakaoPayHost + "/v1/payment/approve")
                 .queryParam("cid", "TC0ONETIME")
                 .queryParam("partner_order_id", "1")
                 .queryParam("partner_user_id", "1")
                 .queryParam("tid", user.getBillingInfoList().get(billingInfoSize -1).getUniqueNumber())
-                .queryParam("pg_token", randomPgToken);
+                .queryParam("pg_token", pgToken);
 
         HttpEntity httpEntity = kakaoHttpHeader();
 
