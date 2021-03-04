@@ -4,12 +4,14 @@ import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.domain.enumType.UserStatus;
 import com.shop.online.shopingMall.dto.UserLoginResponseDto;
 import com.shop.online.shopingMall.repository.UserRepository;
+import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.NotActiveException;
 import java.util.Optional;
 
 @Service
@@ -25,7 +27,7 @@ public class UserService {
         if (user.getUserStatus() == UserStatus.SIGN) {
             if (passwordEncoder.matches(passWord, user.getPassword())){
                 UserLoginResponseDto userResponseDto = UserLoginResponseDto.builder()
-                        .id(user.getId()).email(user.getEmail()).phone(user.getPhone()).name(user.getName()).build();
+                        .id(user.getId()).email(user.getEmail()).phone(user.getPhone()).name(user.getName()).address(user.getAddress()).build();
                 return Optional.ofNullable(userResponseDto);
             }
         }
@@ -43,6 +45,11 @@ public class UserService {
 
     public boolean checkEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    public void unRegister(Long id) throws NotFoundException {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("아아디 가 존재하지 않습니다."));
+        userRepository.delete(user);
     }
 
 }

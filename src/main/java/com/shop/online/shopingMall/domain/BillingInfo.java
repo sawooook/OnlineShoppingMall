@@ -2,23 +2,29 @@ package com.shop.online.shopingMall.domain;
 
 import com.shop.online.shopingMall.domain.base.BaseEntity;
 import com.shop.online.shopingMall.domain.enumType.BillingInfoStatus;
+import com.shop.online.shopingMall.domain.enumType.CardName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity @Builder
+@NoArgsConstructor @AllArgsConstructor
 public class BillingInfo extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "billingInfo_id")
     private Long id;
 
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private CardName cardName;
 
-    private String cardNum;
+    private String paymentKey;
 
-    private String bid;
+    private String uniqueNumber;
 
     private BillingInfoStatus billingInfoStatus;
 

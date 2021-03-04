@@ -26,6 +26,7 @@ public class UserConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers("/billingInfo/**").permitAll()
                 .antMatchers("/user/**").permitAll();
         http.csrf().disable();
         http.cors().and();

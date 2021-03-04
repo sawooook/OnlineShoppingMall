@@ -5,11 +5,13 @@ import com.shop.online.shopingMall.dto.UserDto;
 import com.shop.online.shopingMall.dto.UserLoginRequestDto;
 import com.shop.online.shopingMall.dto.UserLoginResponseDto;
 import com.shop.online.shopingMall.service.UserService;
+import javassist.NotFoundException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.NotActiveException;
 import java.util.Optional;
 
 @RestController
@@ -50,6 +52,13 @@ public class UserController {
         }
     }
 
+    /*
+    * 로그인 관련 API
+    *
+    * 성공시 return OK, User 정보
+    * 실패시 return BadRequest
+    *
+    * */
     @PostMapping("/login")
     public ResponseEntity Login(@RequestBody @NonNull UserLoginRequestDto userLoginRequestDto) {
         String email = userLoginRequestDto.getEmail();
@@ -58,9 +67,15 @@ public class UserController {
         Optional<UserLoginResponseDto> userResponseDto = userService.loginCheck(email, passWord);
 
         if (userResponseDto.isPresent()) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body(userResponseDto);
         } else {
             return ResponseEntity.badRequest().body("가입하지 않은 아이디입니다.");
         }
+    }
+
+    @GetMapping("/delete/{id}")
+    public ResponseEntity unRegister(@NonNull Long id) throws NotFoundException {
+        userService.unRegister(id);
+        return ResponseEntity.ok().body("회원탈퇴가 완료 되었습니다.");
     }
 }

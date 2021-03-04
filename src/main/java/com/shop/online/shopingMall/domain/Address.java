@@ -10,7 +10,6 @@ import javax.persistence.Embedded;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Address {
-
     private String addressCode;
     private String addressDetail;
 }
