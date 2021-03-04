@@ -1,23 +1,16 @@
 package com.shop.online.shopingMall.controller;
 
 import com.shop.online.shopingMall.domain.User;
-import com.shop.online.shopingMall.dto.ResponseMessage;
-import com.shop.online.shopingMall.dto.ResponseStatus;
 import com.shop.online.shopingMall.dto.UserDto;
+import com.shop.online.shopingMall.dto.UserLoginRequestDto;
+import com.shop.online.shopingMall.dto.UserLoginResponseDto;
 import com.shop.online.shopingMall.service.UserService;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.bridge.Message;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.charset.Charset;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,23 +27,40 @@ public class UserController {
     public ResponseEntity signUp(@RequestBody @NonNull UserDto userDto) {
         User user = userDto.toEntity();
         userService.save(user);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-        ResponseMessage message = ResponseMessage.builder().message("SUCCESS").responseStatus(ResponseStatus.OK).data(user).build();
-        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
-//    @GetMapping("/user/check")
-//    public void duplicatedEmail(@RequestParam @NonNull )
-
-    @GetMapping("/test")
-    public ResponseEntity Test() {
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
+    /*
+    * 이메일 중복 체크 API
+    *
+    * 이메일 중복시
+    * STATUS : notFound
+    *
+    * 중복이 아닐시
+    * STATUS : OK
+    * */
     @GetMapping("/check/{email}")
     public ResponseEntity checkEmail(@PathVariable @NonNull String email) {
-        System.out.println(email);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        Boolean checkEmailStatus = userService.checkEmail(email);
+
+        if (checkEmailStatus) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity Login(@RequestBody @NonNull UserLoginRequestDto userLoginRequestDto) {
+        String email = userLoginRequestDto.getEmail();
+        String passWord = userLoginRequestDto.getPassWord();
+
+        Optional<UserLoginResponseDto> userResponseDto = userService.loginCheck(email, passWord);
+
+        if (userResponseDto.isPresent()) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().body("가입하지 않은 아이디입니다.");
+        }
     }
 }
