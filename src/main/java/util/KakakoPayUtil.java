@@ -1,5 +1,7 @@
 package util;
 
+import com.shop.online.shopingMall.domain.User;
+import com.shop.online.shopingMall.dto.KakaoPayApproveResponseDto;
 import com.shop.online.shopingMall.dto.KakaoPayReadyResponseDto;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
@@ -29,13 +31,42 @@ public class KakakoPayUtil {
                 .queryParam("cancel_url", localhost + "/billingInfo/kakao/cancel")
                 .queryParam("fail_url", localhost + "/billingInfo/kakao/fail");
 
+        HttpEntity httpEntity = kakaoHttpHeader();
+        ResponseEntity<KakaoPayReadyResponseDto> responseKakaoPay =
+                restTemplate.exchange(kakaoUrl.toUriString(), HttpMethod.POST, httpEntity, KakaoPayReadyResponseDto.class);
+
+        return responseKakaoPay;
+    }
+
+    public static KakaoPayApproveResponseDto approveToKakaoPay(User user) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        int billingInfoSize = user.getBillingInfoList().size();
+        String randomPgToken = String.valueOf(Math.random());
+
+        UriComponentsBuilder kakaoUrl = UriComponentsBuilder.fromHttpUrl(KakaoPayHost + "/v1/payment/approve")
+                .queryParam("cid", "TC0ONETIME")
+                .queryParam("partner_order_id", "1")
+                .queryParam("partner_user_id", "1")
+                .queryParam("tid", user.getBillingInfoList().get(billingInfoSize -1).getUniqueNumber())
+                .queryParam("pg_token", randomPgToken);
+
+        HttpEntity httpEntity = kakaoHttpHeader();
+
+        ResponseEntity<KakaoPayApproveResponseDto> responseKakaoPay =
+                restTemplate.exchange(kakaoUrl.toUriString(), HttpMethod.POST, httpEntity, KakaoPayApproveResponseDto.class);
+
+        return responseKakaoPay.getBody();
+    }
+
+    private static HttpEntity kakaoHttpHeader() {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Authorization","KakaoAK" + " 29a74f0f85117e18e3e2a883dba59210");
         httpHeaders.add("Accept", MediaType.APPLICATION_JSON_VALUE);
         httpHeaders.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=UTF-8");
 
         HttpEntity<?> httpEntity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<KakaoPayReadyResponseDto> responseKakaoPay = restTemplate.exchange(kakaoUrl.toUriString(), HttpMethod.POST, httpEntity, KakaoPayReadyResponseDto.class);
-        return responseKakaoPay;
+        return httpEntity;
     }
+
 }

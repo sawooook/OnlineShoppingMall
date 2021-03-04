@@ -5,13 +5,14 @@ import com.shop.online.shopingMall.domain.enumType.BillingInfoStatus;
 import com.shop.online.shopingMall.domain.enumType.CardName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity @Builder
+@Entity @Builder @Getter
 @NoArgsConstructor @AllArgsConstructor
 public class BillingInfo extends BaseEntity {
 
@@ -34,4 +35,7 @@ public class BillingInfo extends BaseEntity {
 
     @OneToMany(mappedBy = "billingInfo")
     private List<Order> orderList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "billingInfo")
+    private List<Payment> payments = new ArrayList<>();
 }

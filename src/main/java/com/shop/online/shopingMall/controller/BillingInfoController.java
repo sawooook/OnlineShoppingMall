@@ -21,4 +21,20 @@ public class BillingInfoController {
     public void kakaoPayReady(@PathVariable @NonNull Long id) throws ChangeSetPersister.NotFoundException {
         billingInfoService.kakaoPayReady(id);
     }
+
+    @GetMapping("/kakao/approve")
+    public void kakaoPayApprove() throws ChangeSetPersister.NotFoundException {
+        billingInfoService.kakaoPayAprove(1L);
+
+    }
+
+    @GetMapping("/kakao/fail")
+    public ResponseEntity<String> kakaoPayFail() {
+        return ResponseEntity.badRequest().body("결제에 실패하였습니다");
+    }
+
+    @GetMapping("/kakao/cancel")
+    public ResponseEntity<String> kakaoPayCancel() {
+        return ResponseEntity.badRequest().body("결제를 취소 하였습니다");
+    }
 }
