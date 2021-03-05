@@ -2,7 +2,6 @@ package com.shop.online.shopingMall.domain;
 
 import com.shop.online.shopingMall.domain.base.BaseEntity;
 import com.shop.online.shopingMall.domain.enumType.ProductOptionStatus;
-import com.shop.online.shopingMall.domain.enumType.ProductStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +18,7 @@ public class ProductOption extends BaseEntity {
     @Column(name = "product_option_id")
     private Long id;
 
-    private String Color;
+    private String color;
 
     private String size;
 
@@ -35,6 +34,11 @@ public class ProductOption extends BaseEntity {
         if (this.getProductOptionStatus() == null) {
             this.productOptionStatus = ProductOptionStatus.ACTIVE;
         }
+    }
+
+    public static ProductOption saveProductOption(String color, String size, Product product) {
+        return ProductOption.builder()
+                .product(product).size(size).color(color).build();
     }
 
 }
