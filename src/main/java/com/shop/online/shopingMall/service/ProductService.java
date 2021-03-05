@@ -4,6 +4,8 @@ import com.shop.online.shopingMall.domain.Product;
 import com.shop.online.shopingMall.domain.ProductOption;
 import com.shop.online.shopingMall.domain.ProductPrice;
 import com.shop.online.shopingMall.domain.User;
+import com.shop.online.shopingMall.dto.product.ProductDetailResponseDto;
+import com.shop.online.shopingMall.dto.product.ProductPriceDto;
 import com.shop.online.shopingMall.dto.product.ProductSaveRequestDto;
 import com.shop.online.shopingMall.repository.ProductPriceRepository;
 import com.shop.online.shopingMall.repository.ProductRepository;
@@ -30,8 +32,8 @@ public class ProductService {
     *
     * */
 
-    public Product saveProduct(ProductSaveRequestDto productSaveRequestDto) throws ChangeSetPersister.NotFoundException, NotFoundException {
-        User findUser = userRepository.findById(productSaveRequestDto.getUserId()).orElseThrow(ChangeSetPersister.NotFoundException::new);
+    public Product saveProduct(ProductSaveRequestDto productSaveRequestDto) throws NotFoundException {
+        User findUser = userRepository.findById(productSaveRequestDto.getUserId()).orElseThrow(() -> new NotFoundException("회원정보를 찾을 수 없습니다"));
 
         Product buildProduct = Product.builder()
                 .user(findUser).description(productSaveRequestDto.getDescription()).name(productSaveRequestDto.getName()).build();
@@ -56,6 +58,17 @@ public class ProductService {
         productPriceRepository.save(makeProductPrice);
 
         return makeProduct;
+    }
+
+    public Product findProduct(Long id) throws NotFoundException {
+        Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException("제품을 찾을 수 없습니다"));
+
+        User seller = product.getUser();
+
+        ProductDetailResponseDto.builder()
+                .description(product.getDescription()).name(product.getName()).sellerName(seller.getName())
+                .productPriceDto(new ProductPriceDto(product.lastRegisterPrice()));
+
     }
 
 }

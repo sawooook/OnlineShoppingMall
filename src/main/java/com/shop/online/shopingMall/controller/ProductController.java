@@ -3,6 +3,7 @@ package com.shop.online.shopingMall.controller;
 import com.shop.online.shopingMall.dto.product.ProductSaveRequestDto;
 import com.shop.online.shopingMall.service.ProductService;
 import javassist.NotFoundException;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,14 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public ResponseEntity productSave(@RequestBody ProductSaveRequestDto productSaveRequestDto) throws ChangeSetPersister.NotFoundException, NotFoundException {
+    public ResponseEntity productSave(@RequestBody ProductSaveRequestDto productSaveRequestDto) throws NotFoundException {
         productService.saveProduct(productSaveRequestDto);
 
         return ResponseEntity.ok().body("제품 등록에 성공 하였습니다.");
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity productDetail(@PathVariable @NonNull Long id) {
+        productService.findProduct(id);
     }
 }

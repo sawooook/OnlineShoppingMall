@@ -45,4 +45,10 @@ public class Product extends BaseEntity {
             this.productStatus = ProductStatus.ACTIVE;
         }
     }
+
+    public int lastRegisterPrice() {
+        int lastPriceSize = getProductPrices().size() - 1;
+        return getProductPrices().get(lastPriceSize).getPrice();
+    }
+
 }

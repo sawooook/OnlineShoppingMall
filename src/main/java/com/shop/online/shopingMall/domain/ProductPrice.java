@@ -3,6 +3,7 @@ package com.shop.online.shopingMall.domain;
 import com.shop.online.shopingMall.domain.base.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 * 생성한 테이블
 * */
 
-@Entity @Builder
+@Entity @Builder @Getter
 @NoArgsConstructor @AllArgsConstructor
 public class ProductPrice extends BaseEntity {
 
@@ -30,4 +31,10 @@ public class ProductPrice extends BaseEntity {
         return ProductPrice.builder()
                 .price(price).product(product).build();
     }
+
+    public int lastRegisterPrice() {
+        return getPrice();
+    }
+
+
 }
