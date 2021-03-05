@@ -3,6 +3,7 @@ package com.shop.online.shopingMall.domain;
 import com.shop.online.shopingMall.domain.base.BaseEntity;
 import com.shop.online.shopingMall.domain.enumType.BillingInfoStatus;
 import com.shop.online.shopingMall.domain.enumType.CardName;
+import com.shop.online.shopingMall.domain.enumType.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,5 +47,14 @@ public class BillingInfo extends BaseEntity {
 
     public void updatePaymentKey(String paymentKey) {
         this.paymentKey = paymentKey;
+    }
+
+
+    // 처음 insert 시 userStatus 업데이트를 위한 코드
+    @PrePersist
+    public void prePersist() {
+        if (this.getBillingInfoStatus() == null) {
+            this.billingInfoStatus = BillingInfoStatus.ACTIVE;
+        }
     }
 }

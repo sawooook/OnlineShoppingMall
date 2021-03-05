@@ -22,6 +22,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+
+    /*
+    * 로그인 체크
+    * 1) 입력한 이메일과 비밀번호가 일치하는지 테스트함
+    * 2) 회원탈퇴한 아이디일 경우 로그인을 하지못하도록 현재 가입된 유저만 로그인하도록함
+    * */
     public Optional<UserLoginResponseDto> loginCheck(String email, String passWord) {
         User user = userRepository.findByEmail(email).orElseThrow(EntityNotFoundException::new);
         if (user.getUserStatus() == UserStatus.SIGN) {
@@ -31,7 +37,7 @@ public class UserService {
                 return Optional.ofNullable(userResponseDto);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     /*

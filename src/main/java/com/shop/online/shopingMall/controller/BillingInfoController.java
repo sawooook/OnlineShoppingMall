@@ -23,7 +23,7 @@ public class BillingInfoController {
     public void kakaoPayApprove(@RequestParam("pg_token") String pgToken) throws ChangeSetPersister.NotFoundException {
         System.out.println("===============");
         System.out.println(pgToken);
-        billingInfoService.kakaoPayAprove(1L, pgToken);
+        billingInfoService.kakaoPayApprove(1L, pgToken);
 
     }
 

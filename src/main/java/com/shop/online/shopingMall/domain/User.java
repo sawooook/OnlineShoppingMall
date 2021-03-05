@@ -11,12 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Entity @Getter @Builder
+@Entity
+@Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "user_id")
     private Long id;
 
@@ -33,7 +36,6 @@ public class User extends BaseEntity {
     private UserRole userRole;
 
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("'SIGN'")
     private UserStatus userStatus;
 
     @OneToMany(mappedBy = "user")
@@ -44,6 +46,14 @@ public class User extends BaseEntity {
 
     @Embedded
     private Address address;
+
+    // 처음 insert 시 userStatus 업데이트를 위한 코드
+    @PrePersist
+    public void prePersist() {
+        if (this.getUserStatus() == null) {
+            this.userStatus = UserStatus.SIGN;
+        }
+    }
 
     public User changeEncodingPassword(String encodingPassword) {
         return User.builder().password(encodingPassword)
