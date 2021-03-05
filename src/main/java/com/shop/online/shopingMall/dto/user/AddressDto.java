@@ -1,4 +1,4 @@
-package com.shop.online.shopingMall.dto;
+package com.shop.online.shopingMall.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

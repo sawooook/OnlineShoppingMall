@@ -2,7 +2,7 @@ package com.shop.online.shopingMall.service;
 
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.domain.enumType.UserStatus;
-import com.shop.online.shopingMall.dto.UserLoginResponseDto;
+import com.shop.online.shopingMall.dto.user.UserLoginResponseDto;
 import com.shop.online.shopingMall.repository.UserRepository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.io.NotActiveException;
 import java.util.Optional;
 
 @Service

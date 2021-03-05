@@ -5,13 +5,14 @@ import com.shop.online.shopingMall.domain.base.BaseEntity;
 import com.shop.online.shopingMall.domain.enumType.ProductStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity @Builder
+@Entity @Builder @Getter
 @NoArgsConstructor @AllArgsConstructor
 public class Product extends BaseEntity {
 
@@ -31,4 +32,11 @@ public class Product extends BaseEntity {
 
     @OneToMany(mappedBy = "product")
     private List<ProductPrice> productPrices = new ArrayList<>();
+
+    @PrePersist
+    public void prePersist() {
+        if (this.getProductStatus() == null) {
+            this.productStatus = ProductStatus.ACTIVE;
+        }
+    }
 }

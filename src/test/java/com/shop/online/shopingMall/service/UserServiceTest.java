@@ -2,7 +2,7 @@ package com.shop.online.shopingMall.service;
 
 import com.shop.online.shopingMall.domain.Address;
 import com.shop.online.shopingMall.domain.User;
-import com.shop.online.shopingMall.dto.UserLoginResponseDto;
+import com.shop.online.shopingMall.dto.user.UserLoginResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

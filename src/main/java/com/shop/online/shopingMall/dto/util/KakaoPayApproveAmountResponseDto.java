@@ -1,4 +1,4 @@
-package com.shop.online.shopingMall.dto;
+package com.shop.online.shopingMall.dto.util;
 
 import com.shop.online.shopingMall.domain.enumType.CardName;
 import lombok.AllArgsConstructor;

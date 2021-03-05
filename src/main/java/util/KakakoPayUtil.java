@@ -1,11 +1,8 @@
 package util;
 
 import com.shop.online.shopingMall.domain.User;
-import com.shop.online.shopingMall.dto.KakaoPayApproveResponseDto;
-import com.shop.online.shopingMall.dto.KakaoPayReadyResponseDto;
-import org.apache.tomcat.util.json.JSONParser;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
-import org.springframework.boot.json.JsonParser;
+import com.shop.online.shopingMall.dto.util.KakaoPayApproveResponseDto;
+import com.shop.online.shopingMall.dto.util.KakaoPayReadyResponseDto;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;

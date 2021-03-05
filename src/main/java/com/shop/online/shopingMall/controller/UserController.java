@@ -1,9 +1,9 @@
 package com.shop.online.shopingMall.controller;
 
 import com.shop.online.shopingMall.domain.User;
-import com.shop.online.shopingMall.dto.UserDto;
-import com.shop.online.shopingMall.dto.UserLoginRequestDto;
-import com.shop.online.shopingMall.dto.UserLoginResponseDto;
+import com.shop.online.shopingMall.dto.user.UserDto;
+import com.shop.online.shopingMall.dto.user.UserLoginRequestDto;
+import com.shop.online.shopingMall.dto.user.UserLoginResponseDto;
 import com.shop.online.shopingMall.service.UserService;
 import javassist.NotFoundException;
 import lombok.NonNull;
@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.NotActiveException;
 import java.util.Optional;
 
 @RestController
@@ -23,7 +22,7 @@ public class UserController {
 
     /*
     * 회원 가입 관련 컨트롤러
-    * 회원가입에 성공시 Status 201과, User 객체를 내려준다.
+    * 회원가입에 성공시 Status 201과, user 객체를 내려준다.
     */
     @PostMapping("/singUp")
     public ResponseEntity signUp(@RequestBody @NonNull UserDto userDto) {
@@ -55,7 +54,7 @@ public class UserController {
     /*
     * 로그인 관련 API
     *
-    * 성공시 return OK, User 정보
+    * 성공시 return OK, user 정보
     * 실패시 return BadRequest
     *
     * */

@@ -1,4 +1,4 @@
-package com.shop.online.shopingMall.dto;
+package com.shop.online.shopingMall.dto.util;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,15 @@ import java.time.LocalDateTime;
 
 @Data @Builder
 @NoArgsConstructor @AllArgsConstructor
-public class KakaoPayResultResponseDto {
-    private String amount;
-    private String cardInfo;
+public class KakaoPayApproveResponseDto {
+    private String aid;
+    private String tid;
+    private String cid;
+    private String sid;
+//    private String amount;
+//    private String cardInfo;
     private String itemName;
     private String quantity;
     private LocalDateTime approveAt;
+    private LocalDateTime createdAt;
 }

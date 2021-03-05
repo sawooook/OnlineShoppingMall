@@ -4,22 +4,16 @@ import com.shop.online.shopingMall.domain.BillingInfo;
 import com.shop.online.shopingMall.domain.Payment;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.domain.enumType.CardName;
-import com.shop.online.shopingMall.dto.KakaoPayApproveResponseDto;
-import com.shop.online.shopingMall.dto.KakaoPayReadyResponseDto;
+import com.shop.online.shopingMall.dto.util.KakaoPayApproveResponseDto;
+import com.shop.online.shopingMall.dto.util.KakaoPayReadyResponseDto;
 import com.shop.online.shopingMall.repository.BillingInfoRepository;
 import com.shop.online.shopingMall.repository.PaymentRepository;
 import com.shop.online.shopingMall.repository.UserRepository;
-import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 import util.KakakoPayUtil;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
