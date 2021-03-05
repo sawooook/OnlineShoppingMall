@@ -44,6 +44,9 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<Order> orderList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Product> products = new ArrayList<>();
+
     @Embedded
     private Address address;
 
