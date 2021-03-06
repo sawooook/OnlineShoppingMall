@@ -1,17 +1,15 @@
 package com.shop.online.shopingMall.service;
 
+import com.shop.online.shopingMall.Exception.NotFoundUserException;
 import com.shop.online.shopingMall.domain.User;
-import com.shop.online.shopingMall.domain.enumType.UserStatus;
+import com.shop.online.shopingMall.dto.user.UserDto;
 import com.shop.online.shopingMall.dto.user.UserLoginResponseDto;
 import com.shop.online.shopingMall.repository.UserRepository;
-import javassist.NotFoundException;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -27,22 +25,32 @@ public class UserService {
     * 1) 입력한 이메일과 비밀번호가 일치하는지 테스트함
     * 2) 회원탈퇴한 아이디일 경우 로그인을 하지못하도록 현재 가입된 유저만 로그인하도록함
     * */
-    public Optional<UserLoginResponseDto> loginCheck(String email, String passWord) {
-        User user = userRepository.findByEmail(email).orElseThrow(EntityNotFoundException::new);
-        if (user.getUserStatus() == UserStatus.SIGN) {
-            if (passwordEncoder.matches(passWord, user.getPassword())){
-                UserLoginResponseDto userResponseDto = UserLoginResponseDto.builder()
-                        .id(user.getId()).email(user.getEmail()).phone(user.getPhone()).name(user.getName()).address(user.getAddress()).build();
-                return Optional.ofNullable(userResponseDto);
-            }
+    public UserLoginResponseDto loginCheck(String email, String passWord) throws NotFoundUserException {
+        User user = userRepository.findByEmail(email).orElseThrow(NotFoundUserException::new);
+
+        boolean validUser = isValidUser(user.isNotDeleteUser(), isValidPassword(passWord, user.getPassword()));
+
+        if (validUser) {
+            return UserLoginResponseDto.toDto(user);
+        } else {
+            throw new NotFoundUserException("로그인 실패");
         }
-        return Optional.empty();
+    }
+
+    private boolean isValidPassword(String passWord, String encodingPassWord) {
+        return passwordEncoder.matches(passWord, encodingPassWord);
+    }
+
+    private boolean isValidUser(Boolean userStatus, Boolean passWordCorrectStatus) {
+        return userStatus && passWordCorrectStatus;
     }
 
     /*
     * 해당 비밀번호를 받아와서 password_Encoder를 이용해서 인코딩 한 후, 유저를 저장한다.
     * */
-    public Long save(User user) {
+
+    public Long save(@NonNull UserDto userDto) {
+        User user = userDto.toEntity();
         String encodePassWord = passwordEncoder.encode(user.getPassword());
         User encodingUser = user.changeEncodingPassword(encodePassWord);
         return userRepository.save(encodingUser).getId();
@@ -52,8 +60,8 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-    public void unRegister(Long id) throws NotFoundException {
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("아아디 가 존재하지 않습니다."));
+    public void unRegister(Long id) throws NotFoundUserException {
+        User user = userRepository.findById(id).orElseThrow(NotFoundUserException::new);
         userRepository.delete(user);
     }
 

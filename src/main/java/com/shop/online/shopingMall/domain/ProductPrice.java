@@ -1,6 +1,7 @@
 package com.shop.online.shopingMall.domain;
 
 import com.shop.online.shopingMall.domain.base.BaseEntity;
+import com.shop.online.shopingMall.dto.product.ProductPriceDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,14 +28,16 @@ public class ProductPrice extends BaseEntity {
     @JoinColumn(name = "product_Id")
     private Product product;
 
-    public static ProductPrice saveProductPrice(Product product, int price) {
+    public static ProductPrice saveProductPrice(ProductPriceDto productPriceDto, Product product) {
         return ProductPrice.builder()
-                .price(price).product(product).build();
+                .price(productPriceDto.getPrice()).product(product).build();
     }
 
     public int lastRegisterPrice() {
         return getPrice();
     }
 
-
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 }

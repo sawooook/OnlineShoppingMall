@@ -1,5 +1,6 @@
 package com.shop.online.shopingMall.dto.product;
 
+import com.shop.online.shopingMall.domain.Product;
 import com.shop.online.shopingMall.domain.ProductOption;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,11 +13,19 @@ import java.util.List;
 @AllArgsConstructor @NoArgsConstructor
 public class ProductDetailResponseDto {
 
-    private Long id;
-
     private String name;
     private String description;
     private List<ProductOptionDto> productOptions;
-    private ProductPriceDto productPriceDto;
+    private int productPrice;
     private String sellerName;
+
+
+    public static ProductDetailResponseDto toDto(Product product) {
+        List<ProductOptionDto> productOptionDtos = ProductOptionDto.toDto(product.getProductOptions());
+
+        return ProductDetailResponseDto.builder()
+                .name(product.getName()).description(product.getDescription())
+                .productPrice(product.lastRegisterPrice()).sellerName(product.getUser().getName())
+                .productOptions(productOptionDtos).build();
+    }
 }

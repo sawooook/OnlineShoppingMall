@@ -26,8 +26,7 @@ public class UserController {
     */
     @PostMapping("/singUp")
     public ResponseEntity signUp(@RequestBody @NonNull UserDto userDto) {
-        User user = userDto.toEntity();
-        userService.save(user);
+        userService.save(userDto);
         return ResponseEntity.ok().build();
     }
 
@@ -63,13 +62,9 @@ public class UserController {
         String email = userLoginRequestDto.getEmail();
         String passWord = userLoginRequestDto.getPassWord();
 
-        Optional<UserLoginResponseDto> userResponseDto = userService.loginCheck(email, passWord);
+        UserLoginResponseDto userLoginResponseDto = userService.loginCheck(email, passWord);
 
-        if (userResponseDto.isPresent()) {
-            return ResponseEntity.ok().body(userResponseDto);
-        } else {
-            return ResponseEntity.badRequest().body("가입하지 않은 아이디입니다.");
-        }
+        return ResponseEntity.ok().body(userLoginResponseDto);
     }
 
     @GetMapping("/delete/{id}")

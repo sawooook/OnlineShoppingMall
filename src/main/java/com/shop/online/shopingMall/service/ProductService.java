@@ -1,10 +1,13 @@
 package com.shop.online.shopingMall.service;
 
+import com.shop.online.shopingMall.Exception.NotFoundUserException;
+import com.shop.online.shopingMall.Exception.ProductNotFoundException;
 import com.shop.online.shopingMall.domain.Product;
 import com.shop.online.shopingMall.domain.ProductOption;
 import com.shop.online.shopingMall.domain.ProductPrice;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.dto.product.ProductDetailResponseDto;
+import com.shop.online.shopingMall.dto.product.ProductOptionDto;
 import com.shop.online.shopingMall.dto.product.ProductPriceDto;
 import com.shop.online.shopingMall.dto.product.ProductSaveRequestDto;
 import com.shop.online.shopingMall.repository.ProductPriceRepository;
@@ -16,6 +19,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -31,44 +37,30 @@ public class ProductService {
     * 제품 저장
     *
     * */
+    public void saveProduct(ProductSaveRequestDto requestDto) throws NotFoundUserException {
 
-    public Product saveProduct(ProductSaveRequestDto productSaveRequestDto) throws NotFoundException {
-        User findUser = userRepository.findById(productSaveRequestDto.getUserId()).orElseThrow(() -> new NotFoundException("회원정보를 찾을 수 없습니다"));
+        User findUser = userRepository.findById(requestDto.getUserId())
+                .orElseThrow(() -> new NotFoundUserException("회원정보를 찾을 수 없습니다"));
 
-        Product buildProduct = Product.builder()
-                .user(findUser).description(productSaveRequestDto.getDescription()).name(productSaveRequestDto.getName()).build();
+        Product product = ProductSaveRequestDto.toEntity(requestDto, findUser);
+        List<ProductOption> optionsList = ProductOptionDto.toEntity(requestDto.getProductOptionDto());
+        ProductPrice productPrice = ProductPriceDto.toEntity(requestDto.getProductPriceDto());
 
-        Product makeProduct = productRepository.save(buildProduct);
+        Product makeProduct = Product.createProduct(product, optionsList, productPrice);
 
-        if (productSaveRequestDto.getProductOptionDto() == null) {
-            throw new NotFoundException("옵션을 선택하지 않았습니다");
-        }
-        int productOptionSize = productSaveRequestDto.getProductOptionDto().size();
-
-        for (int i = 0; i < productOptionSize ; i++) {
-            ProductOption productOption = ProductOption.saveProductOption(
-                    productSaveRequestDto.getProductOptionDto().get(i).getColor(),
-                    productSaveRequestDto.getProductOptionDto().get(i).getSize(),
-                    makeProduct);
-            productionOptionRepository.save(productOption);
-        }
-
-        ProductPrice makeProductPrice = ProductPrice.saveProductPrice(makeProduct, productSaveRequestDto.getProductPriceDto().getPrice());
-
-        productPriceRepository.save(makeProductPrice);
-
-        return makeProduct;
+        productRepository.save(makeProduct);
     }
 
-    public Product findProduct(Long id) throws NotFoundException {
-        Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException("제품을 찾을 수 없습니다"));
 
-        User seller = product.getUser();
+    /*
+    * #- 제품 상세페이지
+    * 제품을 찾으면 제품에대한 상세페이지 리스트를 리턴해준다.
+    * */
+    public ProductDetailResponseDto findProduct(Long id) throws ProductNotFoundException {
 
-        ProductDetailResponseDto.builder()
-                .description(product.getDescription()).name(product.getName()).sellerName(seller.getName())
-                .productPriceDto(new ProductPriceDto(product.lastRegisterPrice()));
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("제품을 찾을 수 없습니다"));
 
+        return ProductDetailResponseDto.toDto(product);
     }
-
 }

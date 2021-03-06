@@ -1,11 +1,9 @@
 package com.shop.online.shopingMall.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.shop.online.shopingMall.domain.ProductOption;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import com.shop.online.shopingMall.domain.Product;
+import com.shop.online.shopingMall.domain.User;
+import lombok.*;
 
 import java.util.List;
 
@@ -29,4 +27,9 @@ public class ProductSaveRequestDto {
     @NonNull
     @JsonProperty("product_price")
     private ProductPriceDto productPriceDto;
+
+    public static Product toEntity(ProductSaveRequestDto requestDto, User user) {
+        return Product.builder()
+                .name(requestDto.getName()).user(user).description(requestDto.getDescription()).build();
+    }
 }

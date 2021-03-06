@@ -41,4 +41,7 @@ public class ProductOption extends BaseEntity {
                 .product(product).size(size).color(color).build();
     }
 
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 }

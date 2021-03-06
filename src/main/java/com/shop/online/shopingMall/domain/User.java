@@ -65,4 +65,18 @@ public class User extends BaseEntity {
                 .name(this.name).userRole(this.userRole).userStatus(this.userStatus).build();
 
     }
+
+    public boolean isNotDeleteUser() {
+        return getUserStatus() == UserStatus.SIGN;
+    }
+
+//
+//        if (user.getUserStatus() == UserStatus.SIGN) {
+//            if (passwordEncoder.matches(passWord, user.getPassword())){
+//                UserLoginResponseDto userResponseDto = UserLoginResponseDto.builder()
+//                        .id(user.getId()).email(user.getEmail()).phone(user.getPhone()).name(user.getName()).address(user.getAddress()).build();
+//                return Optional.ofNullable(userResponseDto);
+//            }
+//
+//        }
 }
