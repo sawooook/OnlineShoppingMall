@@ -1,5 +1,7 @@
 package com.shop.online.shopingMall.controller;
 
+import com.shop.online.shopingMall.concern.ResponseMessage;
+import com.shop.online.shopingMall.concern.ResponseStatus;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.dto.user.UserDto;
 import com.shop.online.shopingMall.dto.user.UserLoginRequestDto;
@@ -61,15 +63,14 @@ public class UserController {
     public ResponseEntity Login(@RequestBody @NonNull UserLoginRequestDto userLoginRequestDto) {
         String email = userLoginRequestDto.getEmail();
         String passWord = userLoginRequestDto.getPassWord();
-
         UserLoginResponseDto userLoginResponseDto = userService.loginCheck(email, passWord);
 
-        return ResponseEntity.ok().body(userLoginResponseDto);
+        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK,"로그인 성공", userLoginResponseDto));
     }
 
     @GetMapping("/delete/{id}")
     public ResponseEntity unRegister(@NonNull Long id) throws NotFoundException {
         userService.unRegister(id);
-        return ResponseEntity.ok().body("회원탈퇴가 완료 되었습니다.");
+        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK,"회원탈퇴 완료", null));
     }
 }

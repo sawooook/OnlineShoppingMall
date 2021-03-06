@@ -1,4 +1,4 @@
-package com.shop.online.shopingMall.dto.util;
+package com.shop.online.shopingMall.concern;
 
 public enum ResponseStatus {
     OK(200, "OK"),

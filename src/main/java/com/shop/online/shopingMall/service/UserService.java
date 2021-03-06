@@ -26,7 +26,8 @@ public class UserService {
     * 2) 회원탈퇴한 아이디일 경우 로그인을 하지못하도록 현재 가입된 유저만 로그인하도록함
     * */
     public UserLoginResponseDto loginCheck(String email, String passWord) throws NotFoundUserException {
-        User user = userRepository.findByEmail(email).orElseThrow(NotFoundUserException::new);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(()-> new NotFoundUserException("유저를 찾을 수 없습니다."));
 
         boolean validUser = isValidUser(user.isNotDeleteUser(), isValidPassword(passWord, user.getPassword()));
 
