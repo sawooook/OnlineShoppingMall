@@ -1,8 +1,10 @@
 package com.shop.online.shopingMall.service;
 
+import com.shop.online.shopingMall.Exception.NotFoundUserException;
 import com.shop.online.shopingMall.domain.Address;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.dto.user.UserLoginResponseDto;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +39,9 @@ class UserServiceTest {
 
         entityManager.persist(testUser);
 
-        Optional<UserLoginResponseDto> userLoginResponseDto = userService.loginCheck(testUser.getEmail(), "123");
+        UserLoginResponseDto userLoginResponseDto = userService.loginCheck(testUser.getEmail(), "123");
 
-        assertThat(userLoginResponseDto.isPresent()).isNotNull();
+        assertThat(userLoginResponseDto.getName()).isEqualTo("test");
 
     }
 
@@ -51,9 +53,11 @@ class UserServiceTest {
 
         entityManager.persist(testUser);
 
-        Optional<UserLoginResponseDto> userLoginResponseDto = userService.loginCheck(testUser.getEmail(), "123");
-
-        assertThat(userLoginResponseDto.isEmpty()).isTrue();
+        try {
+            userService.loginCheck(testUser.getEmail(), "123");
+        } catch (Exception e) {
+            Assertions.assertEquals("로그인 실패", e.getMessage());
+        }
     }
 
     @Test
