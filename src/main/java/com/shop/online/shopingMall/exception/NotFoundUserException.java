@@ -1,4 +1,4 @@
-package com.shop.online.shopingMall.Exception;
+package com.shop.online.shopingMall.exception;
 
 public class NotFoundUserException extends RuntimeException {
 

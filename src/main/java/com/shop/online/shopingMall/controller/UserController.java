@@ -11,6 +11,7 @@ import javassist.NotFoundException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -21,12 +22,13 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     /*
     * 회원 가입 관련 컨트롤러
     * 회원가입에 성공시 Status 201과, user 객체를 내려준다.
     */
-    @PostMapping("/singUp")
+    @PostMapping("/signUp")
     public ResponseEntity signUp(@RequestBody @NonNull UserDto userDto) {
         userService.save(userDto);
         return ResponseEntity.ok().build();
@@ -64,6 +66,11 @@ public class UserController {
         String email = userLoginRequestDto.getEmail();
         String passWord = userLoginRequestDto.getPassWord();
         UserLoginResponseDto userLoginResponseDto = userService.loginCheck(email, passWord);
+
+//        if (userLoginResponseDto != null) {
+//            String token = jwtTokenProvider.createToken(userLoginResponseDto.getId());
+//            userLoginResponseDto.updateToken(token);
+//        }
 
         return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK,"로그인 성공", userLoginResponseDto));
     }

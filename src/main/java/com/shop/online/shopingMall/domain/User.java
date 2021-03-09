@@ -5,9 +5,12 @@ import com.shop.online.shopingMall.domain.enumType.UserRole;
 import com.shop.online.shopingMall.domain.enumType.UserStatus;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -16,7 +19,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails {
 
     @Id
     @GeneratedValue
@@ -70,13 +73,43 @@ public class User extends BaseEntity {
         return getUserStatus() == UserStatus.SIGN;
     }
 
-//
-//        if (user.getUserStatus() == UserStatus.SIGN) {
-//            if (passwordEncoder.matches(passWord, user.getPassword())){
-//                UserLoginResponseDto userResponseDto = UserLoginResponseDto.builder()
-//                        .id(user.getId()).email(user.getEmail()).phone(user.getPhone()).name(user.getName()).address(user.getAddress()).build();
-//                return Optional.ofNullable(userResponseDto);
-//            }
-//
-//        }
+    /*
+    * Spring Security 관련 메소드
+    * */
+
+    // 계정이 갖고 있는 권한 목록을 리턴함
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    // 계정의 이름을 리턴함
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
+    //계정이 만료되었는지 체크한다
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    //계정이 잠겨있는지 체크한다.
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    //계정 비밀번호가 만료되지 않았는지 체크한다.
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    // 계정이 활성화 상태인지 체크한다.
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 }

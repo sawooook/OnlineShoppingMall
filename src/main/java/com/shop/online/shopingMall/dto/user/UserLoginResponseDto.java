@@ -11,6 +11,7 @@ import lombok.Data;
 public class UserLoginResponseDto {
     private Long id;
     private String name;
+    private String jwtToken;
     private String phone;
     private String email;
     private AddressDto address;
@@ -26,5 +27,9 @@ public class UserLoginResponseDto {
 
         return UserLoginResponseDto.builder().address(addressDto)
                 .id(user.getId()).name(user.getName()).email(user.getEmail()).phone(user.getPhone()).build();
+    }
+
+    public void updateToken(String token) {
+        setJwtToken(token);
     }
 }

@@ -3,7 +3,10 @@ package com.shop.online.shopingMall.dto.user;
 import com.shop.online.shopingMall.domain.Address;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.domain.enumType.UserRole;
+import com.shop.online.shopingMall.domain.enumType.UserStatus;
+import com.shop.online.shopingMall.service.UserService;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 /*
 * 사용자관련 DTO
@@ -37,6 +40,9 @@ public class UserDto {
 
     @NonNull
     private UserRole userRole;
+
+    @ColumnDefault("SIGN")
+    private UserStatus userStatus;
 
     public User toEntity() {
         Address address = Address.builder().addressCode(getAddressCode())

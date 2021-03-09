@@ -1,7 +1,7 @@
 package com.shop.online.shopingMall.service;
 
-import com.shop.online.shopingMall.Exception.NotFoundUserException;
-import com.shop.online.shopingMall.Exception.ProductNotFoundException;
+import com.shop.online.shopingMall.exception.NotFoundUserException;
+import com.shop.online.shopingMall.exception.ProductNotFoundException;
 import com.shop.online.shopingMall.domain.Product;
 import com.shop.online.shopingMall.domain.ProductOption;
 import com.shop.online.shopingMall.domain.ProductPrice;
@@ -14,13 +14,10 @@ import com.shop.online.shopingMall.repository.ProductPriceRepository;
 import com.shop.online.shopingMall.repository.ProductRepository;
 import com.shop.online.shopingMall.repository.ProductionOptionRepository;
 import com.shop.online.shopingMall.repository.UserRepository;
-import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

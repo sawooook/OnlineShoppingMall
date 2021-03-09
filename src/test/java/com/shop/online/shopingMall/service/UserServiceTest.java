@@ -1,6 +1,5 @@
 package com.shop.online.shopingMall.service;
 
-import com.shop.online.shopingMall.Exception.NotFoundUserException;
 import com.shop.online.shopingMall.domain.Address;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.dto.user.UserLoginResponseDto;
@@ -13,7 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

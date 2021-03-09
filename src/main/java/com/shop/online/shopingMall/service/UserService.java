@@ -1,12 +1,16 @@
 package com.shop.online.shopingMall.service;
 
-import com.shop.online.shopingMall.Exception.NotFoundUserException;
+import com.shop.online.shopingMall.config.JwtTokenProvider;
+import com.shop.online.shopingMall.exception.NotFoundUserException;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.dto.user.UserDto;
 import com.shop.online.shopingMall.dto.user.UserLoginResponseDto;
 import com.shop.online.shopingMall.repository.UserRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +22,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-
+    private final JwtTokenProvider jwtTokenProvider;
     /*
     * 로그인 체크
     * 1) 입력한 이메일과 비밀번호가 일치하는지 테스트함
@@ -32,7 +35,10 @@ public class UserService {
         boolean validUser = isValidUser(user.isNotDeleteUser(), isValidPassword(passWord, user.getPassword()));
 
         if (validUser) {
-            return UserLoginResponseDto.toDto(user);
+            String token = jwtTokenProvider.createToken(user.getId());
+            UserLoginResponseDto userLoginResponseDto = UserLoginResponseDto.toDto(user);
+            userLoginResponseDto.updateToken(token);
+            return userLoginResponseDto;
         } else {
             throw new NotFoundUserException("로그인 실패");
         }

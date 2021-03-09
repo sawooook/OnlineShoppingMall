@@ -9,31 +9,39 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.servlet.*;
+import java.io.IOException;
 
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
-public class UserConfig extends WebSecurityConfigurerAdapter {
-
-//    private final CustomAutowireConfigurer autowireConfigurer;
-
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     /*
-    * Http 보안에 대한 설정
-    * */
+     * Http 보안에 대한 설정
+     * */
+    private final JwtTokenProvider jwtTokenProvider;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http.httpBasic().disable()
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //토큰 기반인증이므로 세션사용 안함
+                .and()
+                .authorizeRequests() // 요청에대한 사용권한체크
                 .antMatchers("/billingInfo/**").permitAll()
-                .antMatchers("/user/**").permitAll();
-        http.csrf().disable();
-        http.cors().and();
+                .antMatchers("/user/**").permitAll()
+                .and()
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // or any other password encoder
+        return new BCryptPasswordEncoder();
     }
 }
