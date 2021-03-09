@@ -74,7 +74,7 @@ public class JwtTokenProvider {
         //토큰을 파싱
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-            return claims.getBody().getExpiration().before(new Date());
+            return claims.getBody().getExpiration().after(new Date());
         } catch (Exception e) {
             return false;
         }
@@ -82,6 +82,7 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = securityService.loadUserByUsername(this.getUserPk(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        UsernamePasswordAuthenticationToken us = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword());
+        return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword());
     }
 }

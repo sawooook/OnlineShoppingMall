@@ -22,8 +22,6 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
-
     /*
     * 회원 가입 관련 컨트롤러
     * 회원가입에 성공시 Status 201과, user 객체를 내려준다.

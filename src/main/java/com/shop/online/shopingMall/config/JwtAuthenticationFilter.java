@@ -18,7 +18,7 @@ public class JwtAuthenticationFilter implements Filter {
 
 
 
-    /*
+    /**
     * 회원가입, 로그인 페이지의 경우 유효성검사를 하지 않도록함
     * */
     @Override
@@ -27,8 +27,10 @@ public class JwtAuthenticationFilter implements Filter {
 
         if (!(url.equals("/user/signUp") || url.equals("/user/login"))) {
             String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
+            System.out.println("token = " + token);
             if (isValidToken(token)) {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                System.out.println("authentication = " + authentication);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
                 throw new JWTAuthenticateException("JWT 토큰 유효성 에러");
@@ -37,7 +39,12 @@ public class JwtAuthenticationFilter implements Filter {
         chain.doFilter(request, response);
     }
 
+
+    /**
+    * 토큰 유효성 검사
+    * Null Check 및 날짜가 지난 토큰이 아닌지 확인
+    * */
     private boolean isValidToken(String token) {
-        return token == null && jwtTokenProvider.validToken(token);
+        return token != null && jwtTokenProvider.validToken(token);
     }
 }
