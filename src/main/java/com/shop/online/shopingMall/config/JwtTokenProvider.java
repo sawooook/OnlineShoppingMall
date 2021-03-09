@@ -36,7 +36,7 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    /*
+    /**
     * claims => JWT payload에 저장되는 정보 단위
     *
     * */
@@ -51,7 +51,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    /*
+    /**
     * 토큰에서 회원 정보 추출
     * */
     public String getUserPk(String token) {
@@ -64,7 +64,7 @@ public class JwtTokenProvider {
     }
 
 
-    /*
+    /**
     * 토큰이 유효한 토큰인지 파악
     *
     * 만약 시간이 지나지 않은 토큰이고, 발행이 유효한 토큰일 경우 true를 반환한다

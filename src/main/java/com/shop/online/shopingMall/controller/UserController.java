@@ -6,8 +6,11 @@ import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.dto.user.UserDto;
 import com.shop.online.shopingMall.dto.user.UserLoginRequestDto;
 import com.shop.online.shopingMall.dto.user.UserLoginResponseDto;
+import com.shop.online.shopingMall.dto.user.UserMypageResponse;
+import com.shop.online.shopingMall.exception.NotFoundUserException;
 import com.shop.online.shopingMall.service.UserService;
 import javassist.NotFoundException;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +46,7 @@ public class UserController {
     * */
     @GetMapping("/check/{email}")
     public ResponseEntity checkEmail(@PathVariable @NonNull String email) {
-        Boolean checkEmailStatus = userService.checkEmail(email);
+        boolean checkEmailStatus = userService.checkEmail(email);
 
         if (checkEmailStatus) {
             return ResponseEntity.notFound().build();
@@ -60,7 +63,7 @@ public class UserController {
     *
     * */
     @PostMapping("/login")
-    public ResponseEntity Login(@RequestBody @NonNull UserLoginRequestDto userLoginRequestDto) {
+    public ResponseEntity login(@RequestBody @NonNull UserLoginRequestDto userLoginRequestDto) {
         String email = userLoginRequestDto.getEmail();
         String passWord = userLoginRequestDto.getPassWord();
         UserLoginResponseDto userLoginResponseDto = userService.loginCheck(email, passWord);
@@ -74,8 +77,15 @@ public class UserController {
     }
 
     @GetMapping("/delete/{id}")
-    public ResponseEntity unRegister(@NonNull Long id) throws NotFoundException {
+    public ResponseEntity unRegister(@NonNull Long id) throws NotFoundUserException {
         userService.unRegister(id);
         return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK,"회원탈퇴 완료", null));
+    }
+
+    @GetMapping("/test/{id}")
+    public ResponseEntity myPage(@PathVariable @NonNull Long id) throws NotFoundUserException {
+        UserMypageResponse user = userService.findUser(id);
+        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, "마이페이지", user));
+
     }
 }

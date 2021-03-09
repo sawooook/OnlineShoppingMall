@@ -27,10 +27,8 @@ public class JwtAuthenticationFilter implements Filter {
 
         if (!(url.equals("/user/signUp") || url.equals("/user/login"))) {
             String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
-            System.out.println("token = " + token);
             if (isValidToken(token)) {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
-                System.out.println("authentication = " + authentication);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
                 throw new JWTAuthenticateException("JWT 토큰 유효성 에러");

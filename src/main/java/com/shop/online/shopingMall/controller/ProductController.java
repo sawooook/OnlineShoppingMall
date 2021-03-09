@@ -1,5 +1,7 @@
 package com.shop.online.shopingMall.controller;
 
+import com.shop.online.shopingMall.concern.ResponseMessage;
+import com.shop.online.shopingMall.concern.ResponseStatus;
 import com.shop.online.shopingMall.exception.NotFoundUserException;
 import com.shop.online.shopingMall.dto.product.ProductDetailResponseDto;
 import com.shop.online.shopingMall.dto.product.ProductSaveRequestDto;
@@ -20,7 +22,7 @@ public class ProductController {
     public ResponseEntity productSave(@RequestBody ProductSaveRequestDto productSaveRequestDto) throws NotFoundUserException {
         productService.saveProduct(productSaveRequestDto);
 
-        return ResponseEntity.ok().body("제품 등록에 성공 하였습니다.");
+        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, "제품 등록에 성공 하였습니다", null));
     }
 
     @GetMapping("/{id}")

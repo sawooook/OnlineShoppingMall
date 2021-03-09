@@ -32,12 +32,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //토큰 기반인증이므로 세션사용 안함
                 .and()
-                .authorizeRequests() // 요청에대한 사용권한체크
-                .antMatchers("/billingInfo/**").permitAll()
-                .antMatchers("/user/**").permitAll()
-                .and()
+//                .authorizeRequests() // 요청에대한 사용권한체크
+//                .antMatchers("/billingInfo/**").permitAll()
+//                .antMatchers("/user/**").permitAll()
+//                .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-
     }
 
     @Bean
