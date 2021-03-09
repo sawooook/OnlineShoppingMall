@@ -82,7 +82,6 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = securityService.loadUserByUsername(this.getUserPk(token));
-        UsernamePasswordAuthenticationToken us = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword());
         return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword());
     }
 }
