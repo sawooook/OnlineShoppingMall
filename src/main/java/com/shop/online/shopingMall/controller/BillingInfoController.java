@@ -19,18 +19,15 @@ import org.springframework.web.bind.annotation.*;
 public class BillingInfoController {
 
     private final BillingInfoService billingInfoService;
-    private final SecurityService securityService;
 
-    @GetMapping("/kakao/ready/{id}")
-    public void kakaoPayReady(@PathVariable @NonNull Long id) throws ChangeSetPersister.NotFoundException {
-        Long userId = securityService.findUserIdbyToken();
-        billingInfoService.kakaoPayReady(userId);
+    @GetMapping("/kakao/ready")
+    public void kakaoPayReady() {
+        billingInfoService.ready();
     }
 
     @RequestMapping("/kakao/approve")
-    public void kakaoPayApprove(@RequestParam("pg_token") String pgToken) throws ChangeSetPersister.NotFoundException {
-        Long userId = securityService.findUserIdbyToken();
-        billingInfoService.kakaoPayApprove(userId, pgToken);
+    public void kakaoPayApprove(@RequestParam("pg_token") String pgToken) {
+        billingInfoService.approve(pgToken);
     }
 
     @GetMapping("/kakao/fail")

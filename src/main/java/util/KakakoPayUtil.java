@@ -3,6 +3,7 @@ package util;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.dto.util.KakaoPayApproveResponseDto;
 import com.shop.online.shopingMall.dto.util.KakaoPayReadyResponseDto;
+import com.shop.online.shopingMall.exception.NotFoundBillingInfoException;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -14,11 +15,12 @@ public class KakakoPayUtil {
         return "http://" + url + ":" + port;
     }
 
+    public static RestTemplate restTemplate = new RestTemplate();
+
+
     public static ResponseEntity<KakaoPayReadyResponseDto> readyToKakaoPay() {
-        RestTemplate restTemplate = new RestTemplate();
 
         String localhost = getApiServerUrl("localhost", 8080);
-
         UriComponentsBuilder kakaoUrl = UriComponentsBuilder.fromHttpUrl(KakaoPayHost + "/v1/payment/ready")
                 .queryParam("cid", "TC0ONETIME")
                 .queryParam("partner_order_id", "1")
@@ -41,15 +43,11 @@ public class KakakoPayUtil {
     }
 
     public static KakaoPayApproveResponseDto approveToKakaoPay(User user, String pgToken) {
-        RestTemplate restTemplate = new RestTemplate();
-
-        int billingInfoSize = user.getBillingInfoList().size();
-
         UriComponentsBuilder kakaoUrl = UriComponentsBuilder.fromHttpUrl(KakaoPayHost + "/v1/payment/approve")
                 .queryParam("cid", "TC0ONETIME")
                 .queryParam("partner_order_id", "1")
                 .queryParam("partner_user_id", "1")
-                .queryParam("tid", user.getBillingInfoList().get(billingInfoSize -1).getUniqueNumber())
+                .queryParam("tid", user.activeBillingInfo().orElseThrow(NotFoundBillingInfoException::new))
                 .queryParam("pg_token", pgToken);
 
         HttpEntity httpEntity = kakaoHttpHeader();
