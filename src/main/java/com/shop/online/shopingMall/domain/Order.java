@@ -6,14 +6,16 @@ import com.shop.online.shopingMall.dto.OrderItemDto;
 import com.shop.online.shopingMall.exception.NotFoundBillingInfoException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor @AllArgsConstructor
-@Entity @Builder
+@Entity @Builder @Getter
 @Table(name = "orders")
 public class Order extends BaseEntity {
 
@@ -23,6 +25,8 @@ public class Order extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
+
+    private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "billingInfo_id")
@@ -37,17 +41,16 @@ public class Order extends BaseEntity {
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItem> orderItems;
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
 
     /**
-    *  저장에 성공하면 order의 상태를 success로 변경함
+    *  저장 성공시 order 상태를 ready로 변경함
     * */
-    @PostPersist
-    public void orderStatusConstruct() {
-        this.orderStatus = OrderStatus.success;
+    public void updateOrderStatus() {
+        this.orderStatus = OrderStatus.ready;
     }
 
     /**
@@ -58,13 +61,31 @@ public class Order extends BaseEntity {
         Order order = Order.builder()
                 .billingInfo(billingInfo).user(user).product(product).build();
         for (OrderItem orderItem : orderItems) {
+            System.out.println("orderItem.getColor() =========================================== " + orderItem.getColor());
             order.addOrderItem(orderItem);
         }
         return order;
     }
 
     private void addOrderItem(OrderItem orderItem) {
+        System.out.println("orderItem = " + orderItem.getColor());
+        System.out.println("orderItem = " + orderItem.getName());
+        System.out.println("orderItem = " + orderItem.getPrice());
+        System.out.println("orderItem = " + orderItem.getId());
+        System.out.println("orderItems = " + orderItems);
+
         orderItems.add(orderItem);
         orderItem.setOrder(this);
+    }
+
+    public boolean cancel() {
+        if (delivery.isDeliveryReady()) {
+            this.orderStatus = OrderStatus.cancel;
+            delivery.cancel();
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }

@@ -39,7 +39,7 @@ public class Product extends BaseEntity {
     private List<ProductPrice> productPrices = new ArrayList<>();
 
     @OneToMany(mappedBy = "product")
-    private List<Order> orderList;
+    private List<OrderItem> orderList = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {
@@ -75,6 +75,7 @@ public class Product extends BaseEntity {
     }
 
     private void addProductOption(ProductOption option) {
+        System.out.println("=-=-=-=-=-=-=-=poductitem = = " + productOptions);
         productOptions.add(option);
         option.setProduct(this);
     }

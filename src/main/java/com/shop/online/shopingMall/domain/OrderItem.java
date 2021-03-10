@@ -21,8 +21,11 @@ public class OrderItem extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
+
     private int price;
+
     private String size;
+
     private String color;
 
     public void setOrder(Order order) {

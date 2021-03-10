@@ -49,8 +49,8 @@ public class ProductService {
     }
 
 
-    /*
-    * #- 제품 상세페이지
+    /**
+    * - 제품 상세페이지
     * 제품을 찾으면 제품에대한 상세페이지 리스트를 리턴해준다.
     * */
     public ProductDetailResponseDto findProduct(Long id) throws ProductNotFoundException {
@@ -59,5 +59,12 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException("제품을 찾을 수 없습니다"));
 
         return ProductDetailResponseDto.toDto(product);
+    }
+
+    /**
+     * 모든 제품 리스트를 가져옴
+    * */
+    public List<Product> allProduct() {
+        return productRepository.findAll();
     }
 }

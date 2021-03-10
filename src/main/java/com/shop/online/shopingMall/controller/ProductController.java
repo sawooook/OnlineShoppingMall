@@ -30,4 +30,10 @@ public class ProductController {
         ProductDetailResponseDto responseDto = productService.findProduct(id);
         return ResponseEntity.ok().body(responseDto);
     }
+
+    @GetMapping("/list")
+    public ResponseEntity productList() {
+        productService.allProduct();
+        return ResponseEntity.ok().body("123");
+    }
 }

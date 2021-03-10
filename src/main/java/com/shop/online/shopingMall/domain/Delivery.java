@@ -24,4 +24,18 @@ public class Delivery extends BaseEntity {
 
     @OneToOne(mappedBy = "delivery")
     private Order order;
+
+    /**
+     * 배송상태를 체크
+    * */
+    public boolean isDeliveryReady() {
+        return (getDeliveryStatus() == DeliveryStatus.ing);
+    }
+
+    /**
+     * 배송 상태를 취소로변경
+    * */
+    public void cancel() {
+        this.deliveryStatus = DeliveryStatus.cancel;
+    }
 }

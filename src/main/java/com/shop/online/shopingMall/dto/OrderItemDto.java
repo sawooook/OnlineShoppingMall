@@ -20,11 +20,10 @@ public class OrderItemDto {
     public static List<OrderItem> toEntity(List<OrderItemDto> orderItemDto) {
         List<OrderItem> orderItems = new ArrayList<>();
 
-        for (OrderItem orderItem : orderItems) {
+        for (OrderItemDto orderItem : orderItemDto) {
             OrderItem item = OrderItem.builder()
                     .color(orderItem.getColor()).size(orderItem.getSize()).price(orderItem.getPrice()).build();
             orderItems.add(item);
-
         }
 
         return orderItems;
