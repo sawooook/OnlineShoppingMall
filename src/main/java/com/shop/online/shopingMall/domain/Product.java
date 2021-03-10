@@ -38,6 +38,9 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductPrice> productPrices = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product")
+    private List<Order> orderList;
+
     @PrePersist
     public void prePersist() {
         if (this.getProductStatus() == null) {

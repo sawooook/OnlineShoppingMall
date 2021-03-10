@@ -1,11 +1,16 @@
 package com.shop.online.shopingMall.controller;
 
+import com.shop.online.shopingMall.config.JwtTokenProvider;
 import com.shop.online.shopingMall.service.BillingInfoService;
+import com.shop.online.shopingMall.service.SecurityService;
 import javassist.NotFoundException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,17 +19,18 @@ import org.springframework.web.bind.annotation.*;
 public class BillingInfoController {
 
     private final BillingInfoService billingInfoService;
+    private final SecurityService securityService;
+
     @GetMapping("/kakao/ready/{id}")
     public void kakaoPayReady(@PathVariable @NonNull Long id) throws ChangeSetPersister.NotFoundException {
-        billingInfoService.kakaoPayReady(id);
+        Long userId = securityService.findUserIdbyToken();
+        billingInfoService.kakaoPayReady(userId);
     }
 
     @RequestMapping("/kakao/approve")
     public void kakaoPayApprove(@RequestParam("pg_token") String pgToken) throws ChangeSetPersister.NotFoundException {
-        System.out.println("===============");
-        System.out.println(pgToken);
-        billingInfoService.kakaoPayApprove(1L, pgToken);
-
+        Long userId = securityService.findUserIdbyToken();
+        billingInfoService.kakaoPayApprove(userId, pgToken);
     }
 
     @GetMapping("/kakao/fail")

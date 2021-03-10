@@ -14,6 +14,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity @Builder @Getter
 @NoArgsConstructor @AllArgsConstructor
@@ -56,5 +57,12 @@ public class BillingInfo extends BaseEntity {
         if (this.getBillingInfoStatus() == null) {
             this.billingInfoStatus = BillingInfoStatus.ACTIVE;
         }
+    }
+
+    public Optional<BillingInfo> isActiveBillingInfo() {
+        if (billingInfoStatus == BillingInfoStatus.ACTIVE) {
+            return Optional.of(this);
+        }
+        return Optional.empty();
     }
 }
