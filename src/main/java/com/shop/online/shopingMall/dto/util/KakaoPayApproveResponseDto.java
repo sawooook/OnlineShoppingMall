@@ -1,5 +1,7 @@
 package com.shop.online.shopingMall.dto.util;
 
+import com.shop.online.shopingMall.domain.Payment;
+import com.shop.online.shopingMall.domain.enumType.CardName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,4 +22,10 @@ public class KakaoPayApproveResponseDto {
     private String quantity;
     private LocalDateTime approveAt;
     private LocalDateTime createdAt;
+
+    public static Payment toEntity(KakaoPayApproveResponseDto responseDto) {
+        return Payment.builder().tid(responseDto.getTid()).aid(responseDto.getAid()).cid(responseDto.getCid())
+                .itemName(responseDto.getItemName()).quantity(responseDto.getQuantity())
+                .cardName(CardName.kakao).approvedAt(responseDto.getApproveAt()).createdAt(responseDto.getCreatedAt()).build();
+    }
 }

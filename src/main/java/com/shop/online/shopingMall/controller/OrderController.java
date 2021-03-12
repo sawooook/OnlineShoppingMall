@@ -23,11 +23,11 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity makeOrder(@RequestBody OrderRequestDto orderRequestDto) {
-        orderService.createOrder(orderRequestDto);
+        orderService.readyToOrder(orderRequestDto);
         return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK,"주문 성공", null));
     }
 
-    @GetMapping("/{id")
+    @GetMapping("/{id}")
     public ResponseEntity cancelOrder(@PathVariable Long id) {
         orderService.cancel(id);
         return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, "주문 취소 완료", null));

@@ -1,5 +1,7 @@
 package com.shop.online.shopingMall.controller;
 
+import com.shop.online.shopingMall.concern.ResponseMessage;
+import com.shop.online.shopingMall.concern.ResponseStatus;
 import com.shop.online.shopingMall.config.JwtTokenProvider;
 import com.shop.online.shopingMall.service.BillingInfoService;
 import com.shop.online.shopingMall.service.SecurityService;
@@ -25,9 +27,10 @@ public class BillingInfoController {
         billingInfoService.ready();
     }
 
-    @RequestMapping("/kakao/approve")
-    public void kakaoPayApprove(@RequestParam("pg_token") String pgToken) {
-        billingInfoService.approve(pgToken);
+    @RequestMapping("/kakao/approve/{id}")
+    public ResponseEntity<ResponseMessage> kakaoPayApprove(@RequestParam("pg_token") String pgToken, @PathVariable("id") Long id) {
+        billingInfoService.approve(pgToken, id);
+        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, "카드등록완료", null));
     }
 
     @GetMapping("/kakao/fail")

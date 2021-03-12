@@ -4,6 +4,8 @@ import com.shop.online.shopingMall.domain.BillingInfo;
 import com.shop.online.shopingMall.domain.Payment;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.domain.enumType.CardName;
+import com.shop.online.shopingMall.dto.OrderRequestDto;
+import com.shop.online.shopingMall.dto.order.OrderResponseDto;
 import com.shop.online.shopingMall.dto.util.KakaoPayApproveResponseDto;
 import com.shop.online.shopingMall.dto.util.KakaoPayReadyResponseDto;
 import com.shop.online.shopingMall.repository.BillingInfoRepository;
@@ -19,6 +21,6 @@ public interface BillingInfoService {
 
     void ready();
 
-    void approve(String token);
+    void approve(String token, Long id);
 
 }

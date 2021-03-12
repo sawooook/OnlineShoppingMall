@@ -27,18 +27,21 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final BillingInfoService billingInfoService;
 
-    public void createOrder(OrderRequestDto orderRequestDto) {
+
+    public void readyToOrder(OrderRequestDto orderRequestDto) {
         User user = userRepository.findById((long) orderRequestDto.getUserId()).orElseThrow(NotFoundUserException::new);
         Product product = productRepository.findById((long) orderRequestDto.getProductId()).orElseThrow(ProductNotFoundException::new);
-
         List<OrderItem> orderItems = OrderItemDto.toEntity(orderRequestDto.getItemList());
-        for (OrderItem orderItem : orderItems) {
-            System.out.println("=========================orderItem --------------= " + orderItem.getColor());
-        }
-
         Order order = makeOrder(user, product, orderItems);
         orderRepository.save(order);
+
+        readytoPay();
+    }
+
+    private void readytoPay() {
+        billingInfoService.ready();
     }
 
     public void cancel(Long id) {
@@ -64,9 +67,7 @@ public class OrderService {
     * */
     private Order makeOrder(User user, Product product, List<OrderItem> orderItems) {
         Order order = Order.createOrder(user, product, orderItems);
-        order.updateOrderStatus();
         return order;
     }
-
 
 }

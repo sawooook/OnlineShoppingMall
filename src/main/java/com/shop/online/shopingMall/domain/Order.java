@@ -40,11 +40,17 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Product product;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Product product;
+    @OneToMany(mappedBy = "order")
+    private List<Payment> payments = new ArrayList<>();
+
+    private Address address;
+
 
     /**
     *  저장 성공시 order 상태를 ready로 변경함

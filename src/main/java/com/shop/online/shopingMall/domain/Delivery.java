@@ -2,13 +2,14 @@ package com.shop.online.shopingMall.domain;
 
 import com.shop.online.shopingMall.domain.base.BaseEntity;
 import com.shop.online.shopingMall.domain.enumType.DeliveryStatus;
-import lombok.Getter;
-import org.apache.tomcat.jni.Address;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
+@Getter @Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Delivery extends BaseEntity {
 
     @Id

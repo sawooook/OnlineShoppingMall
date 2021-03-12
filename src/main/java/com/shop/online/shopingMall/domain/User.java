@@ -2,6 +2,7 @@ package com.shop.online.shopingMall.domain;
 
 import com.shop.online.shopingMall.domain.base.BaseEntity;
 import com.shop.online.shopingMall.domain.enumType.BillingInfoStatus;
+import com.shop.online.shopingMall.domain.enumType.CardName;
 import com.shop.online.shopingMall.domain.enumType.UserRole;
 import com.shop.online.shopingMall.domain.enumType.UserStatus;
 import com.shop.online.shopingMall.exception.NotFoundBillingInfoException;
@@ -87,6 +88,18 @@ public class User extends BaseEntity implements UserDetails {
         return Optional.ofNullable(findBillingInfo);
     }
 
+    public Optional<BillingInfo> hasActiveBillingInfo(CardName cardName) {
+        List<BillingInfo> cardList = this.getBillingInfoList();
+        BillingInfo billingInfo = null;
+
+        for (BillingInfo card : cardList) {
+            billingInfo = card.isActiveBillingInfo(cardName).orElseThrow(NotFoundBillingInfoException::new);
+        }
+        return Optional.ofNullable(billingInfo);
+    }
+
+
+
 
 
     /*
@@ -128,4 +141,5 @@ public class User extends BaseEntity implements UserDetails {
     public boolean isEnabled() {
         return false;
     }
+
 }

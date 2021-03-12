@@ -8,6 +8,10 @@ import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 public class KakakoPayUtil {
 
     private static final String KakaoPayHost = "https://kapi.kakao.com";
@@ -18,9 +22,9 @@ public class KakakoPayUtil {
     public static RestTemplate restTemplate = new RestTemplate();
 
 
-    public static ResponseEntity<KakaoPayReadyResponseDto> readyToKakaoPay() {
-
+    public static ResponseEntity<KakaoPayReadyResponseDto> readyToKakaoPay(Long userId) {
         String localhost = getApiServerUrl("localhost", 8080);
+
         UriComponentsBuilder kakaoUrl = UriComponentsBuilder.fromHttpUrl(KakaoPayHost + "/v1/payment/ready")
                 .queryParam("cid", "TC0ONETIME")
                 .queryParam("partner_order_id", "1")
@@ -29,7 +33,7 @@ public class KakakoPayUtil {
                 .queryParam("quantity", 1)
                 .queryParam("total_amount", 1)
                 .queryParam("tax_free_amount", 1)
-                .queryParam("approval_url", localhost + "/billingInfo/kakao/approve")
+                .queryParam("approval_url", localhost + "/billingInfo/kakao/approve/"+ userId)
                 .queryParam("cancel_url", localhost + "/billingInfo/kakao/cancel")
                 .queryParam("fail_url", localhost + "/billingInfo/kakao/fail");
 
@@ -47,7 +51,7 @@ public class KakakoPayUtil {
                 .queryParam("cid", "TC0ONETIME")
                 .queryParam("partner_order_id", "1")
                 .queryParam("partner_user_id", "1")
-                .queryParam("tid", user.activeBillingInfo().orElseThrow(NotFoundBillingInfoException::new))
+                .queryParam("tid", user.activeBillingInfo().orElseThrow(NotFoundBillingInfoException::new).getUniqueNumber())
                 .queryParam("pg_token", pgToken);
 
         HttpEntity httpEntity = kakaoHttpHeader();
