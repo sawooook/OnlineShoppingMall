@@ -2,7 +2,7 @@ package com.shop.online.shopingMall.controller;
 
 import com.shop.online.shopingMall.concern.ResponseMessage;
 import com.shop.online.shopingMall.concern.ResponseStatus;
-import com.shop.online.shopingMall.dto.OrderRequestDto;
+import com.shop.online.shopingMall.dto.order.OrderRequestDto;
 import com.shop.online.shopingMall.dto.order.OrderResponseDto;
 import com.shop.online.shopingMall.service.OrderService;
 import com.shop.online.shopingMall.service.SecurityService;

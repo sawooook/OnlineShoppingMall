@@ -1,6 +1,7 @@
-package com.shop.online.shopingMall.dto;
+package com.shop.online.shopingMall.dto.order;
 
 
+import com.shop.online.shopingMall.dto.order.OrderItemDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

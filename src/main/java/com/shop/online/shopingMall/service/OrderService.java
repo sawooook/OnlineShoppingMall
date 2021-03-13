@@ -1,9 +1,8 @@
 package com.shop.online.shopingMall.service;
 
 import com.shop.online.shopingMall.domain.*;
-import com.shop.online.shopingMall.domain.enumType.DeliveryStatus;
-import com.shop.online.shopingMall.dto.OrderItemDto;
-import com.shop.online.shopingMall.dto.OrderRequestDto;
+import com.shop.online.shopingMall.dto.order.OrderItemDto;
+import com.shop.online.shopingMall.dto.order.OrderRequestDto;
 import com.shop.online.shopingMall.dto.order.OrderResponseDto;
 import com.shop.online.shopingMall.dto.order.OrderResultResponseDto;
 import com.shop.online.shopingMall.dto.user.AddressDto;

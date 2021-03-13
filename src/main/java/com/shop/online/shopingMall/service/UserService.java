@@ -73,6 +73,9 @@ public class UserService {
     public UserMypageResponse findUser(Long id) throws NotFoundUserException{
         User user = userRepository.findById(id).orElseThrow(NotFoundUserException::new);
         return UserMypageResponse.toDto(user);
+    }
 
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(NotFoundUserException::new);
     }
 }
