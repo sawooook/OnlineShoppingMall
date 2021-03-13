@@ -12,8 +12,8 @@ public class AddressDto {
     private String addressCode;
     private String addressDetail;
 
-    public static AddressDto toEntity(Address address) {
-        return AddressDto.builder()
+    public static Address toEntity(Address address) {
+        return Address.builder()
                 .addressDetail(address.getAddressDetail()).addressCode(address.getAddressCode()).build();
     }
 

@@ -1,21 +1,17 @@
 package com.shop.online.shopingMall.service;
 
 import com.shop.online.shopingMall.domain.BillingInfo;
-import com.shop.online.shopingMall.domain.Payment;
+import com.shop.online.shopingMall.domain.Order;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.domain.enumType.CardName;
-import com.shop.online.shopingMall.dto.OrderRequestDto;
-import com.shop.online.shopingMall.dto.order.OrderResponseDto;
 import com.shop.online.shopingMall.dto.util.KakaoPayApproveResponseDto;
+import com.shop.online.shopingMall.dto.util.KakaoPayChargeResponseDto;
 import com.shop.online.shopingMall.dto.util.KakaoPayReadyResponseDto;
-import com.shop.online.shopingMall.exception.AlreadyExistBillingInfo;
 import com.shop.online.shopingMall.exception.NotFoundBillingInfoException;
 import com.shop.online.shopingMall.exception.NotFoundUserException;
 import com.shop.online.shopingMall.repository.BillingInfoRepository;
-import com.shop.online.shopingMall.repository.PaymentRepository;
 import com.shop.online.shopingMall.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import util.KakakoPayUtil;
@@ -61,13 +57,14 @@ public class KakaoPayServiceImpl implements BillingInfoService {
         User user = userRepository.findById(userId)
                 .orElseThrow(NotFoundUserException::new);
 
+        KakaoPayApproveResponseDto responseKakao = KakakoPayUtil.approveToKakaoPay(user, pgToken);
         BillingInfo billingInfo = user.activeBillingInfo().orElseThrow(NotFoundBillingInfoException::new);
-
-        System.out.println("==================================================2");
-        KakaoPayApproveResponseDto responseKakaoApprove = KakakoPayUtil.approveToKakaoPay(user, pgToken);
-        System.out.println("==================================================3");
-        billingInfo.updatePaymentKey(responseKakaoApprove.getSid());
+        billingInfo.updatePaymentKey(responseKakao.getSid());
         billingInfoRepository.save(billingInfo);
-        System.out.println("==================================================1");
+    }
+
+    @Override
+    public void charge(Order order) {
+        paymentService.charge(KakakoPayUtil.charge(order));
     }
 }

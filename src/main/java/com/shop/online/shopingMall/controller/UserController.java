@@ -82,10 +82,9 @@ public class UserController {
         return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK,"회원탈퇴 완료", null));
     }
 
-    @GetMapping("/test/{id}")
+    @GetMapping("/mypage/{id}")
     public ResponseEntity myPage(@PathVariable @NonNull Long id) throws NotFoundUserException {
         UserMypageResponse user = userService.findUser(id);
         return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, "마이페이지", user));
-
     }
 }

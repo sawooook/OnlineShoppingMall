@@ -1,7 +1,9 @@
 package util;
 
+import com.shop.online.shopingMall.domain.Order;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.dto.util.KakaoPayApproveResponseDto;
+import com.shop.online.shopingMall.dto.util.KakaoPayChargeResponseDto;
 import com.shop.online.shopingMall.dto.util.KakaoPayReadyResponseDto;
 import com.shop.online.shopingMall.exception.NotFoundBillingInfoException;
 import org.springframework.http.*;
@@ -26,13 +28,13 @@ public class KakakoPayUtil {
         String localhost = getApiServerUrl("localhost", 8080);
 
         UriComponentsBuilder kakaoUrl = UriComponentsBuilder.fromHttpUrl(KakaoPayHost + "/v1/payment/ready")
-                .queryParam("cid", "TC0ONETIME")
+                .queryParam("cid", "TCSUBSCRIP")
                 .queryParam("partner_order_id", "1")
                 .queryParam("partner_user_id", "1")
                 .queryParam("item_name", "test")
                 .queryParam("quantity", 1)
-                .queryParam("total_amount", 1)
-                .queryParam("tax_free_amount", 1)
+                .queryParam("total_amount", 1000)
+                .queryParam("tax_free_amount", 0)
                 .queryParam("approval_url", localhost + "/billingInfo/kakao/approve/"+ userId)
                 .queryParam("cancel_url", localhost + "/billingInfo/kakao/cancel")
                 .queryParam("fail_url", localhost + "/billingInfo/kakao/fail");
@@ -48,16 +50,37 @@ public class KakakoPayUtil {
 
     public static KakaoPayApproveResponseDto approveToKakaoPay(User user, String pgToken) {
         UriComponentsBuilder kakaoUrl = UriComponentsBuilder.fromHttpUrl(KakaoPayHost + "/v1/payment/approve")
-                .queryParam("cid", "TC0ONETIME")
+                .queryParam("cid", "TCSUBSCRIP")
                 .queryParam("partner_order_id", "1")
                 .queryParam("partner_user_id", "1")
                 .queryParam("tid", user.activeBillingInfo().orElseThrow(NotFoundBillingInfoException::new).getUniqueNumber())
+                .queryParam("total_amount", 1000)
                 .queryParam("pg_token", pgToken);
 
         HttpEntity httpEntity = kakaoHttpHeader();
 
         ResponseEntity<KakaoPayApproveResponseDto> responseKakaoPay =
                 restTemplate.exchange(kakaoUrl.toUriString(), HttpMethod.POST, httpEntity, KakaoPayApproveResponseDto.class);
+
+        System.out.println(responseKakaoPay.getBody());
+
+        return responseKakaoPay.getBody();
+    }
+
+    public static KakaoPayChargeResponseDto charge(Order order) {
+        UriComponentsBuilder kakaoUrl = UriComponentsBuilder.fromHttpUrl(KakaoPayHost + "/v1/payment/subscription")
+                .queryParam("cid", "TCSUBSCRIP")
+                .queryParam("sid", order.getBillingInfo().getPaymentKey())
+                .queryParam("partner_order_id", order.getId())
+                .queryParam("partner_user_id", order.getUser().getId())
+                .queryParam("quantity", 1)
+                .queryParam("total_amount", order.getTotalAmount())
+                .queryParam("tax_free_amount", 0);
+
+        HttpEntity httpEntity = kakaoHttpHeader();
+
+        ResponseEntity<KakaoPayChargeResponseDto> responseKakaoPay =
+                restTemplate.exchange(kakaoUrl.toUriString(), HttpMethod.POST, httpEntity, KakaoPayChargeResponseDto.class);
 
         return responseKakaoPay.getBody();
     }
@@ -68,8 +91,7 @@ public class KakakoPayUtil {
         httpHeaders.add("Accept", MediaType.APPLICATION_JSON_VALUE);
         httpHeaders.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=UTF-8");
 
-        HttpEntity<?> httpEntity = new HttpEntity<>(httpHeaders);
-        return httpEntity;
+        return new HttpEntity<>(httpHeaders);
     }
 
 }

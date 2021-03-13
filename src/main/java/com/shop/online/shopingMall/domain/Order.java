@@ -14,8 +14,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity @Getter
 @NoArgsConstructor @AllArgsConstructor
-@Entity @Builder @Getter
 @Table(name = "orders")
 public class Order extends BaseEntity {
 
@@ -51,6 +51,20 @@ public class Order extends BaseEntity {
 
     private Address address;
 
+    private int totalAmount;
+
+    @Builder
+    public Order(Long id, int totalAmount ,OrderStatus orderStatus, String name, BillingInfo billingInfo, Delivery delivery, User user, Product product, Address address) {
+        this.id = id;
+        this.orderStatus = orderStatus;
+        this.name = name;
+        this.billingInfo = billingInfo;
+        this.delivery = delivery;
+        this.user = user;
+        this.product = product;
+        this.address = address;
+        this.totalAmount = totalAmount;
+    }
 
     /**
     *  저장 성공시 order 상태를 ready로 변경함
@@ -62,24 +76,28 @@ public class Order extends BaseEntity {
     /**
      * 주문 생성 메소드
     * */
-    public static Order createOrder(User user, Product product, List<OrderItem> orderItems) {
+    public static Order createOrder(User user, Product product, List<OrderItem> orderItemList, Address address) {
         BillingInfo billingInfo = user.activeBillingInfo().orElseThrow(NotFoundBillingInfoException::new);
-        Order order = Order.builder()
-                .billingInfo(billingInfo).user(user).product(product).build();
-        for (OrderItem orderItem : orderItems) {
-            System.out.println("orderItem.getColor() =========================================== " + orderItem.getColor());
+        int totalAmount = 0;
+
+        Order order = Order.builder().name(product.getName()).address(address)
+                .billingInfo(billingInfo).user(user).product(product).orderStatus(OrderStatus.ready).build();
+
+        for (OrderItem orderItem : orderItemList) {
+            totalAmount += orderItem.getPrice();
             order.addOrderItem(orderItem);
         }
+
+        order.updateTotalAmount(totalAmount);
+
         return order;
     }
 
-    private void addOrderItem(OrderItem orderItem) {
-        System.out.println("orderItem = " + orderItem.getColor());
-        System.out.println("orderItem = " + orderItem.getName());
-        System.out.println("orderItem = " + orderItem.getPrice());
-        System.out.println("orderItem = " + orderItem.getId());
-        System.out.println("orderItems = " + orderItems);
+    private void updateTotalAmount(int totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 
+    private void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
         orderItem.setOrder(this);
     }
@@ -92,6 +110,5 @@ public class Order extends BaseEntity {
         } else {
             return false;
         }
-
     }
 }

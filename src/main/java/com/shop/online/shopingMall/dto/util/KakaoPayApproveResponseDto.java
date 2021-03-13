@@ -1,5 +1,6 @@
 package com.shop.online.shopingMall.dto.util;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.shop.online.shopingMall.domain.Payment;
 import com.shop.online.shopingMall.domain.enumType.CardName;
 import lombok.AllArgsConstructor;
@@ -18,14 +19,16 @@ public class KakaoPayApproveResponseDto {
     private String sid;
 //    private String amount;
 //    private String cardInfo;
-    private String itemName;
+    private String item_name;
     private String quantity;
-    private LocalDateTime approveAt;
+    @JsonProperty("approved_at")
+    private LocalDateTime approvedAt;
+    @JsonProperty("created_at")
     private LocalDateTime createdAt;
 
     public static Payment toEntity(KakaoPayApproveResponseDto responseDto) {
         return Payment.builder().tid(responseDto.getTid()).aid(responseDto.getAid()).cid(responseDto.getCid())
-                .itemName(responseDto.getItemName()).quantity(responseDto.getQuantity())
-                .cardName(CardName.kakao).approvedAt(responseDto.getApproveAt()).createdAt(responseDto.getCreatedAt()).build();
+                .itemName(responseDto.getItem_name()).quantity(responseDto.getQuantity())
+                .cardName(CardName.kakao).approvedAt(responseDto.getApprovedAt()).createdAt(responseDto.getCreatedAt()).build();
     }
 }

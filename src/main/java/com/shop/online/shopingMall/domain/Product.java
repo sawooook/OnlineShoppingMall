@@ -75,7 +75,6 @@ public class Product extends BaseEntity {
     }
 
     private void addProductOption(ProductOption option) {
-        System.out.println("=-=-=-=-=-=-=-=poductitem = = " + productOptions);
         productOptions.add(option);
         option.setProduct(this);
     }

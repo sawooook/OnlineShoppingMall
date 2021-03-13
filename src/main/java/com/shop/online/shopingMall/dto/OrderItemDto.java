@@ -25,7 +25,6 @@ public class OrderItemDto {
                     .color(orderItem.getColor()).size(orderItem.getSize()).price(orderItem.getPrice()).build();
             orderItems.add(item);
         }
-
         return orderItems;
     }
 }
