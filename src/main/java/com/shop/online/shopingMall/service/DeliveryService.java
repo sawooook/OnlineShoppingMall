@@ -16,11 +16,7 @@ public class DeliveryService {
 
     private final DeliveryRepository deliveryRepository;
 
-    public void readyToDelivery(Order order) {
-        Address userAddress = order.getUser().getAddress();
-        Delivery delivery = Delivery.builder().deliveryStatus(DeliveryStatus.ready)
-                .address(new Address(userAddress.getAddressCode(), userAddress.getAddressDetail())).build();
+    public void save(Delivery delivery) {
         deliveryRepository.save(delivery);
-        order.updateOrderStatus();
     }
 }

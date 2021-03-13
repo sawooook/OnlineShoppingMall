@@ -1,9 +1,11 @@
 package com.shop.online.shopingMall.service;
 
 import com.shop.online.shopingMall.domain.*;
+import com.shop.online.shopingMall.domain.enumType.DeliveryStatus;
 import com.shop.online.shopingMall.dto.OrderItemDto;
 import com.shop.online.shopingMall.dto.OrderRequestDto;
 import com.shop.online.shopingMall.dto.order.OrderResponseDto;
+import com.shop.online.shopingMall.dto.order.OrderResultResponseDto;
 import com.shop.online.shopingMall.dto.user.AddressDto;
 import com.shop.online.shopingMall.exception.*;
 import com.shop.online.shopingMall.repository.OrderRepository;
@@ -24,6 +26,8 @@ public class OrderService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final BillingInfoService billingInfoService;
+    private final PaymentService paymentService;
+    private final DeliveryService deliveryService;
 
     /**
     *  주문 준비를 위한 메소드
@@ -48,7 +52,9 @@ public class OrderService {
         Order order = makeOrder(user, product, orderItems, address);
 
         orderRepository.save(order);
-        readyToPay(order);
+        OrderResultResponseDto result = readyToPay(order);
+        Payment payment = makePayBilling(result);
+        readToDelivery(payment);
     }
 
     public Order findOrder(Long id) {
@@ -58,9 +64,27 @@ public class OrderService {
     /**
     * 활성화된 카드로 정기결제를 시도한다.
     *
-     * @param order*/
-    private void readyToPay(Order order) {
-        billingInfoService.charge(order);
+     * @param order
+     * @return*/
+    private OrderResultResponseDto readyToPay(Order order) {
+        return billingInfoService.charge(order);
+    }
+
+    private void readToDelivery(Payment payment) {
+        Order order = payment.getOrder();
+        Address address = order.getUser().getAddress();
+        Delivery delivery = Delivery.toEntity(address);
+        deliveryService.save(delivery);
+        order.setDelivery(delivery);
+        order.updateOrderStatus();
+    }
+
+    private Payment makePayBilling(OrderResultResponseDto result) {
+        Order order = findOrder(Long.valueOf(result.getPartnerOrderId()));
+        result.setOrder(order);
+        Payment payment = OrderResultResponseDto.toEntity(result);
+        paymentService.save(payment);
+        return payment;
     }
 
     public void cancel(Long id) {

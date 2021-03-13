@@ -5,7 +5,7 @@ import com.shop.online.shopingMall.domain.Order;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.domain.enumType.CardName;
 import com.shop.online.shopingMall.dto.util.KakaoPayApproveResponseDto;
-import com.shop.online.shopingMall.dto.util.KakaoPayChargeResponseDto;
+import com.shop.online.shopingMall.dto.order.OrderResultResponseDto;
 import com.shop.online.shopingMall.dto.util.KakaoPayReadyResponseDto;
 import com.shop.online.shopingMall.exception.NotFoundBillingInfoException;
 import com.shop.online.shopingMall.exception.NotFoundUserException;
@@ -64,7 +64,8 @@ public class KakaoPayServiceImpl implements BillingInfoService {
     }
 
     @Override
-    public void charge(Order order) {
-        paymentService.charge(KakakoPayUtil.charge(order));
+    public OrderResultResponseDto charge(Order order) {
+        OrderResultResponseDto responseDto = KakakoPayUtil.charge(order);
+        return responseDto;
     }
 }

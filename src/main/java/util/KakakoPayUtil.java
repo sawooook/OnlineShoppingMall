@@ -3,16 +3,12 @@ package util;
 import com.shop.online.shopingMall.domain.Order;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.dto.util.KakaoPayApproveResponseDto;
-import com.shop.online.shopingMall.dto.util.KakaoPayChargeResponseDto;
+import com.shop.online.shopingMall.dto.order.OrderResultResponseDto;
 import com.shop.online.shopingMall.dto.util.KakaoPayReadyResponseDto;
 import com.shop.online.shopingMall.exception.NotFoundBillingInfoException;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 public class KakakoPayUtil {
 
@@ -67,7 +63,7 @@ public class KakakoPayUtil {
         return responseKakaoPay.getBody();
     }
 
-    public static KakaoPayChargeResponseDto charge(Order order) {
+    public static OrderResultResponseDto charge(Order order) {
         UriComponentsBuilder kakaoUrl = UriComponentsBuilder.fromHttpUrl(KakaoPayHost + "/v1/payment/subscription")
                 .queryParam("cid", "TCSUBSCRIP")
                 .queryParam("sid", order.getBillingInfo().getPaymentKey())
@@ -79,8 +75,8 @@ public class KakakoPayUtil {
 
         HttpEntity httpEntity = kakaoHttpHeader();
 
-        ResponseEntity<KakaoPayChargeResponseDto> responseKakaoPay =
-                restTemplate.exchange(kakaoUrl.toUriString(), HttpMethod.POST, httpEntity, KakaoPayChargeResponseDto.class);
+        ResponseEntity<OrderResultResponseDto> responseKakaoPay =
+                restTemplate.exchange(kakaoUrl.toUriString(), HttpMethod.POST, httpEntity, OrderResultResponseDto.class);
 
         return responseKakaoPay.getBody();
     }

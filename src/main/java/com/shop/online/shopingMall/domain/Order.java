@@ -111,4 +111,8 @@ public class Order extends BaseEntity {
             return false;
         }
     }
+
+    public void setDelivery(Delivery delivery) {
+        this.delivery = delivery;
+    }
 }

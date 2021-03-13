@@ -1,4 +1,4 @@
-package com.shop.online.shopingMall.dto.util;
+package com.shop.online.shopingMall.dto.order;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.shop.online.shopingMall.domain.Order;
@@ -6,40 +6,22 @@ import com.shop.online.shopingMall.domain.Payment;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
-* 받으려는 데이터 형태
- * 카카오페이에서 제공하는 예시 데이터
- * {
- *  "aid": "A5678901234567890123",
- *  "cid": "TCSUBSCRIP",
- *  "sid": "S1234567890987654321",
- *  "tid": "T2468013579246801357",
- *  "partner_order_id": "subscription_order_id_1",
- *  "partner_user_id": "subscription_user_id_1",
- *  "payment_method_type": "MONEY",
- *  "item_name": "음악정기결제",
- *  "quantity": 1,
- *  "amount": {
- *   "total": 9900,
- *   "tax_free": 0,
- *   "vat": 900
- *  },
- *  "created_at": "2016-11-17T16:02:19",
- *  "approved_at": "2016-11-17T16:02:20"
- * }
+* 결제에대한 응답값으로 받으려는 데이터 형태
+ * 공통 DTO
+ *
 * */
+
 
 @Data @Builder
 @NoArgsConstructor @AllArgsConstructor
-public class KakaoPayChargeResponseDto {
+public class OrderResultResponseDto {
     private String aid;
     private String tid;
     private String cid;
     private String sid;
-    private KakaoChargeAmountResponse amount;
+    private Amount amount;
     @JsonProperty("partner_order_id")
     private String partnerOrderId;
     private String itemName;
@@ -52,12 +34,12 @@ public class KakaoPayChargeResponseDto {
 
     // amount 안에있는 내용을 파싱받기 위해서 제작
     @Getter @Setter
-    private static class KakaoChargeAmountResponse {
+    private static class Amount {
         @JsonProperty(value = "amount")
         private int total;
     }
 
-    public static Payment toEntity(KakaoPayChargeResponseDto responseDto) {
+    public static Payment toEntity(OrderResultResponseDto responseDto) {
         return Payment.builder().aid(responseDto.getAid()).tid(responseDto.getTid()).order(responseDto.getOrder())
                 .cid(responseDto.getCid()).amount(String.valueOf(responseDto.getAmount()))
                 .itemName(responseDto.getItemName()).quantity(responseDto.getQuantity())

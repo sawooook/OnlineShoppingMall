@@ -1,7 +1,7 @@
 package com.shop.online.shopingMall.service;
 
 import com.shop.online.shopingMall.domain.Order;
-import com.shop.online.shopingMall.dto.util.KakaoPayChargeResponseDto;
+import com.shop.online.shopingMall.dto.order.OrderResultResponseDto;
 
 public interface BillingInfoService {
 
@@ -9,6 +9,6 @@ public interface BillingInfoService {
 
     void approve(String token, Long id);
 
-    void charge(Order order);
+    OrderResultResponseDto charge(Order order);
 
 }
