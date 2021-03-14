@@ -25,11 +25,22 @@ public class CartController {
         return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK,"장바구니 등록에 성공하였습니다.",null));
     }
 
+    /**
+     * 장바구니 RESET Controller
+     * */
     @GetMapping("/list/{id}")
     public ResponseEntity showCartList(@PathVariable String id) {
-        System.out.println(cartService.findById(id));
         Cart cart = cartService.findById(id);
         CartResponseDto responseDto = CartResponseDto.toDto(cart);
         return ResponseEntity.ok().body(responseDto);
+    }
+
+    /**
+    * 장바구니 RESET Controller
+    * */
+    @DeleteMapping("/{id}")
+    public ResponseEntity resetCart(@PathVariable String id) {
+        cartService.resetCart(id);
+        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, "장바구니를 모두 비웠습니다", null));
     }
 }

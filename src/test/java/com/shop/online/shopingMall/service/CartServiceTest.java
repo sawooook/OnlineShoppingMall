@@ -30,4 +30,19 @@ class CartServiceTest {
         Cart test = cartService.findById("test");
         Assertions.assertThat(cart.getName()).isEqualTo(test.getName());
     }
+
+    @Test
+    public void 장바구니_리셋() {
+        //given
+        CartItem item = CartItem.builder().id("test").color("red").size("95").price("100").build();
+        Cart cart = Cart.builder().cartItems(Collections.singletonList(item)).id("test").build();
+
+        // when
+        cartService.save(cart);
+        cartService.resetCart(cart.getId());
+
+        //then
+        Assertions.assertThat(cart).isNull();
+
+    }
 }
