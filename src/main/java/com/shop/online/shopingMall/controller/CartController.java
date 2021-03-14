@@ -29,12 +29,6 @@ public class CartController {
     public ResponseEntity showCartList(@PathVariable String id) {
         System.out.println(cartService.findById(id));
         Cart cart = cartService.findById(id);
-
-        System.out.println("=============================================");
-        System.out.println(cart.getName());
-        System.out.println(cart.getId());
-        System.out.println(cart.getCartItems().get(0).getColor());
-
         CartResponseDto responseDto = CartResponseDto.toDto(cart);
         return ResponseEntity.ok().body(responseDto);
     }

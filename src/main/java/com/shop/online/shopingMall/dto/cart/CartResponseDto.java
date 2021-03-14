@@ -21,12 +21,17 @@ public class CartResponseDto {
     @JsonProperty("product_options")
     private List<CartItemDto> cartItem;
 
+
+    /**
+    * 응답으로 들어온 Entity를 Dto로 변경
+    * */
+
     public static CartResponseDto toDto(Cart cart) {
         List<CartItem> cartItems = cart.getCartItems();
         List<CartItemDto> cartItemDtos = new ArrayList<>();
 
         for (CartItem cartItem : cartItems) {
-            CartItemDto item = CartItemDto.builder()
+            CartItemDto item = CartItemDto.builder().price(cartItem.getPrice())
                     .color(cartItem.getColor()).size(cartItem.getSize()).build();
             cartItemDtos.add(item);
         }

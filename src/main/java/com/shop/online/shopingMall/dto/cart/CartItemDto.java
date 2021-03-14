@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class CartItemDto {
     private String size;
     private String color;
+    private String price;
 }

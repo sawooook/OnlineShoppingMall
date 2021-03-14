@@ -35,7 +35,7 @@ public class CartRequestDto {
         List<CartItem> itemListEntity = new ArrayList<>();
 
         for (CartItemDto cartItem : cartItems) {
-            CartItem item = CartItem.builder().color(cartItem.getColor()).size(cartItem.getSize()).build();
+            CartItem item = CartItem.builder().price(cartItem.getPrice()).color(cartItem.getColor()).size(cartItem.getSize()).build();
             itemListEntity.add(item);
         }
 

@@ -15,7 +15,6 @@ public class CartItem {
 
     @Id
     private String id;
-
     private String color;
     private String price;
     private String size;
