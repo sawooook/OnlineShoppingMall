@@ -19,6 +19,9 @@ public class NaverPayUtil {
     public static RestTemplate restTemplate = new RestTemplate();
 
 
+    /*
+    * 파트너 아이디가 존재하지 않음..ㅠㅠ
+    * */
     public static ResponseEntity<NaverPayResponseDto> readyToNaverPay(Long userId) {
         String localhost = getApiServerUrl("localhost", 8080);
 
