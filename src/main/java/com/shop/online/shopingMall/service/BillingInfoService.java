@@ -1,7 +1,11 @@
 package com.shop.online.shopingMall.service;
 
+import com.shop.online.shopingMall.domain.BillingInfo;
 import com.shop.online.shopingMall.domain.Order;
+import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.dto.order.OrderResultResponseDto;
+
+import java.util.Optional;
 
 public interface BillingInfoService {
 
@@ -10,5 +14,7 @@ public interface BillingInfoService {
     void approve(String token, Long id);
 
     OrderResultResponseDto charge(Order order);
+
+    BillingInfo isActiveBillingInfo(User user);
 
 }

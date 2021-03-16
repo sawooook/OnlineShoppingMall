@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -42,6 +43,7 @@ public class OrderService {
         if (user.activeBillingInfo().isEmpty()) {
             throw  new NotFoundBillingInfoException("등록된 카드가 없습니다. 카드를 등록해주세요");
         }
+
 
         Product product = productRepository.findById((long) orderRequestDto.getProductId()).orElseThrow(ProductNotFoundException::new);
         List<OrderItem> orderItems = OrderItemDto.toEntity(orderRequestDto.getItemList());
@@ -102,14 +104,12 @@ public class OrderService {
     }
 
 
-
-
     /**
     *  주문을 생성하고, 생성이 완료될 시 주문의 상태를 Ready로 변경한다
     * */
     private Order makeOrder(User user, Product product, List<OrderItem> orderItems, Address address) {
-        Order order = Order.createOrder(user, product, orderItems, address);
+        BillingInfo billingInfo = billingInfoService.isActiveBillingInfo(user);
+        Order order = Order.createOrder(user, product, orderItems, address, billingInfo);
         return order;
     }
-
 }

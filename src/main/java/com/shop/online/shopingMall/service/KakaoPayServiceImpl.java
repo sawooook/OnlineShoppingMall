@@ -23,7 +23,6 @@ public class KakaoPayServiceImpl implements BillingInfoService {
     private final UserRepository userRepository;
     private final BillingInfoRepository billingInfoRepository;
     private final SecurityService securityService;
-    private final PaymentService paymentService;
 
     /**
      * - 카카오 페이 Ready
@@ -36,7 +35,7 @@ public class KakaoPayServiceImpl implements BillingInfoService {
         User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
 
         if (user.hasActiveBillingInfo(CardName.kakao).isPresent()) {
-            BillingInfo billingInfo = user.hasActiveBillingInfo(CardName.kakao).orElseThrow(NotFoundBillingInfoException::new);
+            BillingInfo billingInfo = billingInfoRepository.activeBillingInfo(user).orElseThrow(NotFoundBillingInfoException::new);
             billingInfo.delete();
         }
 
@@ -57,8 +56,10 @@ public class KakaoPayServiceImpl implements BillingInfoService {
         User user = userRepository.findById(userId)
                 .orElseThrow(NotFoundUserException::new);
 
-        KakaoPayApproveResponseDto responseKakao = KakakoPayUtil.approveToKakaoPay(user, pgToken);
-        BillingInfo billingInfo = user.activeBillingInfo().orElseThrow(NotFoundBillingInfoException::new);
+        BillingInfo billingInfo = billingInfoRepository.activeBillingInfo(user).orElseThrow(NotFoundBillingInfoException::new);
+
+        KakaoPayApproveResponseDto responseKakao = KakakoPayUtil.approveToKakaoPay(billingInfo, pgToken);
+
         billingInfo.updatePaymentKey(responseKakao.getSid());
         billingInfoRepository.save(billingInfo);
     }
@@ -67,5 +68,10 @@ public class KakaoPayServiceImpl implements BillingInfoService {
     public OrderResultResponseDto charge(Order order) {
         OrderResultResponseDto responseDto = KakakoPayUtil.charge(order);
         return responseDto;
+    }
+
+    @Override
+    public BillingInfo isActiveBillingInfo(User user) {
+        return billingInfoRepository.activeBillingInfo(user).orElseThrow(NotFoundBillingInfoException::new);
     }
 }

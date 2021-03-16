@@ -1,5 +1,6 @@
 package util;
 
+import com.shop.online.shopingMall.domain.BillingInfo;
 import com.shop.online.shopingMall.domain.Order;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.dto.util.KakaoPayApproveResponseDto;
@@ -44,12 +45,12 @@ public class KakakoPayUtil {
         return responseKakaoPay;
     }
 
-    public static KakaoPayApproveResponseDto approveToKakaoPay(User user, String pgToken) {
+    public static KakaoPayApproveResponseDto approveToKakaoPay(BillingInfo billingInfo, String pgToken) {
         UriComponentsBuilder kakaoUrl = UriComponentsBuilder.fromHttpUrl(KakaoPayHost + "/v1/payment/approve")
                 .queryParam("cid", "TCSUBSCRIP")
                 .queryParam("partner_order_id", "1")
                 .queryParam("partner_user_id", "1")
-                .queryParam("tid", user.activeBillingInfo().orElseThrow(NotFoundBillingInfoException::new).getUniqueNumber())
+                .queryParam("tid", billingInfo.getUniqueNumber())
                 .queryParam("total_amount", 1000)
                 .queryParam("pg_token", pgToken);
 
