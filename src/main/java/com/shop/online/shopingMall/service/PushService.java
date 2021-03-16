@@ -5,6 +5,8 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
+import com.shop.online.shopingMall.dto.fcm.FcmRequestDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -14,7 +16,10 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PushService {
+
+    private final UserService userService;
 
     @PostConstruct
     public void init() throws IOException {
@@ -32,5 +37,9 @@ public class PushService {
     * */
     public void sendPushMessage(List<Message> message) {
         FirebaseMessaging.getInstance().sendAllAsync(message);
+    }
+
+    public void checkSendUser(FcmRequestDto fcmRequestDto) {
+        userService.findFcmOnUser();
     }
 }

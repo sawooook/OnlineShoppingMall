@@ -53,8 +53,13 @@ public class User extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Product> products = new ArrayList<>();
 
+    @OneToMany(mappedBy = "board_id")
+    private List<Board> boards = new ArrayList<>();
+
     @Embedded
     private Address address;
+
+    private String pushToken;
 
     // 처음 insert 시 userStatus 업데이트를 위한 코드
     @PrePersist

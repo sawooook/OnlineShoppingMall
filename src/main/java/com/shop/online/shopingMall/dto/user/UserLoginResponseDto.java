@@ -1,8 +1,6 @@
 package com.shop.online.shopingMall.dto.user;
 
-import com.shop.online.shopingMall.domain.Address;
 import com.shop.online.shopingMall.domain.User;
-import com.shop.online.shopingMall.dto.user.AddressDto.AddressDtoBuilder;
 import lombok.Builder;
 import lombok.Data;
 
