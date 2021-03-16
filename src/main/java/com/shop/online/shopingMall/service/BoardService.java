@@ -9,15 +9,16 @@ import com.shop.online.shopingMall.dto.fcm.FcmRequestDto;
 import com.shop.online.shopingMall.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BoardService {
 
     private final BoardRepository boardRepository;
     private final SecurityService securityService;
     private final UserService userService;
-    private final PushService pushService;
 
     public void save(BoardRequestDto boardRequestDto) {
         Long userId = securityService.findUserIdbyToken();
@@ -29,7 +30,7 @@ public class BoardService {
         FcmRequestDto fcmRequestDto = FcmRequestDto.toEntity(board);
 
         if (board.isSendPush() && (board.getBoardType() == BoardType.FAQ)) {
-            pushService.checkSendUser(fcmRequestDto);
+//            pushService.checkSendUser(fcmRequestDto);
         }
     }
 }

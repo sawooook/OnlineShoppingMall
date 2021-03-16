@@ -53,7 +53,7 @@ public class User extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Product> products = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board_id")
+    @OneToMany(mappedBy = "user")
     private List<Board> boards = new ArrayList<>();
 
     @Embedded

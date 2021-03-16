@@ -27,8 +27,6 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
-    private final ProductionOptionRepository productionOptionRepository;
-    private final ProductPriceRepository productPriceRepository;
 
     /*
     * 제품 저장

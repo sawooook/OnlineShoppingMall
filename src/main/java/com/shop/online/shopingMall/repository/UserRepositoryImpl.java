@@ -1,24 +1,31 @@
 package com.shop.online.shopingMall.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.shop.online.shopingMall.domain.QUser;
 import com.shop.online.shopingMall.domain.User;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 
+@Repository
 public class UserRepositoryImpl extends QuerydslRepositorySupport implements UserRepositoryCustom {
 
+    private final JPAQueryFactory jpaQueryFactory;
 
-    public UserRepositoryImpl(Class<?> domainClass) {
-        super(domainClass);
+    public UserRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
+        super(User.class);
+        this.jpaQueryFactory = jpaQueryFactory;
     }
 
-    @Override
-    public void pushOnUser(User user) {
-    }
 
     @Override
-    public void save(User user) {
-
+    public List<String> pushOnUser() {
+        return jpaQueryFactory
+                .select(QUser.user.pushToken)
+                .from(QUser.user)
+                .where(QUser.user.pushToken.isNotNull())
+                .fetch();
     }
 }

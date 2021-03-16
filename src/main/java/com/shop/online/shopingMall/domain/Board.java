@@ -26,5 +26,6 @@ public class Board extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
     private boolean isSendPush;
 }

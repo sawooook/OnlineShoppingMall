@@ -8,6 +8,7 @@ import com.google.firebase.messaging.Message;
 import com.shop.online.shopingMall.dto.fcm.FcmRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.io.FileInputStream;
@@ -17,13 +18,14 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PushService {
 
     private final UserService userService;
 
     @PostConstruct
     public void init() throws IOException {
-        FileInputStream refreshToken = new FileInputStream("/secert/saouk-rdvuoe-firebase-adminsdk-888v7-2c7ed8dc19.json");
+        FileInputStream refreshToken = new FileInputStream("C:\\Users\\saouk\\Desktop\\shopingMall\\src\\main\\java\\com\\shop\\online\\shopingMall\\secret\\saouk-rdvuoe-firebase-adminsdk-888v7-2c7ed8dc19.json");
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(refreshToken))
                 .build();
@@ -40,6 +42,6 @@ public class PushService {
     }
 
     public void checkSendUser(FcmRequestDto fcmRequestDto) {
-        userService.findFcmOnUser();
+//        userService.findFcmOnUser();
     }
 }

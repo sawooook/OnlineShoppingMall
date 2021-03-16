@@ -15,7 +15,7 @@ public class FcmUtil {
     public void sendPushMessage(String token, String title, String content) {
 
         try {
-            FileInputStream refreshToken = new FileInputStream("/secert/saouk-rdvuoe-firebase-adminsdk-888v7-2c7ed8dc19.json");
+            FileInputStream refreshToken = new FileInputStream("/secret/saouk-rdvuoe-firebase-adminsdk-888v7-2c7ed8dc19.json");
 
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(refreshToken))
