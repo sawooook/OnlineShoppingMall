@@ -4,6 +4,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.shop.online.shopingMall.domain.Product;
+import com.shop.online.shopingMall.domain.ProductCategory;
 import com.shop.online.shopingMall.domain.enumType.ProductStatus;
 import com.shop.online.shopingMall.dto.product.ProductSearchRequestDto;
 import com.shop.online.shopingMall.dto.product.ProductSearchResponseDto;
@@ -66,8 +67,8 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
 
     }
 
-    private BooleanExpression typeEq(String type) {
-        return StringUtils.hasText(type) ? product.name.like(type) : null;
+    private BooleanExpression typeEq(ProductCategory type) {
+        return type != null ? product.category.eq(ProductCategory.COAT) : null;
     }
 
     private BooleanExpression NameEq(String searchName) {

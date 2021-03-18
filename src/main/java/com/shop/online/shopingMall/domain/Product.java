@@ -52,12 +52,13 @@ public class Product extends BaseEntity {
     }
 
     @Builder
-    public Product(Long id, ProductStatus productStatus, String name, String description, User user) {
+    public Product(Long id, ProductStatus productStatus, String name, String description, User user, ProductCategory category) {
         this.id = id;
         this.productStatus = productStatus;
         this.name = name;
         this.description = description;
         this.user = user;
+        this.category = category;
     }
 
 

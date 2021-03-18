@@ -1,6 +1,7 @@
 package com.shop.online.shopingMall.repository;
 
 import com.shop.online.shopingMall.domain.Product;
+import com.shop.online.shopingMall.domain.ProductCategory;
 import com.shop.online.shopingMall.domain.ProductPrice;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.domain.enumType.ProductStatus;
@@ -35,10 +36,10 @@ class ProductRepositoryImplTest {
         User user = User.builder().name("test").userRole(UserRole.seller).email("test").phone("test").build();
         userRepository.save(user);
 
-        Product product1 = Product.builder().name("test1").user(user).productStatus(ProductStatus.ACTIVE).build();
-        Product product2 = Product.builder().name("test2").user(user).productStatus(ProductStatus.ACTIVE).build();
-        Product product3 = Product.builder().name("test3").user(user).productStatus(ProductStatus.INACTIVE).build();
-        Product product4 = Product.builder().name("test4").user(user).productStatus(ProductStatus.ACTIVE).build();
+        Product product1 = Product.builder().name("test1").category(ProductCategory.COAT).user(user).productStatus(ProductStatus.ACTIVE).build();
+        Product product2 = Product.builder().name("test2").category(ProductCategory.COAT).user(user).productStatus(ProductStatus.ACTIVE).build();
+        Product product3 = Product.builder().name("test3").category(ProductCategory.PANTS).user(user).productStatus(ProductStatus.INACTIVE).build();
+        Product product4 = Product.builder().name("test4").category(ProductCategory.SKIRT).user(user).productStatus(ProductStatus.ACTIVE).build();
 
         ProductPrice price1 = ProductPrice.builder().price(1000).product(product1).build();
         ProductPrice price2 = ProductPrice.builder().price(2000).product(product2).build();
@@ -80,8 +81,18 @@ class ProductRepositoryImplTest {
         for (ProductSearchResponseDto product : products) {
             System.out.println("product = " + product);
         }
-
         org.assertj.core.api.Assertions.assertThat(products.get(0).getName()).isEqualTo("test1");
+    }
+
+    @Test
+    public void 제품_필터_테스트_카테고리분류() {
+        ProductSearchRequestDto request = ProductSearchRequestDto.builder().highPrice(false).lowPrice(true).searchName(null).type(ProductCategory.COAT).build();
+        List<ProductSearchResponseDto> products = productRepository.searchProduct(request);
+
+        for (ProductSearchResponseDto product : products) {
+            System.out.println("product = " + product);
+        }
+        org.assertj.core.api.Assertions.assertThat(products.size()).isEqualTo(2);
     }
 
 }
