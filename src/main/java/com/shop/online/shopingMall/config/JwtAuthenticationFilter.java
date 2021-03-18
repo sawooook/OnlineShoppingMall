@@ -25,7 +25,7 @@ public class JwtAuthenticationFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         String url = ((HttpServletRequest) request).getRequestURI();
 
-        if (!(url.equals("/user/signUp") || url.contains("/kakao/fail") || url.equals("/user/login") || url.contains("/billingInfo/kakao/approve/") || url.contains("/v1/payment/approve"))) {
+        if (isExcludeUrl(url)) {
             String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
             if (isValidToken(token)) {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
@@ -35,6 +35,14 @@ public class JwtAuthenticationFilter implements Filter {
             }
         }
         chain.doFilter(request, response);
+    }
+
+    /**
+    * 해당 URL의 경우 JWT토큰 검사를 실행하지 않음
+    * */
+    private boolean isExcludeUrl(String url) {
+        return (url.equals("/user/signUp") || url.contains("/kakao/fail") || url.equals("/user/login") ||
+                url.contains("/billingInfo/kakao/approve/") || url.contains("/v1/payment/approve"));
     }
 
 
