@@ -28,6 +28,9 @@ public class Product extends BaseEntity {
     //제품 설명
     private String description;
 
+    @Enumerated(EnumType.STRING)
+    private ProductCategory category;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

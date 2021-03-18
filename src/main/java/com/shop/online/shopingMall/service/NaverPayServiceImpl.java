@@ -1,6 +1,8 @@
 package com.shop.online.shopingMall.service;
 
+import com.shop.online.shopingMall.domain.BillingInfo;
 import com.shop.online.shopingMall.domain.Order;
+import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.dto.order.OrderResultResponseDto;
 
 public class NaverPayServiceImpl implements BillingInfoService {
@@ -16,6 +18,11 @@ public class NaverPayServiceImpl implements BillingInfoService {
 
     @Override
     public OrderResultResponseDto charge(Order order) {
+        return null;
+    }
+
+    @Override
+    public BillingInfo isActiveBillingInfo(User user) {
         return null;
     }
 }

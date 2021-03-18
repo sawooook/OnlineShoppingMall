@@ -30,7 +30,6 @@ public class UserController {
     * 회원 가입 관련 컨트롤러
     * 회원가입에 성공시 Status 201과, user 객체를 내려준다.
     */
-    @LoginUserCheck
     @PostMapping("/signUp")
     public ResponseEntity signUp(@RequestBody @NonNull UserDto userDto) {
         userService.save(userDto);

@@ -74,8 +74,7 @@ public class Order extends BaseEntity {
     /**
      * 주문 생성 메소드
     * */
-    public static Order createOrder(User user, Product product, List<OrderItem> orderItemList, Address address) {
-        BillingInfo billingInfo = user.activeBillingInfo().orElseThrow(NotFoundBillingInfoException::new);
+    public static Order createOrder(User user, Product product, List<OrderItem> orderItemList, Address address, BillingInfo billingInfo) {
         int totalAmount = 0;
 
         Order order = Order.builder().name(product.getName()).address(address)
