@@ -62,7 +62,7 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
         } else if (condition.isLowPrice()) {
             return productPrice.price.asc();
         } else {
-            return productPrice.price.asc();
+            return product.name.asc();
         }
 
     }

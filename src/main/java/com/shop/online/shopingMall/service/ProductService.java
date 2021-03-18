@@ -1,18 +1,13 @@
 package com.shop.online.shopingMall.service;
 
+import com.shop.online.shopingMall.dto.product.*;
 import com.shop.online.shopingMall.exception.NotFoundUserException;
 import com.shop.online.shopingMall.exception.ProductNotFoundException;
 import com.shop.online.shopingMall.domain.Product;
 import com.shop.online.shopingMall.domain.ProductOption;
 import com.shop.online.shopingMall.domain.ProductPrice;
 import com.shop.online.shopingMall.domain.User;
-import com.shop.online.shopingMall.dto.product.ProductDetailResponseDto;
-import com.shop.online.shopingMall.dto.product.ProductOptionDto;
-import com.shop.online.shopingMall.dto.product.ProductPriceDto;
-import com.shop.online.shopingMall.dto.product.ProductSaveRequestDto;
-import com.shop.online.shopingMall.repository.ProductPriceRepository;
 import com.shop.online.shopingMall.repository.ProductRepository;
-import com.shop.online.shopingMall.repository.ProductionOptionRepository;
 import com.shop.online.shopingMall.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -60,9 +55,16 @@ public class ProductService {
     }
 
     /**
-     * 모든 제품 리스트를 가져옴
-    * */
-    public List<Product> allProduct() {
-        return productRepository.findAll();
+     * 검색 타겟에 맞춰서 제품 리스트를 가져옴
+    *
+     * @return*/
+    public List<ProductSearchResponseDto> productList(ProductSearchRequestDto productSearchRequestDto) {
+        List<ProductSearchResponseDto> response = productRepository.searchProduct(productSearchRequestDto);
+
+        for (ProductSearchResponseDto productSearchResponseDto : response) {
+            System.out.println("productSearchResponseDto = " + productSearchResponseDto);
+        }
+
+        return response;
     }
 }

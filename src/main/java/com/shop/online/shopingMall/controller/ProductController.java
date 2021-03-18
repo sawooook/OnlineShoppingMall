@@ -2,6 +2,8 @@ package com.shop.online.shopingMall.controller;
 
 import com.shop.online.shopingMall.concern.ResponseMessage;
 import com.shop.online.shopingMall.concern.ResponseStatus;
+import com.shop.online.shopingMall.dto.product.ProductSearchRequestDto;
+import com.shop.online.shopingMall.dto.product.ProductSearchResponseDto;
 import com.shop.online.shopingMall.exception.NotFoundUserException;
 import com.shop.online.shopingMall.dto.product.ProductDetailResponseDto;
 import com.shop.online.shopingMall.dto.product.ProductSaveRequestDto;
@@ -10,6 +12,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,8 +36,8 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity productList() {
-        productService.allProduct();
-        return ResponseEntity.ok().body("123");
+    public ResponseEntity productList(@RequestBody ProductSearchRequestDto productSearchRequestDto) {
+        List<ProductSearchResponseDto> response = productService.productList(productSearchRequestDto);
+        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, null, response));
     }
 }

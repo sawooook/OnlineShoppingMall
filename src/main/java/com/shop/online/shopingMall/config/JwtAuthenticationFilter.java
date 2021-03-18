@@ -25,7 +25,7 @@ public class JwtAuthenticationFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         String url = ((HttpServletRequest) request).getRequestURI();
 
-        if (isExcludeUrl(url)) {
+        if (!isExcludeUrl(url)) {
             String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
             if (isValidToken(token)) {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);

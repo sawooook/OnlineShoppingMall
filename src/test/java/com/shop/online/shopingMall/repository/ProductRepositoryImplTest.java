@@ -77,10 +77,6 @@ class ProductRepositoryImplTest {
     public void 제품_필터_테스트__제품이름으로찾기() {
         ProductSearchRequestDto request = ProductSearchRequestDto.builder().highPrice(false).lowPrice(true).searchName("test1").type(null).build();
         List<ProductSearchResponseDto> products = productRepository.searchProduct(request);
-
-        for (ProductSearchResponseDto product : products) {
-            System.out.println("product = " + product);
-        }
         org.assertj.core.api.Assertions.assertThat(products.get(0).getName()).isEqualTo("test1");
     }
 
@@ -88,10 +84,6 @@ class ProductRepositoryImplTest {
     public void 제품_필터_테스트_카테고리분류() {
         ProductSearchRequestDto request = ProductSearchRequestDto.builder().highPrice(false).lowPrice(true).searchName(null).type(ProductCategory.COAT).build();
         List<ProductSearchResponseDto> products = productRepository.searchProduct(request);
-
-        for (ProductSearchResponseDto product : products) {
-            System.out.println("product = " + product);
-        }
         org.assertj.core.api.Assertions.assertThat(products.size()).isEqualTo(2);
     }
 
