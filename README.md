@@ -11,5 +11,6 @@ Java, Spring Boot, JPA, QueryDSL
 4) Redis 최적화를 위해 LFU 정책을 적용하여 효율적으로 캐시를 관리하도록 하였습니다
 
 ## 서버 구조도
-1
+![image](https://user-images.githubusercontent.com/43979984/113081087-fad10100-9212-11eb-8ba9-ff9ae8fed945.png)
+
 
