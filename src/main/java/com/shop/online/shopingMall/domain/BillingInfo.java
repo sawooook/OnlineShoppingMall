@@ -21,7 +21,8 @@ import java.util.Optional;
 @DynamicUpdate
 public class BillingInfo extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "billingInfo_id")
     private Long id;
 

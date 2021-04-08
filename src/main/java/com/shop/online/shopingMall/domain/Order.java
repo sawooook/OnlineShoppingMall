@@ -17,7 +17,7 @@ import java.util.List;
 @Table(name = "orders")
 public class Order extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id
     @Column(name = "order_id")
     private Long id;
 

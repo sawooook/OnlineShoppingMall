@@ -18,7 +18,8 @@ import javax.persistence.*;
 @NoArgsConstructor @AllArgsConstructor
 public class ProductPrice extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_price_id")
     private Long id;
 

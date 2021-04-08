@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -27,16 +28,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * */
     private final JwtTokenProvider jwtTokenProvider;
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.httpBasic().disable()
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //토큰 기반인증이므로 세션사용 안함
+    public void configure(HttpSecurity http) throws Exception {
+        http.httpBasic()
                 .and()
                 .authorizeRequests() // 요청에대한 사용권한체크
                 .antMatchers("/billingInfo/**").permitAll()
                 .antMatchers("/user/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Override
+    public void configure(WebSecurity http) throws Exception {
+        http.ignoring();
     }
 
     @Bean
