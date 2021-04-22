@@ -12,7 +12,7 @@ import java.util.List;
 @Builder @Data
 @AllArgsConstructor @NoArgsConstructor
 public class OrderRequestDto {
-    private int userId;
+    private Long userId;
     private String name;
     private int productId;
     private String addressCode;

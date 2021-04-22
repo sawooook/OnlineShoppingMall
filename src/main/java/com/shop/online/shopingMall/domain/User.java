@@ -72,7 +72,7 @@ public class User extends BaseEntity implements UserDetails {
         this.password = encodePassWord;
         this.userRole = UserRole.customer;
         this.userStatus = UserStatus.SIGN;
-        this.address = new Address(userDto.getAddressCode(), userDto.getAddressDetail());
+        this.address = new Address(userDto.getAddress().getAddressCode(), userDto.getAddress().getAddressDetail());
     }
 
 

@@ -64,6 +64,17 @@ public class Order extends BaseEntity {
         this.totalAmount = totalAmount;
     }
 
+    public Order(User user, Product product, List<OrderItem> items, Address address) {
+        this.orderStatus = OrderStatus.ready;
+        this.user = user;
+        this.name = product.getName();
+        this.product = product;
+        this.address = address;
+        this.totalAmount = items.stream().mapToInt(OrderItem::getPrice).sum();
+        this.delivery = null;
+    }
+
+
     /**
     *  저장 성공시 order 상태를 ready로 변경함
     * */

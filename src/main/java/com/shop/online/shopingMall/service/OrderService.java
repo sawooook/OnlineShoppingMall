@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -35,24 +36,15 @@ public class OrderService {
      *  2) 활성화된 카드가 있으면 주문을 진행한다.
     * */
 
+    @Transactional
     public void readyToOrder(OrderRequestDto orderRequestDto) {
-        User user = userRepository.findById((long) orderRequestDto.getUserId()).orElseThrow(NotFoundUserException::new);
-
-        // 해당 유저에게 활성화된 카드가 있는지 확인한다.
-        // 없을 경우 에러를 리턴 한다.
-        if (user.activeBillingInfo().isEmpty()) {
-            throw  new NotFoundBillingInfoException("등록된 카드가 없습니다. 카드를 등록해주세요");
-        }
-
+        User user = userRepository.findUserAndActiveBillingInfo(orderRequestDto.getUserId()).orElseThrow(NotOrderException::new);
 
         Product product = productRepository.findById((long) orderRequestDto.getProductId()).orElseThrow(ProductNotFoundException::new);
-        List<OrderItem> orderItems = OrderItemDto.toEntity(orderRequestDto.getItemList());
-
-        Address address = AddressDto.toEntity(new Address(orderRequestDto.getAddressCode(), orderRequestDto.getAddressDetail()));
-
-        Order order = makeOrder(user, product, orderItems, address);
-
+        List<OrderItem> items = orderRequestDto.getItemList().stream().map(orderItemDto -> new OrderItem(orderItemDto.getSize(), orderItemDto.getColor())).collect(Collectors.toList());
+        Order order = new Order(user, product, items, new Address(orderRequestDto.getAddressCode(), orderRequestDto.getAddressDetail()));
         orderRepository.save(order);
+
         OrderResultResponseDto result = readyToPay(order);
         Payment payment = makePayBilling(result);
         readToDelivery(payment);

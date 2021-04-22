@@ -28,6 +28,11 @@ public class OrderItem extends BaseEntity {
 
     private String color;
 
+    public OrderItem(String size, String color) {
+        this.size = size;
+        this.color = color;
+    }
+
     public void setOrder(Order order) {
         this.order = order;
     }

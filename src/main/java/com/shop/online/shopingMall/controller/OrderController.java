@@ -6,37 +6,47 @@ import com.shop.online.shopingMall.dto.order.OrderRequestDto;
 import com.shop.online.shopingMall.dto.order.OrderResponseDto;
 import com.shop.online.shopingMall.service.OrderService;
 import com.shop.online.shopingMall.service.SecurityService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/order")
 public class OrderController {
 
     private final OrderService orderService;
     private final SecurityService securityService;
 
+    public OrderController(OrderService orderService, SecurityService securityService) {
+        this.orderService = orderService;
+        this.securityService = securityService;
+    }
+
+
+    /**
+     * 제품 주문 관련 API
+     *
+     * 성공시 return OK, Order 정보
+     * 실패시 return BadRequest
+     *
+     * */
     @PostMapping
     public ResponseEntity makeOrder(@RequestBody OrderRequestDto orderRequestDto) {
         orderService.readyToOrder(orderRequestDto);
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK,"주문 성공", null));
+        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, null));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity cancelOrder(@PathVariable Long id) {
         orderService.cancel(id);
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, "주문 취소 완료", null));
+        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, null));
     }
 
     @GetMapping("/list")
     public ResponseEntity listOrder() {
         Long userId = securityService.findUserIdbyToken();
         List<OrderResponseDto> orderList = orderService.getOrderList(userId);
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, "주문 내역", orderList));
+        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, orderList));
     }
 }
