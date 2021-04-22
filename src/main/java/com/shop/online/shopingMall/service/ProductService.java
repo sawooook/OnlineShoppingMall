@@ -29,7 +29,7 @@ public class ProductService {
     * 요청을 통해 들어온 제품을 저장한다.
     * */
     @Transactional
-    public Product saveProduct(ProductSaveRequestDto requestDto) {
+    public Product saveProduct(ProductDto requestDto) {
 
         User findUser = userRepository.findById(requestDto.getUserId()).orElseThrow(NotFoundUserException::new);
         Product product = new Product(requestDto, findUser);
@@ -45,13 +45,10 @@ public class ProductService {
     /**
     * - 제품 상세페이지
     * 제품을 찾으면 제품에대한 상세페이지 리스트를 리턴해준다.
-    * */
-    public ProductDetailResponseDto findProduct(Long id) throws ProductNotFoundException {
-
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("제품을 찾을 수 없습니다"));
-
-        return ProductDetailResponseDto.toDto(product);
+    *
+     * @return*/
+    public Product findProduct(Long id) throws ProductNotFoundException {
+        return productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
     }
 
     /**

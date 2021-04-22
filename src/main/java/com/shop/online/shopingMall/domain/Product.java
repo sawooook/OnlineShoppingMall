@@ -2,9 +2,7 @@ package com.shop.online.shopingMall.domain;
 
 import com.shop.online.shopingMall.domain.base.BaseEntity;
 import com.shop.online.shopingMall.domain.enumType.ProductStatus;
-import com.shop.online.shopingMall.dto.product.ProductOptionDto;
-import com.shop.online.shopingMall.dto.product.ProductPriceDto;
-import com.shop.online.shopingMall.dto.product.ProductSaveRequestDto;
+import com.shop.online.shopingMall.dto.product.ProductDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -45,7 +43,7 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product")
     private List<Order> orderList = new ArrayList<>();
 
-    public Product(ProductSaveRequestDto requestDto, User user) {
+    public Product(ProductDto requestDto, User user) {
         this.productStatus = ProductStatus.ACTIVE;
         this.name = requestDto.getName();
         this.description = requestDto.getDescription();

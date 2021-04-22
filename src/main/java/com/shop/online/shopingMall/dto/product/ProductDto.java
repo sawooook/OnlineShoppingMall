@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor @NoArgsConstructor
-public class ProductSaveRequestDto {
+public class ProductDto {
 
     @NonNull
     private Long userId;
@@ -30,7 +30,7 @@ public class ProductSaveRequestDto {
     @JsonProperty("product_price")
     private ProductPriceDto productPriceDto;
 
-    public ProductSaveRequestDto(Product product) {
+    public ProductDto(Product product) {
         this.userId = product.getUser().getId();
         this.name = product.getName();
         this.description = product.getDescription();
