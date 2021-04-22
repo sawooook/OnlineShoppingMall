@@ -5,6 +5,7 @@ import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.domain.enumType.UserRole;
 import com.shop.online.shopingMall.domain.enumType.UserStatus;
 import com.shop.online.shopingMall.service.UserService;
+import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -14,10 +15,11 @@ import org.hibernate.annotations.ColumnDefault;
 * */
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
+    @NotNull
+    private Long id;
 
     @NonNull
     private String passWord;
@@ -32,11 +34,7 @@ public class UserDto {
     private String email;
     // 생성날짜
 
-    @NonNull
-    private String addressCode;
-
-    @NonNull
-    private String addressDetail;
+    private AddressDto address;
 
     @NonNull
     private UserRole userRole;
@@ -44,13 +42,12 @@ public class UserDto {
     @ColumnDefault("SIGN")
     private UserStatus userStatus;
 
-    public User toEntity() {
-        Address address = Address.builder().addressCode(getAddressCode())
-                .addressDetail(getAddressDetail()).build();
-
-        return User.builder().password(this.passWord)
-                .email(this.email)
-                .phone(this.phone).address(address)
-                .name(this.name).userRole(this.userRole).build();
+    public UserDto(User user) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.phone = user.getPhone();
+        this.email = user.getEmail();
+        this.address = new AddressDto(user);
+        this.userRole = user.getUserRole();
     }
 }

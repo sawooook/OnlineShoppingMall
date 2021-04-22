@@ -29,6 +29,10 @@ public class ProductPrice extends BaseEntity {
     @JoinColumn(name = "product_Id")
     private Product product;
 
+    public ProductPrice(int price) {
+        this.price = price;
+    }
+
     public static ProductPrice saveProductPrice(ProductPriceDto productPriceDto, Product product) {
         return ProductPrice.builder()
                 .price(productPriceDto.getPrice()).product(product).build();

@@ -45,33 +45,20 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product")
     private List<Order> orderList = new ArrayList<>();
 
-    @PrePersist
-    public void prePersist() {
-        if (this.getProductStatus() == null) {
-            this.productStatus = ProductStatus.ACTIVE;
-        }
-    }
-
-    @Builder
-    public Product(Long id, ProductStatus productStatus, String name, String description, User user, ProductCategory category) {
-        this.id = id;
-        this.productStatus = productStatus;
-        this.name = name;
-        this.description = description;
+    public Product(ProductSaveRequestDto requestDto, User user) {
+        this.productStatus = ProductStatus.ACTIVE;
+        this.name = requestDto.getName();
+        this.description = requestDto.getDescription();
+        this.category = ProductCategory.SHIRTS;
         this.user = user;
-        this.category = category;
     }
 
-
-    public static Product createProduct(Product product, List<ProductOption> productOptions, ProductPrice productPrice) {
-
-        for (ProductOption option : productOptions) {
-            product.addProductOption(option);
+    // 옵션과 가격을 product 객체에 담는다.
+    public void addOptionAndPrice(List<ProductOption> options, ProductPrice price) {
+        for (ProductOption option : options) {
+            addProductOption(option);
         }
-
-        product.addProductPrice(productPrice);
-
-        return product;
+        addProductPrice(price);
     }
 
     private void addProductPrice(ProductPrice price) {
@@ -85,28 +72,8 @@ public class Product extends BaseEntity {
     }
 
 
-
-
+    // 마지막으로 등록된 제품의 가격을 불러옴
     public int lastRegisterPrice() {
-        int lastPriceSize = getProductPrices().size() - 1;
-        return getProductPrices().get(lastPriceSize).getPrice();
+        return getProductPrices().get(getProductPrices().size() - 1).getPrice();
     }
-
-    public List<ProductOption> createProductOption(List<ProductOptionDto> productOptionDto) {
-
-        return productOptions;
-    }
-
-    public List<ProductPrice> createProductPrice(ProductPriceDto productPriceDto) {
-        ProductPrice price = ProductPrice.saveProductPrice(productPriceDto, this);
-        productPrices.add(price);
-        return productPrices;
-    }
-
-//    public void createProductOption(ProductSaveRequestDto requestDto) {
-//        for (int i = 0; i < requestDto.getProductOptionDto().size() -1 ; i++) {
-//            productOptions.add(requestDto.g)
-//            productOptions.add();
-//        }
-//    }
 }

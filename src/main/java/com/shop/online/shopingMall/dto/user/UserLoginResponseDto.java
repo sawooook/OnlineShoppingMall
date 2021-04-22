@@ -27,6 +27,15 @@ public class UserLoginResponseDto {
                 .id(user.getId()).name(user.getName()).email(user.getEmail()).phone(user.getPhone()).build();
     }
 
+    public UserLoginResponseDto(User user, String token, AddressDto addressDto) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.jwtToken = token;
+        this.phone = user.getPhone();
+        this.email = user.getEmail();
+        this.address = addressDto;
+    }
+
     public void updateToken(String token) {
         setJwtToken(token);
     }

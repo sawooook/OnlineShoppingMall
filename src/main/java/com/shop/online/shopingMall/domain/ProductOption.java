@@ -2,12 +2,15 @@ package com.shop.online.shopingMall.domain;
 
 import com.shop.online.shopingMall.domain.base.BaseEntity;
 import com.shop.online.shopingMall.domain.enumType.ProductOptionStatus;
+import com.shop.online.shopingMall.dto.product.ProductOptionDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.swing.text.html.Option;
+import java.util.List;
 
 @Entity @Builder @Getter
 @NoArgsConstructor @AllArgsConstructor
@@ -29,16 +32,10 @@ public class ProductOption extends BaseEntity {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @PrePersist
-    public void prePersist() {
-        if (this.getProductOptionStatus() == null) {
-            this.productOptionStatus = ProductOptionStatus.ACTIVE;
-        }
-    }
-
-    public static ProductOption saveProductOption(String color, String size, Product product) {
-        return ProductOption.builder()
-                .product(product).size(size).color(color).build();
+    public ProductOption(String size, String color) {
+        this.size = size;
+        this.color = color;
+        this.productOptionStatus = ProductOptionStatus.ACTIVE;
     }
 
     public void setProduct(Product product) {

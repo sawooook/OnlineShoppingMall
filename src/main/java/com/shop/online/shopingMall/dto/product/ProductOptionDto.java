@@ -17,6 +17,11 @@ public class ProductOptionDto {
     @NonNull
     private String size;
 
+    public ProductOptionDto(String color, String size) {
+        this.color = color;
+        this.size = size;
+    }
+
     public static List<ProductOption> toEntity(List<ProductOptionDto> productOptionDto) {
         List<ProductOption> productOptionList = new ArrayList<>();
 

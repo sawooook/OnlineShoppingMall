@@ -4,10 +4,7 @@ import com.shop.online.shopingMall.aop.LoginUserCheck;
 import com.shop.online.shopingMall.concern.ResponseMessage;
 import com.shop.online.shopingMall.concern.ResponseStatus;
 import com.shop.online.shopingMall.domain.User;
-import com.shop.online.shopingMall.dto.user.UserDto;
-import com.shop.online.shopingMall.dto.user.UserLoginRequestDto;
-import com.shop.online.shopingMall.dto.user.UserLoginResponseDto;
-import com.shop.online.shopingMall.dto.user.UserMypageResponse;
+import com.shop.online.shopingMall.dto.user.*;
 import com.shop.online.shopingMall.exception.NotFoundUserException;
 import com.shop.online.shopingMall.service.UserService;
 import javassist.NotFoundException;
@@ -29,17 +26,21 @@ public class UserController {
 
 
     private final UserService userService;
-    /*
-    * 회원 가입 관련 컨트롤러
-    * 회원가입에 성공시 Status 201과, user 객체를 내려준다.
+
+    /**
+    * 회원 가입 API
+    *
+    * 회원가입 성공시
+    * Status : OK
+    * user 정보
     */
     @PostMapping("/signUp")
     public ResponseEntity signUp(@RequestBody @NonNull UserDto userDto) {
-        userService.save(userDto);
-        return ResponseEntity.ok().build();
+        User user = userService.save(userDto);
+        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK ,new UserDto(user)));
     }
 
-    /*
+    /**
     * 이메일 중복 체크 API
     *
     * 이메일 중복시
@@ -51,7 +52,6 @@ public class UserController {
     @GetMapping("/check/{email}")
     public ResponseEntity checkEmail(@PathVariable @NonNull String email) {
         boolean checkEmailStatus = userService.checkEmail(email);
-
         if (checkEmailStatus) {
             return ResponseEntity.notFound().build();
         } else {
@@ -59,7 +59,7 @@ public class UserController {
         }
     }
 
-    /*
+    /**
     * 로그인 관련 API
     *
     * 성공시 return OK, user 정보
@@ -72,23 +72,26 @@ public class UserController {
         String passWord = userLoginRequestDto.getPassWord();
         UserLoginResponseDto userLoginResponseDto = userService.loginCheck(email, passWord);
 
-//        if (userLoginResponseDto != null) {
-//            String token = jwtTokenProvider.createToken(userLoginResponseDto.getId());
-//            userLoginResponseDto.updateToken(token);
-//        }
-
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK,"로그인 성공", userLoginResponseDto));
+        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, userLoginResponseDto));
     }
 
     @GetMapping("/delete/{id}")
     public ResponseEntity unRegister(@NonNull Long id) throws NotFoundUserException {
         userService.unRegister(id);
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK,"회원탈퇴 완료", null));
+        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, null));
     }
 
+    /**
+     * 마이페이지 관련 API
+     *
+     * 성공시 return OK, user 정보
+     * 실패시 return BadRequest
+     *
+     * */
     @GetMapping("/mypage/{id}")
     public ResponseEntity myPage(@PathVariable @NonNull Long id) throws NotFoundUserException {
-        UserMypageResponse user = userService.findUser(id);
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, "마이페이지", user));
+        User user = userService.findUser(id);
+        UserResponseDto response = new UserResponseDto(user, new AddressDto(user));
+        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, response));
     }
 }

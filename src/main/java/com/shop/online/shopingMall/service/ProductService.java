@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,22 +24,21 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
-    /*
+    /**
     * 제품 저장
-    *
+    * 요청을 통해 들어온 제품을 저장한다.
     * */
-    public void saveProduct(ProductSaveRequestDto requestDto) throws NotFoundUserException {
+    @Transactional
+    public Product saveProduct(ProductSaveRequestDto requestDto) {
 
-        User findUser = userRepository.findById(requestDto.getUserId())
-                .orElseThrow(() -> new NotFoundUserException("회원정보를 찾을 수 없습니다"));
+        User findUser = userRepository.findById(requestDto.getUserId()).orElseThrow(NotFoundUserException::new);
+        Product product = new Product(requestDto, findUser);
 
-        Product product = ProductSaveRequestDto.toEntity(requestDto, findUser);
-        List<ProductOption> optionsList = ProductOptionDto.toEntity(requestDto.getProductOptionDto());
-        ProductPrice productPrice = ProductPriceDto.toEntity(requestDto.getProductPriceDto());
+        List<ProductOption> options = requestDto.getProductOptionDto().stream().map(
+                productOptionDto -> new ProductOption(productOptionDto.getSize(), productOptionDto.getColor())).collect(Collectors.toList());
 
-        Product makeProduct = Product.createProduct(product, optionsList, productPrice);
-
-        productRepository.save(makeProduct);
+        product.addOptionAndPrice(options, new ProductPrice(requestDto.getProductPriceDto().getPrice()));
+        return productRepository.save(product);
     }
 
 

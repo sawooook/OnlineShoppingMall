@@ -2,6 +2,7 @@ package com.shop.online.shopingMall.controller;
 
 import com.shop.online.shopingMall.concern.ResponseMessage;
 import com.shop.online.shopingMall.concern.ResponseStatus;
+import com.shop.online.shopingMall.domain.Product;
 import com.shop.online.shopingMall.dto.product.ProductSearchRequestDto;
 import com.shop.online.shopingMall.dto.product.ProductSearchResponseDto;
 import com.shop.online.shopingMall.exception.NotFoundUserException;
@@ -22,11 +23,18 @@ public class ProductController {
 
     private final ProductService productService;
 
+    /**
+     * 제품등록 관련 API
+     *
+     * 성공시 return OK, product 정보
+     * 실패시 return BadRequest
+     *
+     * */
     @PostMapping
-    public ResponseEntity productSave(@RequestBody ProductSaveRequestDto productSaveRequestDto) throws NotFoundUserException {
-        productService.saveProduct(productSaveRequestDto);
-
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, "제품 등록에 성공 하였습니다", null));
+    public ResponseEntity productSave(@RequestBody ProductSaveRequestDto productSaveRequestDto) {
+        Product product = productService.saveProduct(productSaveRequestDto);
+        ProductSaveRequestDto response = new ProductSaveRequestDto(product);
+        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, response));
     }
 
     @GetMapping("/{id}")
@@ -38,6 +46,6 @@ public class ProductController {
     @GetMapping("/list")
     public ResponseEntity productList(@RequestBody ProductSearchRequestDto productSearchRequestDto) {
         List<ProductSearchResponseDto> response = productService.productList(productSearchRequestDto);
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, null, response));
+        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, response));
     }
 }

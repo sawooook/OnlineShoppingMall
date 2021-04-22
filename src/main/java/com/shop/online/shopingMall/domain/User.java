@@ -5,6 +5,7 @@ import com.shop.online.shopingMall.domain.enumType.BillingInfoStatus;
 import com.shop.online.shopingMall.domain.enumType.CardName;
 import com.shop.online.shopingMall.domain.enumType.UserRole;
 import com.shop.online.shopingMall.domain.enumType.UserStatus;
+import com.shop.online.shopingMall.dto.user.UserDto;
 import com.shop.online.shopingMall.exception.NotFoundBillingInfoException;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -60,6 +61,20 @@ public class User extends BaseEntity implements UserDetails {
     private Address address;
 
     private String pushToken;
+
+
+    // 회원가입시 사용하는 생성자
+    public User(UserDto userDto, String encodePassWord) {
+        this.name = userDto.getName();
+        this.phone = userDto.getPhone();
+        this.email = userDto.getEmail();
+        this.phone = userDto.getPhone();
+        this.password = encodePassWord;
+        this.userRole = UserRole.customer;
+        this.userStatus = UserStatus.SIGN;
+        this.address = new Address(userDto.getAddressCode(), userDto.getAddressDetail());
+    }
+
 
     // 처음 insert 시 userStatus 업데이트를 위한 코드
     @PrePersist

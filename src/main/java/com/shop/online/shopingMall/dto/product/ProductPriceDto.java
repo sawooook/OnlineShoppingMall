@@ -9,7 +9,6 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor @NoArgsConstructor
 public class ProductPriceDto {
-    @NonNull
     private int price;
 
     public static ProductPrice toEntity(ProductPriceDto productPriceDto) {

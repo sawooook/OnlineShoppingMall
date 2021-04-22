@@ -2,10 +2,12 @@ package com.shop.online.shopingMall.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.shop.online.shopingMall.domain.Product;
+import com.shop.online.shopingMall.domain.ProductPrice;
 import com.shop.online.shopingMall.domain.User;
 import lombok.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor @NoArgsConstructor
@@ -28,8 +30,11 @@ public class ProductSaveRequestDto {
     @JsonProperty("product_price")
     private ProductPriceDto productPriceDto;
 
-    public static Product toEntity(ProductSaveRequestDto requestDto, User user) {
-        return Product.builder()
-                .name(requestDto.getName()).user(user).description(requestDto.getDescription()).build();
+    public ProductSaveRequestDto(Product product) {
+        this.userId = product.getUser().getId();
+        this.name = product.getName();
+        this.description = product.getDescription();
+        this.productOptionDto = product.getProductOptions().stream().map(productOption -> new ProductOptionDto(productOption.getColor(), productOption.getSize())).collect(Collectors.toList());
+        this.productPriceDto = new ProductPriceDto(product.lastRegisterPrice());
     }
 }
