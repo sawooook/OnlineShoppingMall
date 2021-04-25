@@ -75,23 +75,6 @@ public class User extends BaseEntity implements UserDetails {
         this.address = new Address(userDto.getAddress().getAddressCode(), userDto.getAddress().getAddressDetail());
     }
 
-
-    // 처음 insert 시 userStatus 업데이트를 위한 코드
-    @PrePersist
-    public void prePersist() {
-        if (this.getUserStatus() == null) {
-            this.userStatus = UserStatus.SIGN;
-        }
-    }
-
-    public User changeEncodingPassword(String encodingPassword) {
-        return User.builder().password(encodingPassword)
-                .id(this.id).email(this.email)
-                .phone(this.phone).address(this.address)
-                .name(this.name).userRole(this.userRole).userStatus(this.userStatus).build();
-
-    }
-
     public boolean isNotDeleteUser() {
         return getUserStatus() == UserStatus.SIGN;
     }
@@ -118,10 +101,16 @@ public class User extends BaseEntity implements UserDetails {
         return Optional.ofNullable(billingInfo);
     }
 
-
-
-
-
+    /*
+    * 유저 정보를 삭제 상태로 변경하고 등록된
+    * 카드 정보를 모두 삭제한다.
+    * */
+    public void delete() {
+        userStatus = UserStatus.DELETE;
+        for (BillingInfo billingInfo : getBillingInfoList()) {
+            billingInfo.delete();
+        }
+    }
     /*
     * Spring Security 관련 메소드
     * */
@@ -161,5 +150,4 @@ public class User extends BaseEntity implements UserDetails {
     public boolean isEnabled() {
         return false;
     }
-
 }

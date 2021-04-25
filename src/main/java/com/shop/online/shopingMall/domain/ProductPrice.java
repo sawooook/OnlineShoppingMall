@@ -33,15 +33,6 @@ public class ProductPrice extends BaseEntity {
         this.price = price;
     }
 
-    public static ProductPrice saveProductPrice(ProductPriceDto productPriceDto, Product product) {
-        return ProductPrice.builder()
-                .price(productPriceDto.getPrice()).product(product).build();
-    }
-
-    public int lastRegisterPrice() {
-        return getPrice();
-    }
-
     public void setProduct(Product product) {
         this.product = product;
     }

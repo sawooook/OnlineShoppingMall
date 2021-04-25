@@ -2,6 +2,7 @@ package com.shop.online.shopingMall.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.shop.online.shopingMall.domain.User;
+import com.shop.online.shopingMall.domain.enumType.BillingInfoStatus;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
@@ -32,12 +33,12 @@ public class UserRepositoryImpl extends QuerydslRepositorySupport implements Use
                 .fetch();
     }
 
-    // 유저정보가 있는지 확인, 결제키가 있는지 확인
+    // 유저정보가 있는지 확인, 결제키가 있고 삭제되지 않은 결제카드인지
     @Override
     public Optional<User> findUserAndActiveBillingInfo(Long userId) {
         return Optional.ofNullable(jpaQueryFactory.selectFrom(user)
                 .join(user.billingInfoList, billingInfo)
-                .on(user.id.eq(userId), billingInfo.paymentKey.isNotNull())
+                .on(user.id.eq(userId), billingInfo.paymentKey.isNotNull(), billingInfo.billingInfoStatus.eq(BillingInfoStatus.ACTIVE))
                 .fetchOne());
     }
 }

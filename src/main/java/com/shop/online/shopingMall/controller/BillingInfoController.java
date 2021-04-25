@@ -1,19 +1,11 @@
 package com.shop.online.shopingMall.controller;
 
-import com.shop.online.shopingMall.concern.ResponseMessage;
-import com.shop.online.shopingMall.concern.ResponseStatus;
-import com.shop.online.shopingMall.config.JwtTokenProvider;
 import com.shop.online.shopingMall.service.BillingInfoService;
-import com.shop.online.shopingMall.service.SecurityService;
-import javassist.NotFoundException;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
+import util.ApiResponse;
+
+import static util.ApiResponse.*;
 
 @RestController
 @RequestMapping("/billingInfo")
@@ -28,18 +20,18 @@ public class BillingInfoController {
     }
 
     @RequestMapping("/kakao/approve/{id}")
-    public ResponseEntity<ResponseMessage> kakaoPayApprove(@RequestParam("pg_token") String pgToken, @PathVariable("id") Long id) {
+    public ApiResponse<String> kakaoPayApprove(@RequestParam("pg_token") String pgToken, @PathVariable("id") Long id) {
         billingInfoService.approve(pgToken, id);
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, "카드등록완료", null));
+        return success("카드 등록 완료");
     }
 
     @GetMapping("/kakao/fail")
-    public ResponseEntity<String> kakaoPayFail() {
-        return ResponseEntity.badRequest().body("결제에 실패하였습니다");
+    public ApiResponse<?> kakaoPayFail() {
+        return fail("결제에 실패하셨습니다");
     }
 
     @GetMapping("/kakao/cancel")
-    public ResponseEntity<String> kakaoPayCancel() {
-        return ResponseEntity.badRequest().body("결제를 취소 하였습니다");
+    public ApiResponse<?> kakaoPayCancel() {
+        return fail("결제에 취소하셨습니다");
     }
 }

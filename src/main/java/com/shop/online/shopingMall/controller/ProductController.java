@@ -1,17 +1,17 @@
 package com.shop.online.shopingMall.controller;
 
-import com.shop.online.shopingMall.concern.ResponseMessage;
-import com.shop.online.shopingMall.concern.ResponseStatus;
 import com.shop.online.shopingMall.domain.Product;
 import com.shop.online.shopingMall.dto.product.ProductSearchRequestDto;
 import com.shop.online.shopingMall.dto.product.ProductSearchResponseDto;
 import com.shop.online.shopingMall.dto.product.ProductDto;
 import com.shop.online.shopingMall.service.ProductService;
 import lombok.NonNull;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import util.ApiResponse;
 
 import java.util.List;
+
+import static util.ApiResponse.success;
 
 @RestController
 @RequestMapping("/product")
@@ -31,10 +31,10 @@ public class ProductController {
      *
      * */
     @PostMapping
-    public ResponseEntity productSave(@RequestBody ProductDto productDto) {
+    public ApiResponse productSave(@RequestBody ProductDto productDto) {
         Product product = productService.saveProduct(productDto);
         ProductDto response = new ProductDto(product);
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, response));
+        return success(response);
     }
 
     /**
@@ -43,17 +43,17 @@ public class ProductController {
      * 성공시 return OK, product 정보
      * 실패시 return BadRequest
      *
-     * */
+     *
+     * @return*/
     @GetMapping("/{id}")
-    public ResponseEntity productDetail(@PathVariable @NonNull Long id) {
-        Product product = productService.findProduct(id);
-        ProductDto productDto = new ProductDto(product);
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, productDto));
+    public ApiResponse<ProductDto> productDetail(@PathVariable @NonNull Long id) {
+        ProductDto response = productService.findProduct(id);
+        return success(response);
     }
 
     @GetMapping("/list")
-    public ResponseEntity productList(@RequestBody ProductSearchRequestDto productSearchRequestDto) {
+    public ApiResponse<List<ProductSearchResponseDto>> productList(@RequestBody ProductSearchRequestDto productSearchRequestDto) {
         List<ProductSearchResponseDto> response = productService.productList(productSearchRequestDto);
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, response));
+        return success(response);
     }
 }

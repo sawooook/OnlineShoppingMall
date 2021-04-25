@@ -1,5 +1,7 @@
 package com.shop.online.shopingMall.service;
 
+import com.shop.online.shopingMall.domain.enumType.ProductStatus;
+import com.shop.online.shopingMall.domain.enumType.UserStatus;
 import com.shop.online.shopingMall.dto.product.*;
 import com.shop.online.shopingMall.exception.NotFoundUserException;
 import com.shop.online.shopingMall.exception.ProductNotFoundException;
@@ -31,7 +33,7 @@ public class ProductService {
     @Transactional
     public Product saveProduct(ProductDto requestDto) {
 
-        User findUser = userRepository.findById(requestDto.getUserId()).orElseThrow(NotFoundUserException::new);
+        User findUser = userRepository.findByIdAndUserStatus(requestDto.getUserId(), UserStatus.SIGN).orElseThrow(NotFoundUserException::new);
         Product product = new Product(requestDto, findUser);
 
         List<ProductOption> options = requestDto.getProductOptionDto().stream().map(
@@ -47,8 +49,10 @@ public class ProductService {
     * 제품을 찾으면 제품에대한 상세페이지 리스트를 리턴해준다.
     *
      * @return*/
-    public Product findProduct(Long id) throws ProductNotFoundException {
-        return productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
+    public ProductDto findProduct(Long id) throws ProductNotFoundException {
+        Product product = productRepository.findByIdAndProductStatus(id, ProductStatus.ACTIVE).orElseThrow(ProductNotFoundException::new);
+        ProductDto productDto = new ProductDto(product);
+        return productDto;
     }
 
     /**

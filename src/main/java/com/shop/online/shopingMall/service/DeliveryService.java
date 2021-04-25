@@ -23,15 +23,14 @@ public class DeliveryService {
 
     public String checkDelivery(Long id) {
         Delivery delivery = deliveryRepository.findById(id).orElseThrow(NotFoundDeliveryException::new);
-        if (isDeliverying(delivery)) {
+        if (isDelivery(delivery)) {
             return "배송중입니다";
         } else {
-
             return "배송완료된 제품입니다";
         }
     }
 
-    public boolean isDeliverying(Delivery delivery) {
+    public boolean isDelivery(Delivery delivery) {
         return delivery.getDeliveryStatus() == DeliveryStatus.ing;
     }
 }

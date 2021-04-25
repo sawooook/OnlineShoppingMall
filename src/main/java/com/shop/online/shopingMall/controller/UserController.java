@@ -72,11 +72,11 @@ public class UserController {
         return success(userLoginResponseDto);
     }
 
+
     @GetMapping("/delete/{id}")
     public ApiResponse<Boolean> unRegister(@NonNull Long id) throws NotFoundUserException {
         userService.unRegister(id);
         return success(true);
-
     }
 
     /**

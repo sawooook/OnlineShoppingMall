@@ -39,9 +39,4 @@ public class Delivery extends BaseEntity {
     public void cancel() {
         this.deliveryStatus = DeliveryStatus.cancel;
     }
-
-    public static Delivery toEntity(Address address) {
-        return Delivery.builder().deliveryStatus(DeliveryStatus.ready)
-                .address(new Address(address.getAddressCode(), address.getAddressDetail())).build();
-    }
 }

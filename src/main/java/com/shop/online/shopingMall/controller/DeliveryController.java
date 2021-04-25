@@ -1,13 +1,13 @@
 package com.shop.online.shopingMall.controller;
 
-import com.shop.online.shopingMall.concern.ResponseMessage;
-import com.shop.online.shopingMall.concern.ResponseStatus;
 import com.shop.online.shopingMall.service.DeliveryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import util.ApiResponse;
+
+import static util.ApiResponse.success;
 
 @RestController("/delivery")
 @RequiredArgsConstructor
@@ -17,8 +17,8 @@ public class DeliveryController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity checkDelivery(@PathVariable Long id) {
+    public ApiResponse<String> checkDelivery(@PathVariable Long id) {
         String message = deliveryService.checkDelivery(id);
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, message, null));
+        return success(message);
     }
 }

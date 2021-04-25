@@ -6,10 +6,10 @@ import com.shop.online.shopingMall.dto.board.BoardRequestDto;
 import com.shop.online.shopingMall.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import util.ApiResponse;
 
 @RestController
 @RequestMapping("/board")
@@ -18,8 +18,8 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    public ResponseEntity addBoard(@RequestBody BoardRequestDto boardRequestDto) {
+    public ApiResponse<String> addBoard(@RequestBody BoardRequestDto boardRequestDto) {
         boardService.save(boardRequestDto);
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, "등록 성공", null));
+        return ApiResponse.success("동록 성공");
     }
 }

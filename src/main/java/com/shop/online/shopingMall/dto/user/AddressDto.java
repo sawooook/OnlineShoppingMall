@@ -17,12 +17,7 @@ public class AddressDto {
         this.addressCode = user.getAddress().getAddressCode();
         this.addressDetail = user.getAddress().getAddressDetail();
     }
-
-    public static Address toEntity(Address address) {
-        return Address.builder()
-                .addressDetail(address.getAddressDetail()).addressCode(address.getAddressCode()).build();
-    }
-
+    
     public static AddressDto toDto(Address address) {
         return AddressDto.builder()
                 .addressDetail(address.getAddressDetail()).addressCode(address.getAddressCode()).build();

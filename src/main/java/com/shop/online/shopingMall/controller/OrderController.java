@@ -1,15 +1,15 @@
 package com.shop.online.shopingMall.controller;
 
-import com.shop.online.shopingMall.concern.ResponseMessage;
-import com.shop.online.shopingMall.concern.ResponseStatus;
 import com.shop.online.shopingMall.dto.order.OrderRequestDto;
 import com.shop.online.shopingMall.dto.order.OrderResponseDto;
 import com.shop.online.shopingMall.service.OrderService;
 import com.shop.online.shopingMall.service.SecurityService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import util.ApiResponse;
 
 import java.util.List;
+
+import static util.ApiResponse.success;
 
 @RestController
 @RequestMapping("/order")
@@ -30,23 +30,24 @@ public class OrderController {
      * 성공시 return OK, Order 정보
      * 실패시 return BadRequest
      *
-     * */
+     *
+     * @return*/
     @PostMapping
-    public ResponseEntity makeOrder(@RequestBody OrderRequestDto orderRequestDto) {
+    public ApiResponse<Boolean> makeOrder(@RequestBody OrderRequestDto orderRequestDto) {
         orderService.readyToOrder(orderRequestDto);
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, null));
+        return success(true);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity cancelOrder(@PathVariable Long id) {
+    public ApiResponse<Boolean> cancelOrder(@PathVariable Long id) {
         orderService.cancel(id);
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, null));
+        return success(true);
     }
 
     @GetMapping("/list")
-    public ResponseEntity listOrder() {
+    public ApiResponse<List<OrderResponseDto>> listOrder() {
         Long userId = securityService.findUserIdbyToken();
         List<OrderResponseDto> orderList = orderService.getOrderList(userId);
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, orderList));
+        return success(orderList);
     }
 }

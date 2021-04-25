@@ -1,6 +1,7 @@
 package com.shop.online.shopingMall.service;
 
 import com.shop.online.shopingMall.domain.*;
+import com.shop.online.shopingMall.domain.enumType.DeliveryStatus;
 import com.shop.online.shopingMall.dto.order.OrderItemDto;
 import com.shop.online.shopingMall.dto.order.OrderRequestDto;
 import com.shop.online.shopingMall.dto.order.OrderResponseDto;
@@ -19,7 +20,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class OrderService {
 
@@ -36,7 +37,7 @@ public class OrderService {
      *  2) 활성화된 카드가 있으면 주문을 진행한다.
     * */
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void readyToOrder(OrderRequestDto orderRequestDto) {
         User user = userRepository.findUserAndActiveBillingInfo(orderRequestDto.getUserId()).orElseThrow(NotOrderException::new);
 
@@ -66,7 +67,12 @@ public class OrderService {
     private void readToDelivery(Payment payment) {
         Order order = payment.getOrder();
         Address address = order.getUser().getAddress();
-        Delivery delivery = Delivery.toEntity(address);
+
+
+        Delivery delivery = Delivery.builder().deliveryStatus(DeliveryStatus.ready)
+                .address(new Address(address.getAddressCode(), address.getAddressDetail())).build();
+
+
         deliveryService.save(delivery);
         order.setDelivery(delivery);
         order.updateOrderStatus();

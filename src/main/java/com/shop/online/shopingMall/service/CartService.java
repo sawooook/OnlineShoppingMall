@@ -47,8 +47,4 @@ public class CartService {
         Cart cart = cartRepository.findById(id).orElseThrow(() -> new NotFoundCartException("장바구니가 비워져있습니다."));
         cartRepository.delete(cart);
     }
-//
-//    public cart add(CartItem cartItem) {
-//
-//    }
 }

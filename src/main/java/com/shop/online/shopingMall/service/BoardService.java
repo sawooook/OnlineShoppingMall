@@ -22,15 +22,15 @@ public class BoardService {
 
     public void save(BoardRequestDto boardRequestDto) {
         Long userId = securityService.findUserIdbyToken();
-        User user = userService.findById(userId);
+        User user = userService.findUser(userId);
 
         Board board = BoardRequestDto.toEntity(boardRequestDto, user);
         boardRepository.save(board);
 
-        FcmRequestDto fcmRequestDto = FcmRequestDto.toEntity(board);
+//        FcmRequestDto fcmRequestDto = FcmRequestDto.toEntity(board);
 
-        if (board.isSendPush() && (board.getBoardType() == BoardType.FAQ)) {
+//        if (board.isSendPush() && (board.getBoardType() == BoardType.FAQ)) {
 //            pushService.checkSendUser(fcmRequestDto);
-        }
+//        }
     }
 }
