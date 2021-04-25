@@ -1,21 +1,19 @@
 package com.shop.online.shopingMall.controller;
 
-import com.shop.online.shopingMall.aop.LoginUserCheck;
+import com.google.protobuf.Api;
 import com.shop.online.shopingMall.concern.ResponseMessage;
 import com.shop.online.shopingMall.concern.ResponseStatus;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.dto.user.*;
 import com.shop.online.shopingMall.exception.NotFoundUserException;
 import com.shop.online.shopingMall.service.UserService;
-import javassist.NotFoundException;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import util.ApiResponse;
 
-import java.util.Optional;
+import static util.ApiResponse.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,9 +33,9 @@ public class UserController {
     * user 정보
     */
     @PostMapping("/signUp")
-    public ResponseEntity signUp(@RequestBody @NonNull UserDto userDto) {
+    public ApiResponse signUp(@RequestBody @NonNull UserDto userDto) {
         User user = userService.save(userDto);
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK ,new UserDto(user)));
+        return success(new UserDto(user));
     }
 
     /**
@@ -50,12 +48,12 @@ public class UserController {
     * STATUS : OK
     * */
     @GetMapping("/check/{email}")
-    public ResponseEntity checkEmail(@PathVariable @NonNull String email) {
+    public ApiResponse checkEmail(@PathVariable @NonNull String email) {
         boolean checkEmailStatus = userService.checkEmail(email);
         if (checkEmailStatus) {
-            return ResponseEntity.notFound().build();
+            return success(checkEmailStatus);
         } else {
-            return ResponseEntity.ok().build();
+            return success(false);
         }
     }
 
@@ -67,18 +65,18 @@ public class UserController {
     *
     * */
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @NonNull UserLoginRequestDto userLoginRequestDto) {
+    public ApiResponse login(@RequestBody @NonNull UserLoginRequestDto userLoginRequestDto) {
         String email = userLoginRequestDto.getEmail();
         String passWord = userLoginRequestDto.getPassWord();
         UserLoginResponseDto userLoginResponseDto = userService.loginCheck(email, passWord);
-
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, userLoginResponseDto));
+        return success(userLoginResponseDto);
     }
 
     @GetMapping("/delete/{id}")
-    public ResponseEntity unRegister(@NonNull Long id) throws NotFoundUserException {
+    public ApiResponse<Boolean> unRegister(@NonNull Long id) throws NotFoundUserException {
         userService.unRegister(id);
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, null));
+        return success(true);
+
     }
 
     /**
@@ -89,9 +87,9 @@ public class UserController {
      *
      * */
     @GetMapping("/mypage/{id}")
-    public ResponseEntity myPage(@PathVariable @NonNull Long id) throws NotFoundUserException {
+    public ApiResponse myPage(@PathVariable @NonNull Long id) throws NotFoundUserException {
         User user = userService.findUser(id);
         UserResponseDto response = new UserResponseDto(user, new AddressDto(user));
-        return ResponseEntity.ok().body(new ResponseMessage(ResponseStatus.OK, response));
+        return success(response);
     }
 }
