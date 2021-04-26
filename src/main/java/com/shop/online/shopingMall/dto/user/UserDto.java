@@ -18,9 +18,6 @@ import org.hibernate.annotations.ColumnDefault;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
-    @NotNull
-    private Long id;
-
     @NonNull
     private String passWord;
 
@@ -43,7 +40,6 @@ public class UserDto {
     private UserStatus userStatus;
 
     public UserDto(User user) {
-        this.id = user.getId();
         this.name = user.getName();
         this.phone = user.getPhone();
         this.email = user.getEmail();

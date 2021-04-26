@@ -11,13 +11,17 @@ import java.util.List;
 
 @Getter
 @Builder
-@RedisHash("cart")
-@NoArgsConstructor
-@AllArgsConstructor
+@RedisHash("cart") // key 설정
 public class Cart implements Serializable {
 
     @Id
     private String id;
     private String name;
     private List<CartItem> cartItems;
+
+    public Cart(String id, String name, List<CartItem> cartItems) {
+        this.id = id;
+        this.name = name;
+        this.cartItems = cartItems;
+    }
 }

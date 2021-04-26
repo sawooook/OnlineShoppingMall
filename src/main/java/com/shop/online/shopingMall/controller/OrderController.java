@@ -3,7 +3,7 @@ package com.shop.online.shopingMall.controller;
 import com.shop.online.shopingMall.dto.order.OrderRequestDto;
 import com.shop.online.shopingMall.dto.order.OrderResponseDto;
 import com.shop.online.shopingMall.service.OrderService;
-import com.shop.online.shopingMall.service.SecurityService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import util.ApiResponse;
 
@@ -13,15 +13,11 @@ import static util.ApiResponse.success;
 
 @RestController
 @RequestMapping("/order")
+@RequiredArgsConstructor
 public class OrderController {
 
     private final OrderService orderService;
-    private final SecurityService securityService;
 
-    public OrderController(OrderService orderService, SecurityService securityService) {
-        this.orderService = orderService;
-        this.securityService = securityService;
-    }
 
 
     /**
@@ -45,8 +41,7 @@ public class OrderController {
     }
 
     @GetMapping("/list")
-    public ApiResponse<List<OrderResponseDto>> listOrder() {
-        Long userId = securityService.findUserIdbyToken();
+    public ApiResponse<List<OrderResponseDto>> listOrder(@RequestParam Long userId) {
         List<OrderResponseDto> orderList = orderService.getOrderList(userId);
         return success(orderList);
     }

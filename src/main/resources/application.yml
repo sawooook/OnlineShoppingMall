@@ -30,6 +30,3 @@ server:
   error:
     include-stacktrace: always
     include-message: always
-
-# production 환경 셋팅
-# 개발 환경 셋팅

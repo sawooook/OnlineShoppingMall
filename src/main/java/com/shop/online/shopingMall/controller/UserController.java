@@ -1,8 +1,5 @@
 package com.shop.online.shopingMall.controller;
 
-import com.google.protobuf.Api;
-import com.shop.online.shopingMall.concern.ResponseMessage;
-import com.shop.online.shopingMall.concern.ResponseStatus;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.dto.user.*;
 import com.shop.online.shopingMall.exception.NotFoundUserException;
@@ -19,10 +16,6 @@ import static util.ApiResponse.*;
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
-
-
-
-
     private final UserService userService;
 
     /**
@@ -31,9 +24,10 @@ public class UserController {
     * 회원가입 성공시
     * Status : OK
     * user 정보
-    */
+     * @return
+     */
     @PostMapping("/signUp")
-    public ApiResponse signUp(@RequestBody @NonNull UserDto userDto) {
+    public ApiResponse<Object> signUp(@RequestBody UserDto userDto) {
         User user = userService.save(userDto);
         return success(new UserDto(user));
     }

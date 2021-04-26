@@ -23,7 +23,7 @@ import java.util.Optional;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends BaseEntity implements UserDetails {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -110,44 +110,5 @@ public class User extends BaseEntity implements UserDetails {
         for (BillingInfo billingInfo : getBillingInfoList()) {
             billingInfo.delete();
         }
-    }
-    /*
-    * Spring Security 관련 메소드
-    * */
-
-    // 계정이 갖고 있는 권한 목록을 리턴함
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    // 계정의 이름을 리턴함
-    @Override
-    public String getUsername() {
-        return null;
-    }
-
-    //계정이 만료되었는지 체크한다
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    //계정이 잠겨있는지 체크한다.
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    //계정 비밀번호가 만료되지 않았는지 체크한다.
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    // 계정이 활성화 상태인지 체크한다.
-    @Override
-    public boolean isEnabled() {
-        return false;
     }
 }

@@ -11,9 +11,9 @@ import com.shop.online.shopingMall.dto.user.UserLoginResponseDto;
 import com.shop.online.shopingMall.repository.UserRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import util.PasswordEncrypt;
 
 @Service
 @Transactional(readOnly = true)
@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
     /**
@@ -36,7 +35,7 @@ public class UserService {
         boolean validUser = isValidUser(user.isNotDeleteUser(), isValidPassword(passWord, user.getPassword()));
 
         if (validUser) {
-            String token = jwtTokenProvider.createToken(user.getId());
+            String token = jwtTokenProvider.generateToken(String.valueOf(user.getId()));
             return new UserLoginResponseDto(user, token, new AddressDto(user));
         } else {
             throw new NotFoundUserException();
@@ -49,7 +48,7 @@ public class UserService {
 
     @Transactional
     public User save(@NonNull UserDto userDto) {
-        String encodePassWord = passwordEncoder.encode(userDto.getPassWord());
+        String encodePassWord = PasswordEncrypt.encrypt(userDto.getPassWord());
         return userRepository.save(new User(userDto, encodePassWord));
     }
 
@@ -91,7 +90,7 @@ public class UserService {
     }
 
     private boolean isValidPassword(String passWord, String encodingPassWord) {
-        return passwordEncoder.matches(passWord, encodingPassWord);
+        return PasswordEncrypt.checkPassword(passWord, encodingPassWord);
     }
 
     private boolean isValidUser(Boolean userStatus, Boolean passWordCorrectStatus) {

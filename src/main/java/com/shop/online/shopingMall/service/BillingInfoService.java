@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface BillingInfoService {
 
-    void ready();
+    void ready(Long userId);
 
     void approve(String token, Long id);
 

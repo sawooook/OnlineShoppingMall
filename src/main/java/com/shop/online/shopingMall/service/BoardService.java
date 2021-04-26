@@ -17,15 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class BoardService {
 
     private final BoardRepository boardRepository;
-    private final SecurityService securityService;
     private final UserService userService;
 
     public void save(BoardRequestDto boardRequestDto) {
-        Long userId = securityService.findUserIdbyToken();
-        User user = userService.findUser(userId);
 
-        Board board = BoardRequestDto.toEntity(boardRequestDto, user);
-        boardRepository.save(board);
+//        Board board = BoardRequestDto.toEntity(boardRequestDto, user);
+//        boardRepository.save(board);
 
 //        FcmRequestDto fcmRequestDto = FcmRequestDto.toEntity(board);
 

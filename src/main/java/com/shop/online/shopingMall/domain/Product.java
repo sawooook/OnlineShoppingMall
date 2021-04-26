@@ -9,8 +9,11 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity @Getter
-@NoArgsConstructor @AllArgsConstructor
+@Entity
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Product extends BaseEntity {
 
     @Id

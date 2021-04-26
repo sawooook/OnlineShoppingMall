@@ -24,7 +24,6 @@ public class KakaoPayServiceImpl implements BillingInfoService {
 
     private final UserRepository userRepository;
     private final BillingInfoRepository billingInfoRepository;
-    private final SecurityService securityService;
 
     /**
      * - 카카오 페이 Ready
@@ -32,8 +31,7 @@ public class KakaoPayServiceImpl implements BillingInfoService {
      * */
 
     @Override
-    public void ready() {
-        Long userId = securityService.findUserIdbyToken();
+    public void ready(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
 
         if (user.hasActiveBillingInfo(CardName.kakao).isPresent()) {

@@ -8,8 +8,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import util.PasswordEncrypt;
 
 import javax.persistence.EntityManager;
 
@@ -23,16 +23,13 @@ class UserServiceTest {
     private UserService userService;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private EntityManager entityManager;
 
 
     @Test
     @DisplayName("로그인 성공 테스트")
     public void 로그인_성공() {
-        User testUser = User.builder().name("test").password(passwordEncoder.encode("123")).phone("010").address(new Address("seoul", "test"))
+        User testUser = User.builder().name("test").password(PasswordEncrypt.encrypt("123")).phone("010").address(new Address("seoul", "test"))
                 .email("saouk@naver.com").build();
 
         entityManager.persist(testUser);

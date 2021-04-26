@@ -15,8 +15,8 @@ public class BillingInfoController {
     private final BillingInfoService billingInfoService;
 
     @GetMapping("/kakao/ready")
-    public void kakaoPayReady() {
-        billingInfoService.ready();
+    public void kakaoPayReady(@RequestParam Long userId) {
+        billingInfoService.ready(userId);
     }
 
     @RequestMapping("/kakao/approve/{id}")

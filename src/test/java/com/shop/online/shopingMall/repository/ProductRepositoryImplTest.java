@@ -36,6 +36,7 @@ class ProductRepositoryImplTest {
         User user = User.builder().name("test").userRole(UserRole.seller).email("test").phone("test").build();
         userRepository.save(user);
 
+
         Product product1 = Product.builder().name("test1").category(ProductCategory.COAT).user(user).productStatus(ProductStatus.ACTIVE).build();
         Product product2 = Product.builder().name("test2").category(ProductCategory.COAT).user(user).productStatus(ProductStatus.ACTIVE).build();
         Product product3 = Product.builder().name("test3").category(ProductCategory.PANTS).user(user).productStatus(ProductStatus.INACTIVE).build();
