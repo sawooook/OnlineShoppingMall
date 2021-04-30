@@ -1,5 +1,6 @@
 package com.shop.online.shopingMall.controller;
 
+import com.shop.online.shopingMall.domain.Board;
 import com.shop.online.shopingMall.domain.Cart;
 import com.shop.online.shopingMall.dto.cart.CartRequestDto;
 import com.shop.online.shopingMall.dto.cart.CartResponseDto;
@@ -17,31 +18,32 @@ public class CartController {
 
     private final CartService cartService;
 
+    /**
+    * 장바구니에 추가하는 API
+    * */
     @PostMapping
-    public ApiResponse<String> addCart(@RequestBody CartRequestDto cartRequestDto) {
-        Cart cart = CartRequestDto.toEntity(cartRequestDto);
-        cartService.save(cart);
-        return success("장바구니 등록에 성공하셨습니다.");
+    public ApiResponse<Boolean> addCart(@RequestBody CartRequestDto cartRequestDto) {
+        boolean status = cartService.save(cartRequestDto);
+        return success(status);
     }
 
     /**
-     * 장바구니 RESET Controller
+     * 장바구니에 담긴 데이터들을 보여주는 API
      *
      * @return*/
     @GetMapping("/list/{id}")
     public ApiResponse<CartResponseDto> showCartList(@PathVariable String id) {
         Cart cart = cartService.findById(id);
-        CartResponseDto responseDto = CartResponseDto.toDto(cart);
-        return success(responseDto);
+        return success(new CartResponseDto(cart));
     }
 
     /**
-    * 장바구니 RESET Controller
+    * 장바구니에서 등록한 아이템을 지우는 API
     *
      * @return*/
     @DeleteMapping("/{id}")
-    public ApiResponse<String> resetCart(@PathVariable String id) {
-        cartService.resetCart(id);
-        return success("장바구니를 모두 비웠습니다.");
+    public ApiResponse<Boolean> deleteCart(@PathVariable String id) {
+        cartService.deleteCart(id);
+        return success(true);
     }
 }

@@ -1,16 +1,12 @@
 package com.shop.online.shopingMall.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
 
 import javax.persistence.Id;
 
 @Getter
 @EqualsAndHashCode
-@Builder
-@AllArgsConstructor
+@NoArgsConstructor
 public class CartItem {
 
     @Id
@@ -18,4 +14,10 @@ public class CartItem {
     private String color;
     private String price;
     private String size;
+
+    public CartItem(String color, String size, String price) {
+        this.color = color;
+        this.size = size;
+        this.price = price;
+    }
 }
