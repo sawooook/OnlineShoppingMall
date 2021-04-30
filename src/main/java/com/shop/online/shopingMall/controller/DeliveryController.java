@@ -15,7 +15,9 @@ public class DeliveryController {
 
     private final DeliveryService deliveryService;
 
-
+    /**
+    * 배송의 상태를 체크할 수 있는 API
+    * */
     @GetMapping("/{id}")
     public ApiResponse<String> checkDelivery(@PathVariable Long id) {
         String message = deliveryService.checkDelivery(id);

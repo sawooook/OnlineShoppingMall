@@ -33,6 +33,20 @@ public class Delivery extends BaseEntity {
         return (getDeliveryStatus() == DeliveryStatus.ing);
     }
 
+    public boolean isDeliverySuccess() {
+        return (getDeliveryStatus() == DeliveryStatus.success);
+    }
+
+    public boolean isDeliveryCancel() {
+        return (getDeliveryStatus() == DeliveryStatus.cancel);
+    }
+
+    public boolean isDeliveryReady() {
+        return (getDeliveryStatus() == DeliveryStatus.ready);
+    }
+
+
+
     /**
      * 배송 상태를 취소로변경
     * */

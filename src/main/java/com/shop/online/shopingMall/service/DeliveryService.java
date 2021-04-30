@@ -1,8 +1,6 @@
 package com.shop.online.shopingMall.service;
 
-import com.shop.online.shopingMall.domain.Address;
 import com.shop.online.shopingMall.domain.Delivery;
-import com.shop.online.shopingMall.domain.Order;
 import com.shop.online.shopingMall.domain.enumType.DeliveryStatus;
 import com.shop.online.shopingMall.exception.NotFoundDeliveryException;
 import com.shop.online.shopingMall.repository.DeliveryRepository;
@@ -23,14 +21,18 @@ public class DeliveryService {
 
     public String checkDelivery(Long id) {
         Delivery delivery = deliveryRepository.findById(id).orElseThrow(NotFoundDeliveryException::new);
-        if (isDelivery(delivery)) {
-            return "배송중입니다";
-        } else {
-            return "배송완료된 제품입니다";
-        }
+        return checkDeliveryStatus(delivery);
     }
 
-    public boolean isDelivery(Delivery delivery) {
-        return delivery.getDeliveryStatus() == DeliveryStatus.ing;
+    private String checkDeliveryStatus(Delivery delivery) {
+        if (delivery.isDeliveryGoing()) {
+            return "배송중입니다";
+        } else if (delivery.isDeliveryCancel()) {
+            return "취소된 배송입니다.";
+        } else if (delivery.isDeliveryReady()) {
+            return "배송 준비단계에 있습니다.";
+        } else {
+            return "배송 완료되었습니다.";
+        }
     }
 }
