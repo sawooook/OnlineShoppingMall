@@ -51,17 +51,12 @@ public class BillingInfo extends BaseEntity {
         this.paymentKey = paymentKey;
     }
 
-
-    // 처음 insert 시 userStatus 업데이트를 위한 코드
-    @PrePersist
-    public void prePersist() {
-        if (this.getBillingInfoStatus() == null) {
-            this.billingInfoStatus = BillingInfoStatus.ACTIVE;
-        }
-    }
-
     public boolean isActiveBillingInfo() {
         return this.billingInfoStatus == BillingInfoStatus.ACTIVE;
+    }
+
+    public void updateInActive() {
+        this.billingInfoStatus = BillingInfoStatus.INACTIVE;
     }
 
     public void delete() {

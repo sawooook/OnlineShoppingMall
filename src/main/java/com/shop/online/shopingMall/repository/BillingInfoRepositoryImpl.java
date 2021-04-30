@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+import static com.shop.online.shopingMall.domain.QBillingInfo.*;
+
 @Repository
 public class BillingInfoRepositoryImpl extends QuerydslRepositorySupport implements BillingInfoRepositoryCustom {
 
@@ -25,11 +27,11 @@ public class BillingInfoRepositoryImpl extends QuerydslRepositorySupport impleme
     public Optional<BillingInfo> activeBillingInfo(User user) {
 
         return Optional.ofNullable(queryFactory
-                .selectFrom(QBillingInfo.billingInfo)
+                .selectFrom(billingInfo)
                 .where(
-                        QBillingInfo.billingInfo.user.eq(user),
-                        QBillingInfo.billingInfo.billingInfoStatus.eq(BillingInfoStatus.ACTIVE),
-                        QBillingInfo.billingInfo.uniqueNumber.isNotNull())
+                        billingInfo.user.eq(user),
+                        billingInfo.billingInfoStatus.eq(BillingInfoStatus.ACTIVE),
+                        billingInfo.uniqueNumber.isNotNull())
                 .fetchFirst());
     }
 }

@@ -3,6 +3,7 @@ package com.shop.online.shopingMall.service;
 import com.shop.online.shopingMall.domain.BillingInfo;
 import com.shop.online.shopingMall.domain.Order;
 import com.shop.online.shopingMall.domain.User;
+import com.shop.online.shopingMall.domain.enumType.BillingInfoStatus;
 import com.shop.online.shopingMall.domain.enumType.CardName;
 import com.shop.online.shopingMall.dto.util.KakaoPayApproveResponseDto;
 import com.shop.online.shopingMall.dto.order.OrderResultResponseDto;
@@ -42,7 +43,7 @@ public class KakaoPayServiceImpl implements BillingInfoService {
         Optional<BillingInfo> billingInfo = user.activeBillingInfo();
 
         if (billingInfo.isPresent()) {
-            billingInfo.get().delete();
+            billingInfo.get().updateInActive();
             billingInfoRepository.save(billingInfo.get());
         }
 
@@ -50,7 +51,7 @@ public class KakaoPayServiceImpl implements BillingInfoService {
 
         BillingInfo makeKakaoBillingInfo = BillingInfo.builder().cardName(CardName.kakao)
                 .uniqueNumber(responseKakao.getBody().getTid())
-                .user(user).build();
+                .user(user).billingInfoStatus(BillingInfoStatus.ACTIVE).build();
         billingInfoRepository.save(makeKakaoBillingInfo);
     }
 
@@ -59,11 +60,14 @@ public class KakaoPayServiceImpl implements BillingInfoService {
      * 정기결제 등록된 후 테스트 결제를 시도하는 단계
      * */
     @Override
+    @Transactional
     public void approve(String pgToken, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(NotFoundUserException::new);
 
-        BillingInfo billingInfo = billingInfoRepository.activeBillingInfo(user).orElseThrow(NotFoundBillingInfoException::new);
+
+        BillingInfo billingInfo = billingInfoRepository.activeBillingInfo(user)
+                .orElseThrow(NotFoundBillingInfoException::new);
 
         KakaoPayApproveResponseDto responseKakao = KakakoPayUtil.approveToKakaoPay(billingInfo, pgToken);
 
