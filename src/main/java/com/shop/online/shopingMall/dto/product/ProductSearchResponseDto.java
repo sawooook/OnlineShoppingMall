@@ -11,6 +11,7 @@ public class ProductSearchResponseDto {
     private int price;
     private ProductCategory category;
 
+
     @QueryProjection
     public ProductSearchResponseDto(Long id, String name, int price, ProductCategory category) {
         this.id = id;

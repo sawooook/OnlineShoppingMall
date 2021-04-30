@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -58,14 +58,10 @@ public class ProductService {
     /**
      * 검색 타겟에 맞춰서 제품 리스트를 가져옴
     *
+     *
+     * @param productSearchRequestDto
      * @return*/
     public List<ProductSearchResponseDto> productList(ProductSearchRequestDto productSearchRequestDto) {
-        List<ProductSearchResponseDto> response = productRepository.searchProduct(productSearchRequestDto);
-
-        for (ProductSearchResponseDto productSearchResponseDto : response) {
-            System.out.println("productSearchResponseDto = " + productSearchResponseDto);
-        }
-
-        return response;
-    }
+        return productRepository.searchProduct(productSearchRequestDto);
+     }
 }

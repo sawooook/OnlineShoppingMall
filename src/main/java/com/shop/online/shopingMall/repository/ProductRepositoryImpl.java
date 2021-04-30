@@ -5,6 +5,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.shop.online.shopingMall.domain.Product;
 import com.shop.online.shopingMall.domain.ProductCategory;
+import com.shop.online.shopingMall.domain.ProductPrice;
+import com.shop.online.shopingMall.domain.QProductPrice;
 import com.shop.online.shopingMall.domain.enumType.ProductStatus;
 import com.shop.online.shopingMall.dto.product.ProductSearchRequestDto;
 import com.shop.online.shopingMall.dto.product.ProductSearchResponseDto;
@@ -39,12 +41,14 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
                 .select(new QProductSearchResponseDto
                         (product.id.as("id"),
                                 product.name.as("name"),
-                                productPrice.price.as("price")))
+                                productPrice.price.as("price"),
+                                product.category.as("category")))
                 .from(product)
                 .join(product.productPrices, productPrice)
+                .fetchJoin()
                 .where(
                         isActive(),
-                        NameEq(condition.getSearchName()),
+                        nameEq(condition.getSearchName()),
                         typeEq(condition.getType())
                 ).orderBy(priceCheck(condition)).fetch();
     }
@@ -71,7 +75,7 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
         return type != null ? product.category.eq(ProductCategory.COAT) : null;
     }
 
-    private BooleanExpression NameEq(String searchName) {
+    private BooleanExpression nameEq(String searchName) {
         return StringUtils.hasText(searchName) ? product.name.like("%" + searchName + "%") : null;
     }
 }

@@ -88,4 +88,9 @@ class ProductRepositoryImplTest {
         org.assertj.core.api.Assertions.assertThat(products.size()).isEqualTo(2);
     }
 
+    @Test
+    public void N_1_TEST() {
+        productRepository.findAll();
+    }
+
 }

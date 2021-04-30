@@ -1,19 +1,15 @@
 package com.shop.online.shopingMall.domain;
 
 import com.shop.online.shopingMall.domain.base.BaseEntity;
-import com.shop.online.shopingMall.domain.enumType.BillingInfoStatus;
 import com.shop.online.shopingMall.domain.enumType.CardName;
 import com.shop.online.shopingMall.domain.enumType.UserRole;
 import com.shop.online.shopingMall.domain.enumType.UserStatus;
 import com.shop.online.shopingMall.dto.user.UserDto;
 import com.shop.online.shopingMall.exception.NotFoundBillingInfoException;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,36 +75,21 @@ public class User extends BaseEntity {
         return getUserStatus() == UserStatus.SIGN;
     }
 
+    /**
+    * 유저가 활성화된 카드를 갖고있는지 체크한다.
+    * */
     public Optional<BillingInfo> activeBillingInfo() {
-        BillingInfo findBillingInfo = null;
-
-        for (BillingInfo billingInfo : billingInfoList) {
-            if (billingInfo.getBillingInfoStatus() == BillingInfoStatus.ACTIVE) {
-                findBillingInfo = billingInfo;
-                break;
-            }
-        }
-        return Optional.ofNullable(findBillingInfo);
+        return billingInfoList.stream()
+                .filter(billingInfo -> billingInfo.isActiveBillingInfo())
+                .findAny();
     }
 
-    public Optional<BillingInfo> hasActiveBillingInfo(CardName cardName) {
-        List<BillingInfo> cardList = this.getBillingInfoList();
-        BillingInfo billingInfo = null;
-
-        for (BillingInfo card : cardList) {
-            billingInfo = card.isActiveBillingInfo(cardName).orElseThrow(NotFoundBillingInfoException::new);
-        }
-        return Optional.ofNullable(billingInfo);
-    }
-
-    /*
+    /**
     * 유저 정보를 삭제 상태로 변경하고 등록된
     * 카드 정보를 모두 삭제한다.
     * */
     public void delete() {
         userStatus = UserStatus.DELETE;
-        for (BillingInfo billingInfo : getBillingInfoList()) {
-            billingInfo.delete();
-        }
+        getBillingInfoList().forEach(BillingInfo::delete);
     }
 }

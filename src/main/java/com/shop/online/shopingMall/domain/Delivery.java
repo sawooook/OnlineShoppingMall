@@ -23,13 +23,13 @@ public class Delivery extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private DeliveryStatus deliveryStatus;
 
-    @OneToOne(mappedBy = "delivery")
+    @JoinColumn(name = "order_id")
     private Order order;
 
     /**
      * 배송상태를 체크
     * */
-    public boolean isDeliveryReady() {
+    public boolean isDeliveryGoing() {
         return (getDeliveryStatus() == DeliveryStatus.ing);
     }
 

@@ -37,7 +37,8 @@ dependencies {
 	implementation 'com.querydsl:querydsl-jpa'
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	implementation 'de.svenkubiak:jBCrypt:0.4.1'
-	compile group: 'com.google.firebase', name: 'firebase-admin', version: '6.10.0'}
+	compile('org.springframework.boot:spring-boot-starter-aop')
+}
 
 //querydsl 추가 시작
 def querydslDir = "$buildDir/generated/querydsl"

@@ -60,11 +60,8 @@ public class BillingInfo extends BaseEntity {
         }
     }
 
-    public Optional<BillingInfo> isActiveBillingInfo(CardName cardName) {
-        if ((this.billingInfoStatus == BillingInfoStatus.ACTIVE) && (this.cardName == cardName)){
-            return Optional.of(this);
-        }
-        return Optional.empty();
+    public boolean isActiveBillingInfo() {
+        return this.billingInfoStatus == BillingInfoStatus.ACTIVE;
     }
 
     public void delete() {

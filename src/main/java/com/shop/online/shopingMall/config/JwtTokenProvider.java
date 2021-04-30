@@ -13,8 +13,6 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
     private static final String CHARSET = "UTF-8";
-    private static final String PREFIX = "Bearer ";
-
     private static final String SECRET = "shoppingMall";
 
     public String generateToken(String userId) {

@@ -33,17 +33,4 @@ public class ProductOptionDto {
         }
         return productOptionList;
     }
-
-
-    public static List<ProductOptionDto> toDto(List<ProductOption> productOptions) {
-        List<ProductOptionDto> productOptionList = new ArrayList<>();
-
-        for (int i = 0; i < productOptions.size(); i++) {
-            ProductOptionDto option = ProductOptionDto.builder()
-                    .color(productOptions.get(i).getColor()).size(productOptions.get(i).getSize()).build();
-
-            productOptionList.add(option);
-        }
-        return productOptionList;
-    }
 }

@@ -38,6 +38,15 @@ public class ProductOption extends BaseEntity {
         this.productOptionStatus = ProductOptionStatus.ACTIVE;
     }
 
+    @Builder
+    public ProductOption(Long id, String color, String size, ProductOptionStatus productOptionStatus, Product product) {
+        this.id = id;
+        this.color = color;
+        this.size = size;
+        this.productOptionStatus = productOptionStatus;
+        this.product = product;
+    }
+
     public void setProduct(Product product) {
         this.product = product;
     }

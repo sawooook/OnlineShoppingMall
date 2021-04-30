@@ -17,22 +17,4 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class UserRepositoryImplTest {
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private EntityManager entityManager;
-    @Test
-    public void 토큰리스트_가져오기() {
-        User user1 = User.builder().name("test").pushToken("test").build();
-        User user2 = User.builder().name("test").pushToken("test").build();
-
-        entityManager.persist(user1);
-        entityManager.persist(user2);
-
-        List<String> result = userRepository.pushOnUser();
-
-        Assertions.assertThat(result.size()).isEqualTo(2);
-
-    }
-
 }

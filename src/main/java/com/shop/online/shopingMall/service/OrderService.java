@@ -2,6 +2,7 @@ package com.shop.online.shopingMall.service;
 
 import com.shop.online.shopingMall.domain.*;
 import com.shop.online.shopingMall.domain.enumType.DeliveryStatus;
+import com.shop.online.shopingMall.domain.enumType.OrderStatus;
 import com.shop.online.shopingMall.dto.order.OrderItemDto;
 import com.shop.online.shopingMall.dto.order.OrderRequestDto;
 import com.shop.online.shopingMall.dto.order.OrderResponseDto;
@@ -29,7 +30,6 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final BillingInfoService billingInfoService;
     private final PaymentService paymentService;
-    private final DeliveryService deliveryService;
 
     /**
     *  주문 준비를 위한 메소드
@@ -39,11 +39,19 @@ public class OrderService {
 
     @Transactional(rollbackFor = Exception.class)
     public void readyToOrder(OrderRequestDto orderRequestDto) {
-        User user = userRepository.findUserAndActiveBillingInfo(orderRequestDto.getUserId()).orElseThrow(NotOrderException::new);
 
-        Product product = productRepository.findById((long) orderRequestDto.getProductId()).orElseThrow(ProductNotFoundException::new);
-        List<OrderItem> items = orderRequestDto.getItemList().stream().map(orderItemDto -> new OrderItem(orderItemDto.getSize(), orderItemDto.getColor())).collect(Collectors.toList());
-        Order order = new Order(user, product, items, new Address(orderRequestDto.getAddressCode(), orderRequestDto.getAddressDetail()));
+        // 활성화된 카드가 있는지 확인하고 없을 경우 등록된 카드가 없다고 return
+        User user = userRepository.findUserAndActiveBillingInfo(orderRequestDto.getUserId())
+                .orElseThrow(() -> new NotActiveBillingInfoExcption("등록된 카드가 없습니다."));
+
+        Product product = productRepository.findById((long) orderRequestDto.getProductId())
+                .orElseThrow(ProductNotFoundException::new);
+
+        List<OrderItem> items = orderRequestDto.getItemList().stream().map(
+                orderItemDto -> new OrderItem(orderItemDto.getSize(), orderItemDto.getColor()))
+                .collect(Collectors.toList());
+
+        Order order = new Order(user, user.activeBillingInfo().get() ,product, items, new Address(orderRequestDto.getAddressCode(), orderRequestDto.getAddressDetail()));
         orderRepository.save(order);
 
         OrderResultResponseDto result = readyToPay(order);
@@ -51,29 +59,32 @@ public class OrderService {
         readToDelivery(payment);
     }
 
+    /**
+    * 아이디를 통해서 해당 주문을 찾는다.
+    * */
     public Order findOrder(Long id) {
         return orderRepository.findById(id).orElseThrow(NotFoundOrderExcption::new);
     }
 
     /**
-    * 활성화된 카드로 정기결제를 시도한다.
-    *
+    * 활성화된 정기결제 카드로 결제를 시도한다.
      * @param order
      * @return*/
     private OrderResultResponseDto readyToPay(Order order) {
         return billingInfoService.charge(order);
     }
 
+    /**
+    * 배달 상태를 ready로 변경을 완료 할 시
+    * 주문의 상태도 ready로 변경한다.
+    * */
     private void readToDelivery(Payment payment) {
         Order order = payment.getOrder();
         Address address = order.getUser().getAddress();
 
-
         Delivery delivery = Delivery.builder().deliveryStatus(DeliveryStatus.ready)
                 .address(new Address(address.getAddressCode(), address.getAddressDetail())).build();
 
-
-        deliveryService.save(delivery);
         order.setDelivery(delivery);
         order.updateOrderStatus();
     }
@@ -86,28 +97,27 @@ public class OrderService {
         return payment;
     }
 
+    /**
+    * 취소 요청 받은 주문을 찾은 후 주문의 상태를 조회한다.
+    * */
+    @Transactional
     public void cancel(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(ProductNotFoundException::new);
-        boolean cancel = order.cancel();
-        if (!cancel) {
-            throw new OrderCancelFail("주문을 취소 할수 없습니다");
+        if (order.getDelivery().isDeliveryGoing()) {
+            throw new OrderCancelFail("현재 배송중이라 주문을 취소 할수 없습니다");
+        } else {
+            if (order.isSuccess()) {
+                throw new OrderCancelFail("배송이 이미 완료된 제품입니다.");
+            } else if (order.isCancel()) {
+                throw new OrderCancelFail("배송이 취소된 제품입니다.");
+            } else if (order.isReady()){
+                order.cancel();
+            }
         }
     }
 
     public List<OrderResponseDto> getOrderList(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
-        List<Order> orderList = user.getOrderList();
-        List<OrderResponseDto> responseDtoList = OrderResponseDto.toDto(orderList);
-        return responseDtoList;
-    }
-
-
-    /**
-    *  주문을 생성하고, 생성이 완료될 시 주문의 상태를 Ready로 변경한다
-    * */
-    private Order makeOrder(User user, Product product, List<OrderItem> orderItems, Address address) {
-        BillingInfo billingInfo = billingInfoService.isActiveBillingInfo(user);
-        Order order = Order.createOrder(user, product, orderItems, address, billingInfo);
-        return order;
+        List<Order> orderList = orderRepository.findOrderList(userId);
+        return orderList.stream().map(order -> new OrderResponseDto(order)).collect(Collectors.toList());
     }
 }

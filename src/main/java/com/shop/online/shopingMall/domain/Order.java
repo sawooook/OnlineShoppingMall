@@ -1,6 +1,7 @@
 package com.shop.online.shopingMall.domain;
 
 import com.shop.online.shopingMall.domain.base.BaseEntity;
+import com.shop.online.shopingMall.domain.enumType.DeliveryStatus;
 import com.shop.online.shopingMall.domain.enumType.OrderStatus;
 import com.shop.online.shopingMall.exception.NotFoundBillingInfoException;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity @Getter
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "orders")
 public class Order extends BaseEntity {
 
@@ -30,8 +31,7 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "billingInfo_id")
     private BillingInfo billingInfo;
 
-    @OneToOne
-    @JoinColumn(name = "delivery_id")
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Delivery delivery;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -52,7 +52,7 @@ public class Order extends BaseEntity {
     private int totalAmount;
 
     @Builder
-    public Order(Long id, int totalAmount ,OrderStatus orderStatus, String name, BillingInfo billingInfo, Delivery delivery, User user, Product product, Address address) {
+    public Order(Long id, OrderStatus orderStatus, String name, BillingInfo billingInfo, Delivery delivery, User user, Product product, List<OrderItem> orderItems, List<Payment> payments, Address address, int totalAmount) {
         this.id = id;
         this.orderStatus = orderStatus;
         this.name = name;
@@ -60,13 +60,16 @@ public class Order extends BaseEntity {
         this.delivery = delivery;
         this.user = user;
         this.product = product;
+        this.orderItems = orderItems;
+        this.payments = payments;
         this.address = address;
         this.totalAmount = totalAmount;
     }
 
-    public Order(User user, Product product, List<OrderItem> items, Address address) {
+    public Order(User user, BillingInfo billingInfo, Product product, List<OrderItem> items, Address address) {
         this.orderStatus = OrderStatus.ready;
         this.user = user;
+        this.billingInfo = billingInfo;
         this.name = product.getName();
         this.product = product;
         this.address = address;
@@ -82,42 +85,21 @@ public class Order extends BaseEntity {
         this.orderStatus = OrderStatus.ready;
     }
 
-    /**
-     * 주문 생성 메소드
-    * */
-    public static Order createOrder(User user, Product product, List<OrderItem> orderItemList, Address address, BillingInfo billingInfo) {
-        int totalAmount = 0;
-
-        Order order = Order.builder().name(product.getName()).address(address)
-                .billingInfo(billingInfo).user(user).product(product).orderStatus(OrderStatus.ready).build();
-
-        for (OrderItem orderItem : orderItemList) {
-            totalAmount += orderItem.getPrice();
-            order.addOrderItem(orderItem);
-        }
-
-        order.updateTotalAmount(totalAmount);
-
-        return order;
+    public void cancel() {
+        this.orderStatus = OrderStatus.cancel;
+        delivery.cancel();
     }
 
-    private void updateTotalAmount(int totalAmount) {
-        this.totalAmount = totalAmount;
+    public boolean isSuccess() {
+        return this.orderStatus == OrderStatus.success;
     }
 
-    private void addOrderItem(OrderItem orderItem) {
-        orderItems.add(orderItem);
-        orderItem.setOrder(this);
+    public boolean isCancel() {
+        return this.orderStatus == OrderStatus.cancel;
     }
 
-    public boolean cancel() {
-        if (delivery.isDeliveryReady()) {
-            this.orderStatus = OrderStatus.cancel;
-            delivery.cancel();
-            return true;
-        } else {
-            return false;
-        }
+    public boolean isReady() {
+        return this.orderStatus == OrderStatus.ready;
     }
 
     public void setDelivery(Delivery delivery) {

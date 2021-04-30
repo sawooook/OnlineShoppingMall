@@ -14,12 +14,14 @@ import com.shop.online.shopingMall.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import util.KakakoPayUtil;
 
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Transactional(readOnly = true)
 public class KakaoPayServiceImpl implements BillingInfoService {
 
     private final UserRepository userRepository;
@@ -28,15 +30,20 @@ public class KakaoPayServiceImpl implements BillingInfoService {
     /**
      * - 카카오 페이 Ready
      * 정기결제를 준비 하는 단계
+     * 만약에 기존에 등록된 카드가 있을 경우 해당 카드는 비활성화 상태로 변경 하고
+     * 새롭게 등록을 진행한다.
      * */
 
     @Override
+    @Transactional
     public void ready(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
 
-        if (user.hasActiveBillingInfo(CardName.kakao).isPresent()) {
-            BillingInfo billingInfo = billingInfoRepository.activeBillingInfo(user).orElseThrow(NotFoundBillingInfoException::new);
-            billingInfo.delete();
+        Optional<BillingInfo> billingInfo = user.activeBillingInfo();
+
+        if (billingInfo.isPresent()) {
+            billingInfo.get().delete();
+            billingInfoRepository.save(billingInfo.get());
         }
 
         ResponseEntity<KakaoPayReadyResponseDto> responseKakao = KakakoPayUtil.readyToKakaoPay(userId);
@@ -64,7 +71,13 @@ public class KakaoPayServiceImpl implements BillingInfoService {
         billingInfoRepository.save(billingInfo);
     }
 
+    /**
+    * 카카오페이 결제를 완료하고, 결제가 끝나게 될 경우
+    * 카카오페이측으로 부터 받은 response값을 DTO에 담아서
+    * return 한다.
+    * */
     @Override
+    @Transactional
     public OrderResultResponseDto charge(Order order) {
         OrderResultResponseDto responseDto = KakakoPayUtil.charge(order);
         return responseDto;
