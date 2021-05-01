@@ -7,9 +7,8 @@ import util.ApiResponse;
 
 import static util.ApiResponse.*;
 
-/*
+/**
 *  ControllerAdvice -> 컨트롤러 전역에서 발생할 수 있는 예외를 잡아주는 어노테이션
-*
 * */
 
 @ControllerAdvice

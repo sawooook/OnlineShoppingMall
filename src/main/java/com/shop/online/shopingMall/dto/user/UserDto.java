@@ -1,5 +1,6 @@
 package com.shop.online.shopingMall.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.shop.online.shopingMall.domain.Address;
 import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.domain.enumType.UserRole;
@@ -34,10 +35,8 @@ public class UserDto {
     private AddressDto address;
 
     @NonNull
+    @JsonProperty("user_role")
     private UserRole userRole;
-
-    @ColumnDefault("SIGN")
-    private UserStatus userStatus;
 
     public UserDto(User user) {
         this.name = user.getName();

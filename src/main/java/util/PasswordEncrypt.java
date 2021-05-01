@@ -1,7 +1,7 @@
 package util;
 
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.stereotype.Component;
+
+import org.mindrot.jbcrypt.BCrypt;
 
 public class PasswordEncrypt {
 

@@ -27,7 +27,8 @@ public class UserController {
      * @return
      */
     @PostMapping("/signUp")
-    public ApiResponse<Object> signUp(@RequestBody UserDto userDto) {
+    public ApiResponse<?> signUp(@RequestBody UserDto userDto) {
+        System.out.println("================================================");
         User user = userService.save(userDto);
         return success(new UserDto(user));
     }
