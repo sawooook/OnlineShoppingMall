@@ -6,11 +6,10 @@ import com.shop.online.shopingMall.exception.NotFoundUserException;
 import com.shop.online.shopingMall.service.UserService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import util.ApiResponse;
+import com.shop.online.shopingMall.util.ApiResponse;
 
-import static util.ApiResponse.*;
+import static com.shop.online.shopingMall.util.ApiResponse.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +27,6 @@ public class UserController {
      */
     @PostMapping("/signUp")
     public ApiResponse<?> signUp(@RequestBody UserDto userDto) {
-        System.out.println("================================================");
         User user = userService.save(userDto);
         return success(new UserDto(user));
     }

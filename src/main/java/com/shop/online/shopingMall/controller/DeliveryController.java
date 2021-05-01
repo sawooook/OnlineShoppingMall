@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import util.ApiResponse;
+import com.shop.online.shopingMall.util.ApiResponse;
 
-import static util.ApiResponse.success;
+import static com.shop.online.shopingMall.util.ApiResponse.success;
 
 @RestController("/delivery")
 @RequiredArgsConstructor

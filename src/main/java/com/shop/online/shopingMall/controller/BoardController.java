@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import util.ApiResponse;
+import com.shop.online.shopingMall.util.ApiResponse;
 
-import static util.ApiResponse.*;
+import static com.shop.online.shopingMall.util.ApiResponse.*;
 
 @RestController
 @RequestMapping("/board")

@@ -1,15 +1,14 @@
 package com.shop.online.shopingMall.controller;
 
-import com.shop.online.shopingMall.domain.Board;
 import com.shop.online.shopingMall.domain.Cart;
 import com.shop.online.shopingMall.dto.cart.CartRequestDto;
 import com.shop.online.shopingMall.dto.cart.CartResponseDto;
 import com.shop.online.shopingMall.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import util.ApiResponse;
+import com.shop.online.shopingMall.util.ApiResponse;
 
-import static util.ApiResponse.*;
+import static com.shop.online.shopingMall.util.ApiResponse.*;
 
 @RestController
 @RequestMapping("/cart")

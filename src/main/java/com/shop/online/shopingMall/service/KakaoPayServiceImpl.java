@@ -3,7 +3,6 @@ package com.shop.online.shopingMall.service;
 import com.shop.online.shopingMall.domain.BillingInfo;
 import com.shop.online.shopingMall.domain.Order;
 import com.shop.online.shopingMall.domain.User;
-import com.shop.online.shopingMall.domain.enumType.BillingInfoStatus;
 import com.shop.online.shopingMall.domain.enumType.CardName;
 import com.shop.online.shopingMall.dto.util.KakaoPayApproveResponseDto;
 import com.shop.online.shopingMall.dto.order.OrderResultResponseDto;
@@ -16,7 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import util.KakakoPayUtil;
+import com.shop.online.shopingMall.util.KakakoPayUtil;
 
 import java.util.Optional;
 

@@ -5,11 +5,11 @@ import com.shop.online.shopingMall.dto.order.OrderResponseDto;
 import com.shop.online.shopingMall.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import util.ApiResponse;
+import com.shop.online.shopingMall.util.ApiResponse;
 
 import java.util.List;
 
-import static util.ApiResponse.success;
+import static com.shop.online.shopingMall.util.ApiResponse.success;
 
 @RestController
 @RequestMapping("/order")

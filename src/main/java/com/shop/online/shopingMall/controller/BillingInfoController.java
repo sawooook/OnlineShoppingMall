@@ -3,9 +3,9 @@ package com.shop.online.shopingMall.controller;
 import com.shop.online.shopingMall.service.BillingInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import util.ApiResponse;
+import com.shop.online.shopingMall.util.ApiResponse;
 
-import static util.ApiResponse.*;
+import static com.shop.online.shopingMall.util.ApiResponse.*;
 
 @RestController
 @RequestMapping("/billingInfo")

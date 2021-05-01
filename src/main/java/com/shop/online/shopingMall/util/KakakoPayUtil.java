@@ -1,12 +1,10 @@
-package util;
+package com.shop.online.shopingMall.util;
 
 import com.shop.online.shopingMall.domain.BillingInfo;
 import com.shop.online.shopingMall.domain.Order;
-import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.dto.util.KakaoPayApproveResponseDto;
 import com.shop.online.shopingMall.dto.order.OrderResultResponseDto;
 import com.shop.online.shopingMall.dto.util.KakaoPayReadyResponseDto;
-import com.shop.online.shopingMall.exception.NotFoundBillingInfoException;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;

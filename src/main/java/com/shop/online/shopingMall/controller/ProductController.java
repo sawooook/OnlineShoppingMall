@@ -7,11 +7,11 @@ import com.shop.online.shopingMall.dto.product.ProductDto;
 import com.shop.online.shopingMall.service.ProductService;
 import lombok.NonNull;
 import org.springframework.web.bind.annotation.*;
-import util.ApiResponse;
+import com.shop.online.shopingMall.util.ApiResponse;
 
 import java.util.List;
 
-import static util.ApiResponse.success;
+import static com.shop.online.shopingMall.util.ApiResponse.success;
 
 @RestController
 @RequestMapping("/product")

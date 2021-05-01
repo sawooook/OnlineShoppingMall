@@ -1,4 +1,4 @@
-package util;
+package com.shop.online.shopingMall.util;
 
 
 import org.mindrot.jbcrypt.BCrypt;

@@ -1,4 +1,4 @@
-package util;
+package com.shop.online.shopingMall.util;
 
 public class ApiResponse<T> {
 
