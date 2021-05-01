@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class Board extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "board_id")
     private Long id;
     private String title;
@@ -28,4 +28,11 @@ public class Board extends BaseEntity {
     private User user;
 
     private boolean isSendPush;
+
+    public Board(String title, String content, boolean sendPush, BoardType type) {
+        this.title = title;
+        this.content = content;
+        this.isSendPush = sendPush;
+        this.boardType = type;
+    }
 }

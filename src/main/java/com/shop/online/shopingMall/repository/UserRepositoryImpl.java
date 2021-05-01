@@ -23,16 +23,6 @@ public class UserRepositoryImpl extends QuerydslRepositorySupport implements Use
         this.jpaQueryFactory = jpaQueryFactory;
     }
 
-
-    @Override
-    public List<String> pushOnUser() {
-        return jpaQueryFactory
-                .select(user.pushToken)
-                .from(user)
-                .where(user.pushToken.isNotNull())
-                .fetch();
-    }
-
     // 유저정보가 있는지 확인, 결제키가 있고 삭제되지 않은 결제카드인지
     @Override
     public Optional<User> findUserAndActiveBillingInfo(Long userId) {

@@ -13,7 +13,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 public class KakakoPayUtil {
 
+    // 카카오에 요청할 URL
     private static final String KakaoPayHost = "https://kapi.kakao.com";
+
+    // URL 제작
     public static String getApiServerUrl(String url, int port) {
         return "http://" + url + ":" + port;
     }
@@ -21,6 +24,9 @@ public class KakakoPayUtil {
     public static RestTemplate restTemplate = new RestTemplate();
 
 
+    /*
+    * 카카오에 요청할 데이터를 생성
+    * */
     public static ResponseEntity<KakaoPayReadyResponseDto> readyToKakaoPay(Long userId) {
         String localhost = getApiServerUrl("localhost", 8080);
 
@@ -45,6 +51,9 @@ public class KakakoPayUtil {
         return responseKakaoPay;
     }
 
+    /*
+    * 카카오로 부터 정기결제 승인 관련하여 데이터를 전송함
+    * */
     public static KakaoPayApproveResponseDto approveToKakaoPay(BillingInfo billingInfo, String pgToken) {
         UriComponentsBuilder kakaoUrl = UriComponentsBuilder.fromHttpUrl(KakaoPayHost + "/v1/payment/approve")
                 .queryParam("cid", "TCSUBSCRIP")
@@ -64,6 +73,9 @@ public class KakakoPayUtil {
         return responseKakaoPay.getBody();
     }
 
+    /*
+     * 카카오에게 결제를 시도하도록 알림
+     * */
     public static OrderResultResponseDto charge(Order order) {
         UriComponentsBuilder kakaoUrl = UriComponentsBuilder.fromHttpUrl(KakaoPayHost + "/v1/payment/subscription")
                 .queryParam("cid", "TCSUBSCRIP")
@@ -82,6 +94,9 @@ public class KakakoPayUtil {
         return responseKakaoPay.getBody();
     }
 
+    /*
+     * 기본 HTTP Header를 제작
+     * */
     private static HttpEntity kakaoHttpHeader() {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Authorization","KakaoAK" + " 29a74f0f85117e18e3e2a883dba59210");

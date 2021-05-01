@@ -3,21 +3,18 @@ package com.shop.online.shopingMall.domain;
 import com.shop.online.shopingMall.domain.base.BaseEntity;
 import com.shop.online.shopingMall.domain.enumType.ProductOptionStatus;
 import com.shop.online.shopingMall.dto.product.ProductOptionDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.swing.text.html.Option;
 import java.util.List;
 
 @Entity @Builder @Getter
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductOption extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "product_option_id")
     private Long id;
 

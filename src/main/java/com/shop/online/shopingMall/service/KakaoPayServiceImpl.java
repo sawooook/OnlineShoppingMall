@@ -86,9 +86,4 @@ public class KakaoPayServiceImpl implements BillingInfoService {
         OrderResultResponseDto responseDto = KakakoPayUtil.charge(order);
         return responseDto;
     }
-
-    @Override
-    public BillingInfo isActiveBillingInfo(User user) {
-        return billingInfoRepository.activeBillingInfo(user).orElseThrow(NotFoundBillingInfoException::new);
-    }
 }

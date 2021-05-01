@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data @Builder
+@Data
 @NoArgsConstructor @AllArgsConstructor
 public class UserMypageResponse {
     private Long id;
@@ -16,14 +16,4 @@ public class UserMypageResponse {
     private String phone;
     private AddressDto address;
     private String role;
-
-
-    public static UserMypageResponse toDto(User user) {
-        AddressDto addressDto = AddressDto.toDto(user.getAddress());
-
-        return UserMypageResponse.builder()
-                .id(user.getId()).name(user.getName())
-                .phone(user.getPhone()).email(user.getEmail()).role(String.valueOf(user.getUserRole()))
-                .address(addressDto).build();
-    }
 }

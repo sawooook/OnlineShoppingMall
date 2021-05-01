@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
  * 공통 DTO
  *
 * */
-
-
 @Data @Builder
 @NoArgsConstructor @AllArgsConstructor
 public class OrderResultResponseDto {
@@ -21,7 +19,7 @@ public class OrderResultResponseDto {
     private String tid;
     private String cid;
     private String sid;
-    private Amount amount;
+    private AmountDto amount;
     @JsonProperty("partner_order_id")
     private String partnerOrderId;
     private String itemName;
@@ -32,16 +30,9 @@ public class OrderResultResponseDto {
     private String approvedAt;
     private Order order;
 
-    // amount 안에있는 내용을 파싱받기 위해서 제작
-    @Getter @Setter
-    private static class Amount {
-        @JsonProperty(value = "amount")
-        private int total;
-    }
-
     public static Payment toEntity(OrderResultResponseDto responseDto) {
         return Payment.builder().aid(responseDto.getAid()).tid(responseDto.getTid()).order(responseDto.getOrder())
-                .cid(responseDto.getCid()).amount(String.valueOf(responseDto.getAmount()))
+                .cid(responseDto.getCid()).amount(String.valueOf(responseDto.getAmount().getTotal()))
                 .itemName(responseDto.getItemName()).quantity(responseDto.getQuantity())
                 .createdAt(LocalDateTime.parse(responseDto.getCreatedAt()))
                 .approvedAt(LocalDateTime.parse(responseDto.getApprovedAt())).build();

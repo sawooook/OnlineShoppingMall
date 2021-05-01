@@ -14,7 +14,4 @@ public interface BillingInfoService {
     void approve(String token, Long id);
 
     OrderResultResponseDto charge(Order order);
-
-    BillingInfo isActiveBillingInfo(User user);
-
 }

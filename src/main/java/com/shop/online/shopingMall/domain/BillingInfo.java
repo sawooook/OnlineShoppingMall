@@ -4,10 +4,7 @@ import com.shop.online.shopingMall.domain.base.BaseEntity;
 import com.shop.online.shopingMall.domain.enumType.BillingInfoStatus;
 import com.shop.online.shopingMall.domain.enumType.CardName;
 import com.shop.online.shopingMall.domain.enumType.UserStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -17,12 +14,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Entity @Builder @Getter
-@NoArgsConstructor @AllArgsConstructor
-@DynamicUpdate
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BillingInfo extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "billingInfo_id")
     private Long id;
 

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data @Builder
+@Data
 @NoArgsConstructor @AllArgsConstructor
 public class KakaoPayResultResponseDto {
     private String amount;

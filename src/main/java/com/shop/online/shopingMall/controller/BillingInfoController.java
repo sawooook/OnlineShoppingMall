@@ -14,6 +14,11 @@ public class BillingInfoController {
 
     private final BillingInfoService billingInfoService;
 
+    /**
+    * 카카오 페이 자동결제 등록 API
+    * 1) 완료 시 approve로 이동
+    * 2) 실패 시 fail, cancel로 이동
+    * */
     @GetMapping("/kakao/ready")
     public void kakaoPayReady(@RequestParam Long userId) {
         billingInfoService.ready(userId);

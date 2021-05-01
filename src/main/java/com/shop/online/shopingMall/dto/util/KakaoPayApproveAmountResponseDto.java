@@ -10,7 +10,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
 
-@Data @Builder
+@Data
 @NoArgsConstructor @AllArgsConstructor
 public class KakaoPayApproveAmountResponseDto {
     private String itemName;

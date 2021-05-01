@@ -10,15 +10,13 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data @Builder
+@Data
 @NoArgsConstructor @AllArgsConstructor
 public class KakaoPayApproveResponseDto {
     private String aid;
     private String tid;
     private String cid;
     private String sid;
-//    private String amount;
-//    private String cardInfo;
     private String item_name;
     private String quantity;
     @JsonProperty("approved_at")
@@ -26,9 +24,4 @@ public class KakaoPayApproveResponseDto {
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
 
-    public static Payment toEntity(KakaoPayApproveResponseDto responseDto) {
-        return Payment.builder().tid(responseDto.getTid()).aid(responseDto.getAid()).cid(responseDto.getCid())
-                .itemName(responseDto.getItem_name()).quantity(responseDto.getQuantity())
-                .cardName(CardName.kakao).approvedAt(responseDto.getApprovedAt()).createdAt(responseDto.getCreatedAt()).build();
-    }
 }

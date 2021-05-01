@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity @Builder @Getter
+@Entity @Getter
 @NoArgsConstructor @AllArgsConstructor
 public class Payment extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "payment_id")
     private Long id;
 
@@ -56,4 +56,18 @@ public class Payment extends BaseEntity {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @Builder
+    public Payment(String tid, String aid, String cid, String amount, String itemName, String quantity, CardName cardName, LocalDateTime approvedAt, LocalDateTime createdAt, BillingInfo billingInfo, Order order) {
+        this.tid = tid;
+        this.aid = aid;
+        this.cid = cid;
+        this.amount = amount;
+        this.itemName = itemName;
+        this.quantity = quantity;
+        this.cardName = cardName;
+        this.approvedAt = approvedAt;
+        this.createdAt = createdAt;
+        this.billingInfo = billingInfo;
+        this.order = order;
+    }
 }
