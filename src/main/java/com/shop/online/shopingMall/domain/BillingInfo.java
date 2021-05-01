@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Entity @Builder @Getter
+@Entity @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BillingInfo extends BaseEntity {
 
@@ -22,15 +22,18 @@ public class BillingInfo extends BaseEntity {
     @Column(name = "billingInfo_id")
     private Long id;
 
+    // 등록한 카드의 종류
     @Enumerated(EnumType.STRING)
     private CardName cardName;
 
+    // 결제시 사용하는 키번호
     private String paymentKey;
 
+    // 결제 카드 고유 등록번호
     private String uniqueNumber;
 
+    //결제정보의 상태
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("'ACTIVE'")
     private BillingInfoStatus billingInfoStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,6 +45,13 @@ public class BillingInfo extends BaseEntity {
 
     @OneToMany(mappedBy = "billingInfo")
     private List<Payment> payments = new ArrayList<>();
+
+    public BillingInfo(CardName cardName, String tid, User user) {
+        this.cardName = cardName;
+        this.uniqueNumber = tid;
+        this.user = user;
+        this.billingInfoStatus = BillingInfoStatus.ACTIVE;
+    }
 
     public void updatePaymentKey(String paymentKey) {
         this.paymentKey = paymentKey;

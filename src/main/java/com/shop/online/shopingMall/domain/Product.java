@@ -8,12 +8,10 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product extends BaseEntity {
 
     @Id
@@ -55,7 +53,8 @@ public class Product extends BaseEntity {
     }
 
     // 옵션과 가격을 product 객체에 담는다.
-    public void addOptionAndPrice(List<ProductOption> options, ProductPrice price) {
+    public void addOptionAndPrice(List<ProductOption> options, ProductPrice price)
+    {
         for (ProductOption option : options) {
             addProductOption(option);
         }
@@ -73,7 +72,9 @@ public class Product extends BaseEntity {
     }
 
 
-    // 마지막으로 등록된 제품의 가격을 불러옴
+    /**
+    * 마지막으로 등록된 제품의 가격을 불러옴
+    */
     public int lastRegisterPrice() {
         return getProductPrices().get(getProductPrices().size() - 1).getPrice();
     }

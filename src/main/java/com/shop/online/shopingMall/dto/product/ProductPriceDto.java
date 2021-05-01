@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Data
-@AllArgsConstructor @NoArgsConstructor
+@NoArgsConstructor
 public class ProductPriceDto {
     private int price;
 
-    public static ProductPrice toEntity(ProductPriceDto productPriceDto) {
-        return ProductPrice.builder().price(productPriceDto.getPrice()).build();
+    public ProductPriceDto(int price) {
+        this.price = price;
     }
 }

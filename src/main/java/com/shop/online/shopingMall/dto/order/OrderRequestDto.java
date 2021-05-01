@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Builder @Data
+@Data
 @AllArgsConstructor @NoArgsConstructor
 public class OrderRequestDto {
     private Long userId;

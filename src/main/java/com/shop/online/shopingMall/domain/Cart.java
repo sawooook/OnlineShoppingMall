@@ -10,7 +10,6 @@ import java.io.Serializable;
 import java.util.List;
 
 @Getter
-@Builder
 @RedisHash("cart") // key 설정
 public class Cart implements Serializable {
 

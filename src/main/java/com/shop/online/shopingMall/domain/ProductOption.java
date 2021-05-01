@@ -9,7 +9,7 @@ import javax.persistence.*;
 import javax.swing.text.html.Option;
 import java.util.List;
 
-@Entity @Builder @Getter
+@Entity @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductOption extends BaseEntity {
 

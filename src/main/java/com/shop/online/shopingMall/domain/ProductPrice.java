@@ -11,8 +11,7 @@ import javax.persistence.*;
 * 생성한 테이블
 * */
 
-@Entity @Builder @Getter
-@AllArgsConstructor
+@Entity @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductPrice extends BaseEntity {
 

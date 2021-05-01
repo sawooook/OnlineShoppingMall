@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder @Data
-@NoArgsConstructor @AllArgsConstructor
+@Data
+@NoArgsConstructor
 public class OrderItemDto {
     private String size;
     private String color;

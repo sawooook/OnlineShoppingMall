@@ -16,8 +16,6 @@ import java.util.Optional;
 
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
 
@@ -55,9 +53,6 @@ public class User extends BaseEntity {
 
     @Embedded
     private Address address;
-
-    private String pushToken;
-
 
     // 회원가입시 사용하는 생성자
     public User(UserDto userDto, String encodePassWord) {

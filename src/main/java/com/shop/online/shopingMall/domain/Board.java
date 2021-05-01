@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Builder @Getter
+@Getter
 @NoArgsConstructor @AllArgsConstructor
 public class Board extends BaseEntity {
 
@@ -27,6 +27,7 @@ public class Board extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    // 알림톡을 보낼지에 대한 동의 여부
     private boolean isSendPush;
 
     public Board(String title, String content, boolean sendPush, BoardType type) {

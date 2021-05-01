@@ -9,13 +9,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder @NoArgsConstructor
+@NoArgsConstructor
 public class ProductSearchRequestDto {
+
     private ProductCategory type;
+
     @JsonProperty("low_price")
     private boolean lowPrice;
+
     @JsonProperty("high_price")
     private boolean highPrice;
+
     @JsonProperty("search_name")
     private String searchName;
 

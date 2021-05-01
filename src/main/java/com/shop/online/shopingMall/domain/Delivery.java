@@ -3,11 +3,12 @@ package com.shop.online.shopingMall.domain;
 import com.shop.online.shopingMall.domain.base.BaseEntity;
 import com.shop.online.shopingMall.domain.enumType.DeliveryStatus;
 import lombok.*;
+import org.aspectj.weaver.ast.Or;
 
 import javax.persistence.*;
 
 @Entity
-@Getter @Builder
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Delivery extends BaseEntity {
 
@@ -20,10 +21,18 @@ public class Delivery extends BaseEntity {
     private Address address;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "delivery_status")
     private DeliveryStatus deliveryStatus;
 
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
+
+    public Delivery(Address address, Order order) {
+        this.address = address;
+        this.deliveryStatus = DeliveryStatus.ready;
+        this.order = order;
+    }
 
     /**
      * 배송상태를 체크

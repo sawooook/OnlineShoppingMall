@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "orders")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order extends BaseEntity {
 
     @Id
@@ -22,13 +22,11 @@ public class Order extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    private String name;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "billingInfo_id")
     private BillingInfo billingInfo;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Delivery delivery;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -49,10 +47,9 @@ public class Order extends BaseEntity {
     private int totalAmount;
 
     @Builder
-    public Order(Long id, OrderStatus orderStatus, String name, BillingInfo billingInfo, Delivery delivery, User user, Product product, List<OrderItem> orderItems, List<Payment> payments, Address address, int totalAmount) {
+    public Order(Long id, OrderStatus orderStatus, BillingInfo billingInfo, Delivery delivery, User user, Product product, List<OrderItem> orderItems, List<Payment> payments, Address address, int totalAmount) {
         this.id = id;
         this.orderStatus = orderStatus;
-        this.name = name;
         this.billingInfo = billingInfo;
         this.delivery = delivery;
         this.user = user;
@@ -67,7 +64,6 @@ public class Order extends BaseEntity {
         this.orderStatus = OrderStatus.ready;
         this.user = user;
         this.billingInfo = billingInfo;
-        this.name = product.getName();
         this.product = product;
         this.address = address;
         this.totalAmount = items.stream().mapToInt(OrderItem::getPrice).sum();

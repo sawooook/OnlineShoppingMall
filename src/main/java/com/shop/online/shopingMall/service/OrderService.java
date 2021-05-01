@@ -79,9 +79,7 @@ public class OrderService {
         Order order = payment.getOrder();
         Address address = order.getUser().getAddress();
 
-        Delivery delivery = Delivery.builder().deliveryStatus(DeliveryStatus.ready)
-                .address(new Address(address.getAddressCode(), address.getAddressDetail())).build();
-
+        Delivery delivery = new Delivery(new Address(address.getAddressCode(), address.getAddressDetail()), order);
         order.setDelivery(delivery);
         order.updateOrderStatus();
     }

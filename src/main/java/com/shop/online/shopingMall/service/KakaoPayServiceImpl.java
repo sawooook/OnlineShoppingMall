@@ -46,13 +46,9 @@ public class KakaoPayServiceImpl implements BillingInfoService {
             billingInfo.get().updateInActive();
             billingInfoRepository.save(billingInfo.get());
         }
-
         ResponseEntity<KakaoPayReadyResponseDto> responseKakao = KakakoPayUtil.readyToKakaoPay(userId);
 
-        BillingInfo makeKakaoBillingInfo = BillingInfo.builder().cardName(CardName.kakao)
-                .uniqueNumber(responseKakao.getBody().getTid())
-                .user(user).billingInfoStatus(BillingInfoStatus.ACTIVE).build();
-        billingInfoRepository.save(makeKakaoBillingInfo);
+        billingInfoRepository.save(new BillingInfo(CardName.kakao, responseKakao.getBody().getTid(), user));
     }
 
     /**

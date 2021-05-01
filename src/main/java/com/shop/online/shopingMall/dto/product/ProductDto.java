@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-@AllArgsConstructor @NoArgsConstructor
+@NoArgsConstructor
 public class ProductDto {
 
     @NonNull

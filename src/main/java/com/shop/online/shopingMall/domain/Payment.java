@@ -12,7 +12,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity @Getter
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
 public class Payment extends BaseEntity {
 
     @Id
@@ -43,10 +43,12 @@ public class Payment extends BaseEntity {
     private CardName cardName;
 
     // 결제 승인시각
+    @Column(name = "approved_at")
     private LocalDateTime approvedAt;
 
     // 결제 준비요청 시각
-    private LocalDateTime createdAt;
+    @Column(name = "payment_created_at")
+    private LocalDateTime paymentCreatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "billingInfo_id")
@@ -66,7 +68,7 @@ public class Payment extends BaseEntity {
         this.quantity = quantity;
         this.cardName = cardName;
         this.approvedAt = approvedAt;
-        this.createdAt = createdAt;
+        this.paymentCreatedAt = createdAt;
         this.billingInfo = billingInfo;
         this.order = order;
     }

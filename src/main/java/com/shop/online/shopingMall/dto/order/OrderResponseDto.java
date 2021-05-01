@@ -29,7 +29,6 @@ public class OrderResponseDto {
 
     public OrderResponseDto(Order order) {
         this.id = order.getId();
-        this.name = order.getName();
         this.orderStatus = order.getOrderStatus();
         this.price = order.getProduct().lastRegisterPrice();
         this.options = order.getOrderItems()
