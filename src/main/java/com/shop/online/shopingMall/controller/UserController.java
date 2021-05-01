@@ -26,9 +26,9 @@ public class UserController {
      * @return
      */
     @PostMapping("/signUp")
-    public ApiResponse<?> signUp(@RequestBody UserDto userDto) {
+    public ApiResponse<UserResponseDto> signUp(@RequestBody UserDto userDto) {
         User user = userService.save(userDto);
-        return success(new UserDto(user));
+        return success(new UserResponseDto(user));
     }
 
     /**
@@ -82,7 +82,7 @@ public class UserController {
     @GetMapping("/mypage/{id}")
     public ApiResponse myPage(@PathVariable @NonNull Long id) throws NotFoundUserException {
         User user = userService.findUser(id);
-        UserResponseDto response = new UserResponseDto(user, new AddressDto(user));
+        UserResponseDto response = new UserResponseDto(user);
         return success(response);
     }
 }

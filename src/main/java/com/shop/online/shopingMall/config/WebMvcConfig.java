@@ -23,7 +23,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         List<String> patterns = Arrays.asList("/", "/user/signUp", "/user/login");
         registry.addInterceptor(handlerInterceptor)
-                .excludePathPatterns("/**")
+                .addPathPatterns("/**")
                 .excludePathPatterns(patterns);
     }
 }

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
 
-    private static final String AUTHORIZATION = "Authorization";
+    private static final String AUTHORIZATION = "X-AUTH-TOKEN";
     private final JwtTokenProvider jwtTokenProvider;
 
     public LoginInterceptor(JwtTokenProvider jwtTokenProvider) {
