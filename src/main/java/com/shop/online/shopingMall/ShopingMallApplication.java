@@ -9,10 +9,9 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 
-@EnableAspectJAutoProxy
 @EnableJpaAuditing
 @EnableCaching
-@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+@SpringBootApplication
 public class ShopingMallApplication {
 
 	public static void main(String[] args) {

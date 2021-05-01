@@ -4,12 +4,12 @@ import com.shop.online.shopingMall.domain.User;
 import com.shop.online.shopingMall.dto.user.*;
 import com.shop.online.shopingMall.exception.NotFoundUserException;
 import com.shop.online.shopingMall.service.UserService;
+import com.shop.online.shopingMall.util.ApiResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import com.shop.online.shopingMall.util.ApiResponse;
 
-import static com.shop.online.shopingMall.util.ApiResponse.*;
+import static com.shop.online.shopingMall.util.ApiResponse.success;
 
 @RestController
 @RequiredArgsConstructor

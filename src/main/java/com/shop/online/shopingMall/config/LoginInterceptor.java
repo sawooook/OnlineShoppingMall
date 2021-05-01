@@ -18,9 +18,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        System.out.println("===============================================22=");
-
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String headerValue = request.getHeader(AUTHORIZATION);
 
         if (headerValue != null && jwtTokenProvider.isUsable(headerValue)) {
