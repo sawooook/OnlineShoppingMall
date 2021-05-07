@@ -2,7 +2,7 @@
 스프링 부트로 구현한 온라인 쇼핑몰 API입니다.
 
 ## 사용 기술
-Java, Spring Boot, JPA
+Java, Spring Boot, JPA/Hibernate
 
 ## 진행사항
 1) JWT토큰을 이용하여 사용자의 인증과정을 처리하였습니다
